@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>ADMIN</title>
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/widget.css">
     <!-- Icon -->
-    <script src="js/main.js"></script>
-    <script src="js/admin.js"></script>
     <script src="https://kit.fontawesome.com/951fcb8c3d.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
    <style>
         .hidden {
             display: none;
@@ -796,11 +795,95 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+    <canvas id="myChart"></canvas>
+
+    <script src="js/admin.js"></script>
+    <script src="js/main.js"></script>
 
     <script defer src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database-compat.js"></script>
-    <script defer src="./js/main.js"></script>
-    <script defer src="./js/admin_quanly.js"></script>
+    <script>
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <!-- Main JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let chartInstance;
+
+            function createChart(data) {
+                const ctx = document.getElementById('myChart').getContext('2d');
+
+                if (chartInstance) {
+                    chartInstance.destroy();
+                }
+
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Sample Data',
+                            data: data.values,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Example data loading
+            fetch('data.json')
+                .then(response => response.json())
+                .then(data => {
+                    createChart(data);
+                })
+                .catch(error => console.error('Error loading data:', error));
+
+            // Firebase Database example usage
+            const database = firebase.database();
+            const tempRef = database.ref('temperature');
+
+            tempRef.on('value', (snapshot) => {
+                const tempData = snapshot.val();
+                console.log('Temperature data:', tempData);
+                // Update your UI with tempData
+            });
+
+            // Example for active connections
+            function updateActiveConnections() {
+                fetch('active_connections.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Active connections:', data);
+                        // Update your UI with active connections data
+                    })
+                    .catch(error => console.error('Error fetching active connections:', error));
+            }
+
+            updateActiveConnections();
+        });
+    </script>
+
     <script>
         //show content
         $(document).ready(function () {
