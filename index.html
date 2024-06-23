@@ -14,7 +14,324 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
-    <script src="js/admin_quanly.js" defer></script>
+   <script>
+        // Firebase Configuration
+        var firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase only once
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        } else {
+            firebase.app(); // if already initialized, use that one
+        }
+
+        // Function to load the list of devices
+        function LoadListDevice() {
+            let list = JSON.parse(localStorage.getItem('Devices')) || [];
+            if (list.length === 0) {
+                // Initialize default device if the list is empty
+                list.push({
+                    id: Date.now(),
+                    type: 'Pump1',
+                    name: 'Forward',
+                    folder: '1000',
+                    location: '100'
+                });
+                localStorage.setItem('Devices', JSON.stringify(list));
+            }
+            let str = "";
+            for (let i = 0; i < list.length; i++) {
+                let x = list[i];
+                str += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${x.type}</td>
+                        <td>${x.name}</td>
+                        <td>${x.folder}</td>
+                        <td>${x.location}</td>
+                        <td>
+                            <button class="btn-form btn-small" onclick="EditDevice(${x.id})">Edit</button>
+                            <button class="btn-form btn-small" onclick="DeleteDevice(${x.id})">Delete</button>
+                            <button class="btn-form btn-small" onclick="moveDeviceUp(${x.id})">↑</button>
+                            <button class="btn-form btn-small" onclick="moveDeviceDown(${x.id})">↓</button>
+                        </td>
+                    </tr>
+                `;
+            }
+            document.getElementById("listDevice").innerHTML = str;
+            document.getElementById('tongsosp').textContent = list.length;
+            document.getElementById('tongsosp1').textContent = list.length;
+
+            // Update SVG if any ADC sensor is present in the list
+            list.forEach(device => {
+                document.getElementById('type-device').value = device.type;
+                document.getElementById('name-device').value = device.name;
+                document.getElementById('folder').value = device.folder;
+                document.getElementById('location').value = device.location;
+
+                if (device.type === "ADC1" || device.type === "ADC2") {
+                    updateDelayValue();  // Call the function to update the SVG for the specific ADC sensor
+                }
+            });
+
+            createSmallerTable();
+        }
+
+        // Function to create a smaller table
+        function createSmallerTable() {
+            console.log("Creating smaller table...");
+            // Get the table body of listDevice
+            var listDeviceBody = document.getElementById("listDevice");
+            if (!listDeviceBody) {
+                console.error("listDevice body not found!");
+                return;
+            }
+
+            // Create a new table body element for listDevice1
+            var listDevice1Body = document.createElement("tbody");
+            listDevice1Body.id = "listDevice1";
+
+            // Create the first row with custom labels
+            var labelRow = document.createElement("tr");
+            var counterLabel = document.createElement("td");
+            counterLabel.textContent = "   #";
+            var sensorLabel = document.createElement("td");
+            sensorLabel.textContent = " Sensor";
+            var commandLabel = document.createElement("td");
+            commandLabel.textContent = "Command";
+            var timeOnLabel = document.createElement("td");
+            timeOnLabel.textContent = "     Time On";
+            var delayLabel = document.createElement("td");
+            delayLabel.textContent = "     Delay";
+
+            // Append the label row to listDevice1Body
+            listDevice1Body.appendChild(labelRow);
+
+            // Loop through each row in the original table starting from index 1
+            for (var i = 0; i < listDeviceBody.rows.length; i++) {
+                console.log("Copying row", i);
+                // Clone the row
+                var newRow = listDeviceBody.rows[i].cloneNode(true);
+                // Remove all buttons from the cloned row
+                var buttons = newRow.querySelectorAll("button");
+                buttons.forEach(function(button) {
+                    button.parentNode.removeChild(button);
+                });
+                // Add padding to each cell for column spacing
+                for (var j = 0; j < newRow.cells.length; j++) {
+                    newRow.cells[j].style.padding = "0 30px"; // Adjust the padding as needed
+                }
+                // Append the cloned row to listDevice1
+                listDevice1Body.appendChild(newRow);
+
+                // Add an empty row with the desired height after each row
+                if (i < listDeviceBody.rows.length - 1) {
+                    var emptyRow = document.createElement("tr");
+                    var emptyCell = document.createElement("td");
+                    emptyCell.style.height = "20px"; // Adjust the height value as needed
+                    emptyRow.appendChild(emptyCell);
+                    listDevice1Body.appendChild(emptyRow);
+                }
+            }
+
+            // Replace the content of listDevice1 with the content of listDevice1Body
+            var listDevice1 = document.getElementById("listDevice1");
+            listDevice1.innerHTML = listDevice1Body.innerHTML;
+
+            console.log("Smaller table created successfully!");
+        }
+
+        // Function to add a new device
+        function AddDevice() {
+            let list = JSON.parse(localStorage.getItem('Devices')) || [];
+            var id = Date.now(); // Generating a new ID for the device
+            var type = document.getElementById("type-device").value;
+            var name = document.getElementById("name-device").value;
+            var folder = document.getElementById("folder").value;
+            var location = document.getElementById("location").value; // Get the value of the new location field
+
+            if (type === "choose") {
+                alert("Please select a Sensor!");
+                return false;
+            }
+            if (!name || name === "choose") {
+                alert("Operation Mode cannot be empty!");
+                return false;
+            }
+
+            if (name === "const On" || name === "const Off") {
+                folder = "0";  // Set default value for folder if "const On" or "const Off" is selected
+                location = "0";  // Set default value for location if "const On" or "const Off" is selected
+            } else {
+                if (!folder || isNaN(folder)) {  // isNaN function checks if the input is not a number
+                    alert("Please enter time in milliseconds using numeric values only!");
+                    return false;
+                }
+                if (!location || isNaN(location)) {  // isNaN function checks if the input is not a number
+                    alert("Please enter delay in milliseconds using numeric values only!");
+                    return false;
+                }
+            }
+
+            var device = {
+                "id": id,
+                "type": type,
+                "name": name,
+                "folder": folder,
+                "location": location // Add the location property
+            };
+            list.push(device);
+            localStorage.setItem('Devices', JSON.stringify(list));
+            alert("Device added successfully!");
+            LoadListDevice(); // Refresh the list
+        }
+
+        // Function to delete a device
+        function DeleteDevice(id) {
+            let list = JSON.parse(localStorage.getItem('Devices')) || [];
+            if (confirm("You definitely want to delete!")) {
+                var index = list.findIndex(x => x.id == id);
+                if (index >= 0) {
+                    list.splice(index, 1);
+                }
+                localStorage.setItem('Devices', JSON.stringify(list));
+                alert('Deleted successfully');
+                LoadListDevice();
+            }
+        }
+
+        // Global variable to keep track of the currently editing device's ID
+        var currentlyEditingId = null;
+
+        // Function to save device changes
+        function SaveDeviceChanges() {
+            if (currentlyEditingId === null) {
+                alert("No device selected for editing!");
+                return;
+            }
+
+            let list = JSON.parse(localStorage.getItem('Devices'));
+            let deviceIndex = list.findIndex(x => x.id === currentlyEditingId);
+            if (deviceIndex !== -1) {
+                let device = list[deviceIndex];
+                device.name = document.getElementById('name-device').value;
+                device.folder = document.getElementById('folder').value;
+                device.type = document.getElementById('type-device').value;
+                device.location = document.getElementById('location').value;
+
+                if (device.name === "const On" || device.name === "const Off") {
+                    device.folder = "0";  // Set default value for folder if "const On" or "const Off" is selected
+                    device.location = "0";  // Set default value for location if "const On" or "const Off" is selected
+                }
+
+                localStorage.setItem('Devices', JSON.stringify(list));
+                alert("Device updated successfully!");
+                LoadListDevice(); // Refresh the list
+            } else {
+                alert("Device not found!");
+            }
+        }
+
+        // Function to move device up in the list
+        function moveDeviceUp(deviceId) {
+            let list = JSON.parse(localStorage.getItem('Devices'));
+            let index = list.findIndex(x => x.id === deviceId);
+            if (index > 0) { // Check if it's not the first item
+                [list[index], list[index - 1]] = [list[index - 1], list[index]]; // Swap with the above item
+                localStorage.setItem('Devices', JSON.stringify(list));
+                LoadListDevice(); // Reload the list
+            }
+        }
+
+        // Function to move device down in the list
+        function moveDeviceDown(deviceId) {
+            let list = JSON.parse(localStorage.getItem('Devices'));
+            let index = list.findIndex(x => x.id === deviceId);
+            if (index < list.length - 1) { // Check if it's not the last item
+                [list[index], list[index + 1]] = [list[index + 1], list[index]]; // Swap with the below item
+                localStorage.setItem('Devices', JSON.stringify(list));
+                LoadListDevice(); // Reload the list
+            }
+        }
+
+        // Load the device list when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', LoadListDevice);
+    </script>
+    <!-- Main JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let chartInstance;
+
+            function createChart(data) {
+                const ctx = document.getElementById('myChart').getContext('2d');
+
+                if (chartInstance) {
+                    chartInstance.destroy();
+                }
+
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Sample Data',
+                            data: data.values,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Example data loading
+            fetch('data.json')
+                .then(response => response.json())
+                .then(data => {
+                    createChart(data);
+                })
+                .catch(error => console.error('Error loading data:', error));
+
+            // Firebase Database example usage
+            const database = firebase.database();
+            const tempRef = database.ref('temperature');
+
+            tempRef.on('value', (snapshot) => {
+                const tempData = snapshot.val();
+                console.log('Temperature data:', tempData);
+                // Update your UI with tempData
+            });
+
+            // Example for active connections
+            function updateActiveConnections() {
+                fetch('active_connections.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Active connections:', data);
+                        // Update your UI with active connections data
+                    })
+                    .catch(error => console.error('Error fetching active connections:', error));
+            }
+
+            updateActiveConnections();
+        });
+    </script>
+
+
     <script src="js/main.js" defer></script>
 
    <style>
@@ -96,6 +413,78 @@
         </div>
     </div>
             <div class="tab-content">
+<div class="content-item" id="information">
+    <div class="project-overview" style="padding: 30px; background: #fff; box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); border-radius: 20px; margin-top: 30px; max-width: 1200px; margin-left: auto; margin-right: auto;">
+        <div class="card-header">
+            <h2 style="text-align: center; color: #287bff; font-weight: bold; margin-bottom: 30px;">Project Overview</h2>
+        </div>
+        <div style="color: #333; font-size: 18px; line-height: 1.8; text-align: justify;">
+            <p style="font-size: 22px; font-weight: bold;"><strong>Microfluidic Bacterial Analysis System</strong></p>
+            <p>
+                The Microfluidic Bacterial Analysis System is designed to detect specific bacteria through mating events, utilizing a wavelength sensor to measure bacterial growth and density changes. This system integrates machine learning for data analysis, offering versatility for applications in precise biological studies.
+            </p>
+            <p>
+                Our goal is to develop a "Mini Lab" microfluidic system that operates automatically in response to bacterial growth. The system features modular parts that are easy to replace and includes a mating chamber for two types of bacteria. Supported by a real-time website, it allows for remote control and monitoring of operations using an STM32F446RE microcontroller with FreeRTOS for efficient multitasking.
+            </p>
+            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Product Capabilities:</p>
+            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
+                <li>1. <strong>OD600 Sensor Monitoring:</strong> Monitors bacterial growth density.</li>
+                <li>2. <strong>Temperature Control:</strong> Maintains optimal conditions for bacterial growth.</li>
+                <li>3. <strong>Pump Control:</strong> Automates the transfer of bacterial cultures.</li>
+                <li>4. <strong>Web-Based Dashboard:</strong> Provides a user-friendly interface for data reading and sensor testing.</li>
+            </ul>
+            <p style="font-size: 20px; color: #287bff; font-weight: bold;">System Components:</p>
+            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
+                <li>- <strong>OD600 Sensors:</strong> Measure bacterial growth in lab tubes and mating chambers.</li>
+                <li>- <strong>Temperature Sensors and Heating Surface:</strong> Ensure optimal growth conditions.</li>
+                <li>- <strong>Pumps:</strong> Automate air insertion, bacterial mixing, and cleaning processes.</li>
+                <li>- <strong>Microcontroller (STM32F446RE):</strong> Controls sensors and actuators, running FreeRTOS for multitasking.</li>
+                <li>- <strong>ESP32:</strong> Hosts the real-time website for monitoring and control.</li>
+            </ul>
+            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Electrical Scheme:</p>
+            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
+                <li>- <strong>Microcontroller:</strong> STM32F446RE for controlling sensors and actuators.</li>
+                <li>- <strong>Power Supply:</strong> USB charger for STM32 and ESP32, 230V to 5V adapter for pumps, 230V to 12V adapter for heating and fans.</li>
+                <li>- <strong>Sensors and Actuators:</strong> Connected to the microcontroller to ensure synchronized operation.</li>
+            </ul>
+            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Software and Firmware:</p>
+            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
+                <li>- <strong>Control Algorithms:</strong> Implemented in the STM32F446RE microcontroller for sensor readings, actuator operations, and data communication.</li>
+                <li>- <strong>Real-Time Website:</strong> Hosted on ESP32, features a user-friendly interface for real-time monitoring and control of the system.</li>
+            </ul>
+            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Experiment Examples:</p>
+            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
+                <li>1. <strong>Precision Growth Measurements and Automation:</strong>
+                    <ul style="list-style-type: disc; margin-left: 20px;">
+                        <li><strong>Goal:</strong> Quantify bacterial growth using OD600 sensors and automate culture transfer.</li>
+                        <li><strong>Steps:</strong> Calibration with water and diluted coffee, pump activation based on OD600 readings.</li>
+                    </ul>
+                </li>
+                <li>2. <strong>System Functionality and Component Validation:</strong>
+                    <ul style="list-style-type: disc; margin-left: 20px;">
+                        <li><strong>Goal:</strong> Validate system power requirements, mixing behavior, and temperature control.</li>
+                        <li><strong>Steps:</strong> Measure power consumption, verify pump and heating surface functionality, and automate data recording.</li>
+                    </ul>
+                </li>
+            </ul>
+            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Future Work and Risk Management:</p>
+            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
+                <li>- <strong>Additional Experiments:</strong> Gather more data, refine sensor calibration, and enhance experimental setups.</li>
+                <li>- <strong>System Optimization:</strong> Improve control algorithms, enhance user interface, and ensure seamless integration of components.</li>
+                <li>- <strong>Risk Management:</strong> Address potential contamination, integration issues, and sensor calibration challenges.</li>
+            </ul>
+            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Website Simulation Features:</p>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>- <strong>Task Management:</strong> Choose a sensor to set tasks and schedules. Manage multiple sensors and set OD600 values for automatic actions.</li>
+                <li>- <strong>PWM Adjustments:</strong> PWM1 adjusts Pump 1, Pump 2, and Pump 4. PWM2 modifies Pump 3, which is responsible for mixing. When V01 or V02 is set to -1, you will see the value of the ADC instead of the OD600 to get the maximum value of V01 or V02.</li>
+                <li>- <strong>Active Connections:</strong> Displays the number of active connections to the system.</li>
+                <li>- <strong>System Diagram:</strong> Visual representation of the system setup and components.</li>
+                <li>- <strong>Data Monitoring:</strong> Real-time graphs for OD600 and temperature values.</li>
+            </ul>
+        </div>
+    </div>
+    </div>
+        </div>
                 <div class="content-item" id="tong-quan">
 <div class="card-box" style="padding-right: 10px;">
 
@@ -622,7 +1011,8 @@
                     </div>
                 </div>
                 <div class="list-btn">
-                    <button class="btn-form" type="button" onclick="AddDevice()">More</button>
+    <button class="btn-form" type="button" onclick="AddDevice()">More</button>
+
                     <button class="btn-form" type="button" onclick="SaveDeviceChanges()">Save Changes</button>
                 </div>
             </form>
@@ -724,82 +1114,14 @@
 
 
     </div>
-<div class="content-item" id="information">
-    <div class="project-overview" style="padding: 20px; background: #fff; box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); border-radius: 20px; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
-        <div class="card-header">
-            <h2 style="text-align: center; color: #287bff; font-weight: bold;">Project Overview</h2>
-        </div>
-        <p style="margin-top: 20px; color: #333; font-size: 18px; line-height: 1.6; text-align: justify;">
-            <strong>Microfluidic Bacterial Analysis System</strong>
-            <br><br>
-            The Microfluidic Bacterial Analysis System is designed to detect specific bacteria through mating events, utilizing a wavelength sensor to measure bacterial growth and density changes. This system integrates machine learning for data analysis, offering versatility for applications in precise biological studies.
-            <br><br>
-            Our goal is to develop a "Mini Lab" microfluidic system that operates automatically in response to bacterial growth. The system features modular parts that are easy to replace and includes a mating chamber for two types of bacteria. Supported by a real-time website, it allows for remote control and monitoring of operations using an STM32 microcontroller and an ESP32 for hosting the website.
-            <br><br>
-            <strong>Product Capabilities:</strong>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li>1. <strong>OD600 Sensor Monitoring:</strong> Monitors bacterial growth density.</li>
-                <li>2. <strong>Temperature Control:</strong> Maintains optimal conditions for bacterial growth.</li>
-                <li>3. <strong>Pump Control:</strong> Automates the transfer of bacterial cultures.</li>
-                <li>4. <strong>Web-Based Dashboard:</strong> Provides a user-friendly interface for data reading and sensor testing.</li>
-            </ul>
-            <br>
-            <strong>System Components:</strong>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li>- <strong>OD600 Sensors:</strong> Measure bacterial growth in lab tubes and mating chambers.</li>
-                <li>- <strong>Temperature Sensors and Heating Surface:</strong> Ensure optimal growth conditions.</li>
-                <li>- <strong>Pumps:</strong> Automate air insertion, bacterial mixing, and cleaning processes.</li>
-                <li>- <strong>Microcontroller (STM32):</strong> Controls sensors and actuators.</li>
-                <li>- <strong>ESP32:</strong> Hosts the real-time website for monitoring and control.</li>
-            </ul>
-            <br>
-            <strong>Electrical Scheme:</strong>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li>- <strong>Microcontroller:</strong> STM32 for controlling sensors and actuators.</li>
-                <li>- <strong>Power Supply:</strong> USB charger for STM32 and ESP32, 230V to 5V adapter for pumps, 230V to 12V adapter for heating and fans.</li>
-                <li>- <strong>Sensors and Actuators:</strong> Connected to the microcontroller to ensure synchronized operation.</li>
-            </ul>
-            <br>
-            <strong>Software and Firmware:</strong>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li>- <strong>Control Algorithms:</strong> Implemented in the STM32 microcontroller for sensor readings, actuator operations, and data communication.</li>
-                <li>- <strong>Real-Time Website:</strong> Hosted on ESP32, features a user-friendly interface for real-time monitoring and control of the system.</li>
-            </ul>
-            <br>
-            <strong>Experiment Examples:</strong>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li>1. <strong>Precision Growth Measurements and Automation:</strong>
-                    <ul style="list-style-type: disc; margin-left: 20px;">
-                        <li><strong>Goal:</strong> Quantify bacterial growth using OD600 sensors and automate culture transfer.</li>
-                        <li><strong>Steps:</strong> Calibration with water and diluted coffee, pump activation based on OD600 readings.</li>
-                    </ul>
-                </li>
-                <li>2. <strong>System Functionality and Component Validation:</strong>
-                    <ul style="list-style-type: disc; margin-left: 20px;">
-                        <li><strong>Goal:</strong> Validate system power requirements, mixing behavior, and temperature control.</li>
-                        <li><strong>Steps:</strong> Measure power consumption, verify pump and heating surface functionality, and automate data recording.</li>
-                    </ul>
-                </li>
-            </ul>
-            <br>
-            <strong>Future Work and Risk Management:</strong>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li>- <strong>Additional Experiments:</strong> Gather more data, refine sensor calibration, and enhance
-                <li>- <strong>System Optimization:</strong> Improve control algorithms, enhance user interface, and ensure seamless integration of components.</li>
-                <li>- <strong>Risk Management:</strong> Address potential contamination, integration issues, and sensor calibration challenges.</li>
-            </ul>
-        </p>
 
     </div>
-</div>
-
-</div>
-
-        </div>
-    </div>
+    
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
     <canvas id="myChart"></canvas>
+    <link rel="stylesheet" href="css/style.css">
+
 
 
     <script defer src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
@@ -819,73 +1141,12 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
     </script>
-
-    <!-- Main JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let chartInstance;
-
-            function createChart(data) {
-                const ctx = document.getElementById('myChart').getContext('2d');
-
-                if (chartInstance) {
-                    chartInstance.destroy();
-                }
-
-                chartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'Sample Data',
-                            data: data.values,
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Example data loading
-            fetch('data.json')
-                .then(response => response.json())
-                .then(data => {
-                    createChart(data);
-                })
-                .catch(error => console.error('Error loading data:', error));
-
-            // Firebase Database example usage
-            const database = firebase.database();
-            const tempRef = database.ref('temperature');
-
-            tempRef.on('value', (snapshot) => {
-                const tempData = snapshot.val();
-                console.log('Temperature data:', tempData);
-                // Update your UI with tempData
-            });
-
-            // Example for active connections
-            function updateActiveConnections() {
-                fetch('active_connections.json')
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Active connections:', data);
-                        // Update your UI with active connections data
-                    })
-                    .catch(error => console.error('Error fetching active connections:', error));
-            }
-
-            updateActiveConnections();
+        document.addEventListener('DOMContentLoaded', function() {
+            LoadListDevice();
         });
     </script>
-
+    
     <script>
         //show content
         $(document).ready(function () {
