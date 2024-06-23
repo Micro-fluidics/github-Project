@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/widget.css">
     <!-- Icon -->
+    <script src="js/main.js"></script>
+    <script src="js/admin.js"></script>
     <script src="https://kit.fontawesome.com/951fcb8c3d.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
@@ -39,38 +41,38 @@
                 <li>
                 
            <a href="#">
-                        <span class="icon"><img src="/icons?name=user.png" alt="User Icon" style="width: 28px; height: 28px;"></span>
+        <span class="icon"><img src="icons/user.png" alt="User Icon" style="width: 28px; height: 28px;"></span>
                         <span class="title">Ben Berni & Moran Tsoran</span>
                     </a>
                 </li>
                 <li class="active">
                     <a href="#tong-quan">
-                                            <span class="icon"><img src="/icons?name=home.png" alt="DashBoard Icon" style="width: 28px; height: 28px;"></span>
+                                            <span class="icon"><img src="icons/home.png" alt="DashBoard Icon" style="width: 28px; height: 28px;"></span>
                         <span class="title">Dash Board</span>
                     </a>
                 </li>
                 <li>
                     <a href="#thiet-bi">
-                                                                <span class="icon"><img src="/icons?name=task.png" alt="task Icon" style="width: 28px; height: 28px;"></span>
+                                                                <span class="icon"><img src="icons/task.png" alt="task Icon" style="width: 28px; height: 28px;"></span>
                         <span class="title">Task Editor</span>
                     </a>
                 </li>
 <li id="menu-set-auto">
     <a href="#set-auto">
-        <span class="icon"><img src="/icons?name=setting.png" alt="setting Icon" style="width: 28px; height: 28px;"></span>
+        <span class="icon"><img src="icons/setting.png" alt="setting Icon" style="width: 28px; height: 28px;"></span>
         <span class="title">Setting</span>
     </a>
 </li>
 
                 <li>
                     <a href="#information">
-                                                                                    <span class="icon"><img src="/icons?name=about.png" alt="about Icon" style="width: 28px; height: 28px;"></span>
+                                                                                    <span class="icon"><img src="icons/about.png" alt="about Icon" style="width: 28px; height: 28px;"></span>
                         <span class="title">information</span>
                     </a>
                 </li>
                 <li>
                     <a href="test.html">
-                                                                                    <span class="icon"><img src="/icons?name=online.png" alt="internet Icon" style="width: 28px; height: 28px;"></span>
+                                                                                    <span class="icon"><img src="icons/online.png" alt="internet Icon" style="width: 28px; height: 28px;"></span>
                         <span class="title">test</span>
                     </a>
                 </li>
@@ -80,14 +82,14 @@
 <div class="main">
     <div class="topbar">
         <div class="toggle">
-            <span class="icon"><img src="/icons?name=menu.png" alt="menu Icon" style="width: 34px; height: 34px;"></span>
+            <span class="icon"><img src="icons/menu.png" alt="menu Icon" style="width: 34px; height: 34px;"></span>
         </div>
           <div class="active-connections">
             <span class="connection-count" id="activeConnections">0</span> Active Connection<span id="plural-suffix">s</span>
         </div>
 
         <div class="setting" onclick="navigateToSetAuto()">
-            <span class="icon"><img src="/icons?name=setting.png" alt="setting Icon" style="width: 34px; height: 34px;"></span>
+            <span class="icon"><img src="icons/setting.png" alt="setting Icon" style="width: 34px; height: 34px;"></span>
         </div>
     </div>
             <div class="tab-content">
@@ -99,7 +101,7 @@
     <div>
         <div class="icon-box"></div>
         <div class="card-name" style="color:red">Pump 1</div>
-        <img src="/icons?name=pump.png" alt="Pump Icon">
+        <img src="icons/pump.png" alt="Pump Icon">
     </div>
 <div style="display: flex; flex-direction: column;">
     <button class="btn-form" id="forwardButton_Pump1" onclick="toggleDirection('Pump1', 'forward')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; margin-bottom: 5px; background-color: blue;">Forward</button>
@@ -117,7 +119,7 @@
         <div class="icon-box">
         </div>
         <div class="card-name" style="color:red">Pump 2</div>
-   <img src="/icons?name=pump.png" alt="Pump Icon">
+   <img src="icons/pump.png" alt="Pump Icon">
     </div>
 <div style="display: flex; flex-direction: column;">
     <button class="btn-form" id="forwardButton_Pump2" onclick="toggleDirection('Pump2', 'forward')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; margin-bottom: 5px; background-color: blue;">Forward</button>
@@ -133,7 +135,7 @@
         <div class="icon-box">
         </div>
         <div class="card-name" style="color:red">Pump 3</div>
-   <img src="/icons?name=pump.png" alt="Pump Icon">
+   <img src="icons/pump.png" alt="Pump Icon">
     </div>
 <div style="display: flex; flex-direction: column;">
     <button class="btn-form" id="forwardButton_Pump3" onclick="toggleDirection('Pump3', 'forward')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; margin-bottom: 5px; background-color: blue;">Forward</button>
@@ -149,7 +151,7 @@
         <div class="icon-box">
         </div>
         <div class="card-name" style="color:red">Pump 4</div>
-   <img src="/icons?name=pump.png" alt="Pump Icon">
+   <img src="icons/pump.png" alt="Pump Icon">
     </div>
 <div style="display: flex; flex-direction: column;">
     <button class="btn-form" id="forwardButton_Pump4" onclick="toggleDirection('Pump4', 'forward')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; margin-bottom: 5px; background-color: blue;">Forward</button>
@@ -167,7 +169,7 @@
         <div class="icon-box">
         </div>
         <div class="card-name " style="padding-bottom: 5px; color:red ;">Heating</div>
-        <img src="/icons?name=Heating.png" alt="Heating Icon">
+        <img src="icons/Heating.png" alt="Heating Icon">
     </div>
     <div class="switch">
         <input type="checkbox" id="toggle_Heating" onchange="toggleSensor('Heating', this.checked);">
@@ -179,7 +181,7 @@
         <div class="icon-box">
         </div>
 <div class="card-name" style="padding-bottom: 5px; padding-left: 10px;color:red;">Fan</div>
-        <img src="/icons?name=fan.png" alt="FAN Icon">
+        <img src="icons/fan.png" alt="FAN Icon">
     </div>
     <div class="switch">
         <input type="checkbox" id="toggle_FAN" onchange="toggleSensor('Fan', this.checked);">
@@ -191,7 +193,7 @@
         <div class="icon-box">
         </div>
         <div class="card-name" style="padding-bottom: 1px; padding-left: 10px;color:red;">Led 1</div>
-       <img src="/icons?name=led.png" alt="LED Icon">
+       <img src="icons/led.png" alt="LED Icon">
     </div>
     <div class="switch">
         <input type="checkbox" id="toggle_LED1" onchange="toggleSensor('Led1', this.checked);">
@@ -203,7 +205,7 @@
         <div class="icon-box ">
         </div>
         <div class="card-name" style="padding-bottom: 1px; padding-left: 10px;color:red;">Led 2</div>
-      <img src="/icons?name=led.png" alt="LED Icon">
+      <img src="icons/led.png" alt="LED Icon">
     </div>
     <div class="switch">
         <input type="checkbox" id="toggle_LED2" onchange="toggleSensor('Led2', this.checked);">
@@ -960,6 +962,41 @@ function EditDevice(id) {
 }
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Example function to update the graph
+    function updateGraph(data) {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Sample Data',
+                    data: data.values,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Example data loading
+    fetch('path/to/your/data.json')
+        .then(response => response.json())
+        .then(data => {
+            updateGraph(data);
+        })
+        .catch(error => console.error('Error loading data:', error));
+});
+</script>
 <script>
 function toggleSensor(sensorName, checked) {
     var state = checked ? 'On' : 'Off';  // Determine state based on checkbox
