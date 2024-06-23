@@ -43,7 +43,7 @@
             <ul>
                 <li>
                 
-           <a href="#">
+           <a href="#information">
         <span class="icon"><img src="icons/user.png" alt="User Icon" style="width: 28px; height: 28px;"></span>
                         <span class="title">Ben Berni & Moran Tsoran</span>
                     </a>
@@ -1349,8 +1349,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Update ADC values
-        document.getElementById('adc1').innerHTML = isNaN(newData1) ? "NaN" : `${newData1}`;
-        document.getElementById('adc2').innerHTML = isNaN(newData2) ? "NaN" : `${newData2}`;
+document.getElementById('adc1').innerHTML = isNaN(newData1) ? "NaN" : newData1.toFixed(0);
+document.getElementById('adc2').innerHTML = isNaN(newData2) ? "NaN" : newData2.toFixed(0);
 
         // Update the SVG circles
         const circle3 = document.getElementById('circle3').querySelector('circle:nth-child(2)');
