@@ -1158,254 +1158,237 @@ function toggleDirection(sensorName, direction) {
 }
 
 </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var ctx3 = document.getElementById('myChart3').getContext('2d');
-
-                var data5 = {
-                    labels: [],
-                    datasets: [{
-                        label: 'Temperature',
-                        data: [],
-                        borderColor: '#36a2eb', // Vibrant blue color
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Light blue background
-                        tension: 0.4
-                    }]
-                };
-
-                var config5 = {
-                    type: 'line',
-                    data: data5,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true, // Maintain aspect ratio
-                        scales: {
-                            y: {
-                               beginAtZero: true,
-
-                                ticks: {
-                                    stepSize: 10,
-                                    color: '#666'
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Temperature (°C)',
-                                    color: '#666'
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    color: '#666'
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Time',
-                                    color: '#666'
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: true,
-                                labels: {
-                                    color: '#666'
-                                }
-                            }
-                        }
-                    }
-                };
-
-                var myChart3 = new Chart(ctx3, config5);
-
-                function fetchTemperature() {
-                    fetch('/temperature')
-                        .then(response => response.json())
-                        .then(data => {
-                            var now = new Date().toLocaleTimeString();
-
-                            // Update the temperature chart
-                            data5.labels.push(now);
-                            data5.datasets[0].data.push(data.temp);
-
-                            myChart3.update();
-
-                            // Update temperature values for Temp and Humidity
-                            document.getElementById('Temp').innerHTML = `${data.temp}°C`;
-                            document.getElementById('Humidity').innerHTML = `${data.humidity}%`;
-
-                            // Update SVG circle's stroke-dashoffset based on the temperature values
-                            const circle1 = document.getElementById('circle1').querySelector('circle:nth-child(2)');
-                            const circle2 = document.getElementById('circle2').querySelector('circle:nth-child(2)');
-                            const radius1 = circle1.r.baseVal.value;
-                            const radius2 = circle2.r.baseVal.value;
-                            const circumference1 = 2 * Math.PI * radius1;
-                            const circumference2 = 2 * Math.PI * radius2;
-                            const offset1 = circumference1 - ((data.temp) / 50) * circumference1;
-                            const offset2 = circumference2 - ((data.humidity) / 100) * circumference2;
-                            circle1.style.strokeDasharray = `${circumference1}`;
-                            circle1.style.strokeDashoffset = `${offset1}`;
-                            circle2.style.strokeDasharray = `${circumference2}`;
-                            circle2.style.strokeDashoffset = `${offset2}`;
-                        })
-                        .catch(error => console.error('Error fetching temperature:', error));
-                }
-
-                fetchTemperature(); // Fetch immediately
-                setInterval(fetchTemperature, 3000); // Fetch every 3 seconds
-            });
-        </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize chart data
-        let labels = [];
-        let data1 = [];
-        let data2 = [];
-        let adc3Value = [];
+document.addEventListener('DOMContentLoaded', function() {
+    var ctx3 = document.getElementById('myChart3').getContext('2d');
 
-        // Initialize Chart.js instance
-        let ctx = document.getElementById('myChart').getContext('2d');
-        let myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                        label: 'OD1',
-                        data: data1,
-                        backgroundColor: 'rgba(0, 0, 0, 0)', // No background color
-                        borderColor: 'rgba(54, 162, 235, 1)', // Solid Blue
-                        borderWidth: 1,
-                        fill: false // Do not fill under the line
-                    },
-                    {
-                        label: 'OD2',
-                        data: data2,
-                        backgroundColor: 'rgba(0, 0, 0, 0)', // No background color
-                        borderColor: 'rgba(255, 99, 132, 1)', // Solid Red
-                        borderWidth: 1,
-                        fill: false // Do not fill under the line
-                    },
-        
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
+    var data5 = {
+        labels: [],
+        datasets: [{
+            label: 'Temperature',
+            data: [],
+            borderColor: '#36a2eb', // Vibrant blue color
+            backgroundColor: 'rgba(54, 162, 235, 0.2)', // Light blue background
+            tension: 0.4
+        }]
+    };
 
-                        beginAtZero: true,
-                        ticks: {
-                                                                                    stepSize: 50,
-                            color: '#666'
-                        },
-                        title: {
-                            display: true,
-                            text: 'OD 600',
-                            color: '#666'
-                        }
+    var config5 = {
+        type: 'line',
+        data: data5,
+        options: {
+            responsive: true,
+            maintainAspectRatio: true, // Maintain aspect ratio
+            scales: {
+                y: {
+                   beginAtZero: true,
+                    ticks: {
+                        stepSize: 10,
+                        color: '#666'
                     },
-                    x: {
-                        ticks: {
-
-                            color: '#666'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Time',
-                            color: '#666'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
+                    title: {
                         display: true,
-                        labels: {
-                            color: '#666'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        borderColor: '#fff',
-                        borderWidth: 1
+                        text: 'Temperature (°C)',
+                        color: '#666'
                     }
                 },
-                animation: {
-                    duration: 1000,
-                    easing: 'easeInOutQuart'
+                x: {
+                    ticks: {
+                        color: '#666'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Time',
+                        color: '#666'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: '#666'
+                    }
                 }
             }
+        }
+    };
+
+    var myChart3 = new Chart(ctx3, config5);
+
+    function simulateTemperature() {
+        var now = new Date().toLocaleTimeString();
+        var simulatedTemp = Math.random() * 40 + 10; // Simulated temperature between 10 and 50
+        var simulatedHumidity = Math.random() * 100; // Simulated humidity between 0 and 100
+
+        // Update the temperature chart
+        data5.labels.push(now);
+        data5.datasets[0].data.push(simulatedTemp);
+
+        myChart3.update();
+
+        // Update temperature values for Temp and Humidity
+        document.getElementById('Temp').innerHTML = `${simulatedTemp.toFixed(1)}°C`;
+        document.getElementById('Humidity').innerHTML = `${simulatedHumidity.toFixed(1)}%`;
+
+        // Update SVG circle's stroke-dashoffset based on the temperature values
+        const circle1 = document.getElementById('circle1').querySelector('circle:nth-child(2)');
+        const circle2 = document.getElementById('circle2').querySelector('circle:nth-child(2)');
+        const radius1 = circle1.r.baseVal.value;
+        const radius2 = circle2.r.baseVal.value;
+        const circumference1 = 2 * Math.PI * radius1;
+        const circumference2 = 2 * Math.PI * radius2;
+        const offset1 = circumference1 - ((simulatedTemp) / 50) * circumference1;
+        const offset2 = circumference2 - ((simulatedHumidity) / 100) * circumference2;
+        circle1.style.strokeDasharray = `${circumference1}`;
+        circle1.style.strokeDashoffset = `${offset1}`;
+        circle2.style.strokeDasharray = `${circumference2}`;
+        circle2.style.strokeDashoffset = `${offset2}`;
+    }
+
+    simulateTemperature(); // Simulate immediately
+    setInterval(simulateTemperature, 3000); // Simulate every 3 seconds
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize chart data
+    let labels = [];
+    let data1 = [];
+    let data2 = [];
+
+    // Initialize Chart.js instance
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                    label: 'OD1',
+                    data: data1,
+                    backgroundColor: 'rgba(0, 0, 0, 0)', // No background color
+                    borderColor: 'rgba(54, 162, 235, 1)', // Solid Blue
+                    borderWidth: 1,
+                    fill: false // Do not fill under the line
+                },
+                {
+                    label: 'OD2',
+                    data: data2,
+                    backgroundColor: 'rgba(0, 0, 0, 0)', // No background color
+                    borderColor: 'rgba(255, 99, 132, 1)', // Solid Red
+                    borderWidth: 1,
+                    fill: false // Do not fill under the line
+                },
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 50,
+                        color: '#666'
+                    },
+                    title: {
+                        display: true,
+                        text: 'OD 600',
+                        color: '#666'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#666'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Time',
+                        color: '#666'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: '#666'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutQuart'
+            }
+        }
+    });
+
+    // Store ADC values for download
+    const adcData = [];
+
+    // Function to update chart data with new row data
+    function updateChart(newLabel, newData1, newData2) {
+        labels.push(newLabel);
+        data1.push(newData1);
+        data2.push(newData2);
+
+        // Update the chart
+        myChart.update();
+
+        // Store the data for download
+        adcData.push({
+            timestamp: newLabel,
+            od1: newData1,
+            od2: newData2
         });
 
-        // Store ADC values for download
-        const adcData = [];
+        // Update ADC values
+        document.getElementById('adc1').innerHTML = isNaN(newData1) ? "NaN" : `${newData1}`;
+        document.getElementById('adc2').innerHTML = isNaN(newData2) ? "NaN" : `${newData2}`;
 
-        // Function to update chart data with new row data
-        function updateChart(newLabel, newData1, newData2) {
-            labels.push(newLabel);
-            data1.push(newData1);
-            data2.push(newData2);
-            adc3Value.push(20); // Push the constant value here
+        // Update the SVG circles
+        const circle3 = document.getElementById('circle3').querySelector('circle:nth-child(2)');
+        const circle4 = document.getElementById('circle4').querySelector('circle:nth-child(2)');
+        const radius3 = circle3.r.baseVal.value;
+        const radius4 = circle4.r.baseVal.value;
+        const circumference3 = 2 * Math.PI * radius3;
+        const circumference4 = 2 * Math.PI * radius4;
+        const offset3 = circumference3 - (isNaN(newData1) ? 0 : (newData1 / 4095) * circumference3);
+        const offset4 = circumference4 - (isNaN(newData2) ? 0 : (newData2 / 4095) * circumference4);
+        circle3.style.strokeDasharray = `${circumference3}`;
+        circle3.style.strokeDashoffset = `${offset3}`;
+        circle4.style.strokeDasharray = `${circumference4}`;
+        circle4.style.strokeDashoffset = `${offset4}`;
+    }
 
-            // Update the chart
-            myChart.update();
+    // Function to simulate ADC data
+    function simulateAndPlotData() {
+        let newLabel = new Date().toLocaleTimeString();
+        let newData1 = Math.random() * 4095; // Simulated ADC1 value
+        let newData2 = Math.random() * 4095; // Simulated ADC2 value
+        updateChart(newLabel, newData1, newData2);
+    }
 
-            // Store the data for download
-            adcData.push({
-                timestamp: newLabel,
-                od1: newData1,
-                od2: newData2
-            });
+    // Simulate data and update chart initially
+    simulateAndPlotData();
 
-            // Update kWh values
-            const adc1Value = isNaN(newData1) ? "NaN" : `${newData1}`;
-            const adc2Value = isNaN(newData2) ? "NaN" : `${newData2}`;
-            document.getElementById('adc1').innerHTML = adc1Value;
-            document.getElementById('adc2').innerHTML = adc2Value;
+    // Set interval to simulate data and update chart periodically
+    setInterval(simulateAndPlotData, 3000); // Update every 3 seconds
 
-            // Update the SVG circles
-            const circle3 = document.getElementById('circle3').querySelector('circle:nth-child(2)');
-            const circle4 = document.getElementById('circle4').querySelector('circle:nth-child(2)');
-            const radius3 = circle3.r.baseVal.value;
-            const radius4 = circle4.r.baseVal.value;
-            const circumference3 = 2 * Math.PI * radius3;
-            const circumference4 = 2 * Math.PI * radius4;
-            const offset3 = circumference3 - (isNaN(newData1) ? 0 : (newData1 / 4095) * circumference3);
-            const offset4 = circumference4 - (isNaN(newData2) ? 0 : (newData2 / 4095) * circumference4);
-            circle3.style.strokeDasharray = `${circumference3}`;
-            circle3.style.strokeDashoffset = `${offset3}`;
-            circle4.style.strokeDasharray = `${circumference4}`;
-            circle4.style.strokeDashoffset = `${offset4}`;
-        }
-
-        // Function to fetch kWh data from Arduino server and update chart
-        function fetchAndPlotData() {
-            fetch('/adc')
-                .then(response => response.json())
-                .then(data => {
-                    let newLabel = new Date().toLocaleTimeString();
-                    let newData1 = data.adc1;
-                    let newData2 = data.adc2;
-                    updateChart(newLabel, newData1, newData2);
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        }
-
-        // Fetch data and update chart initially
-        fetchAndPlotData();
-
-        // Set interval to fetch data and update chart periodically
-        setInterval(fetchAndPlotData, 3000); // Update every 3 seconds
-
-        // Function to download the Excel file
-        window.downloadExcel = function() {
-            const ws = XLSX.utils.json_to_sheet(adcData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'ADC Data');
-            XLSX.writeFile(wb, 'od_data.xlsx');
-        }
-        
-    });
+    // Function to download the Excel file
+    window.downloadExcel = function() {
+        const ws = XLSX.utils.json_to_sheet(adcData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'ADC Data');
+        XLSX.writeFile(wb, 'od_data.xlsx');
+    }
+});
 </script>
 
 
