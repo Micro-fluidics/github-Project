@@ -1218,8 +1218,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function simulateTemperature() {
         var now = new Date().toLocaleTimeString();
-        var simulatedTemp = Math.random() * 40 + 10; // Simulated temperature between 10 and 50
-        var simulatedHumidity = Math.random() * 100; // Simulated humidity between 0 and 100
+        var simulatedTemp = 25 + (Math.random() - 0.5) * 0.5; // Simulated temperature around 25°C with small fluctuations
+        var simulatedHumidity = 60 + (Math.random() - 0.5) * 5; // Simulated humidity around 60% with small fluctuations
 
         // Update the temperature chart
         data5.labels.push(now);
@@ -1287,7 +1287,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        stepSize: 50,
+                        stepSize: 500,
                         color: '#666'
                     },
                     title: {
@@ -1370,8 +1370,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to simulate ADC data
     function simulateAndPlotData() {
         let newLabel = new Date().toLocaleTimeString();
-        let newData1 = Math.random() * 4095; // Simulated ADC1 value
-        let newData2 = Math.random() * 4095; // Simulated ADC2 value
+        let newData1 = data1.length > 0 ? data1[data1.length - 1] + Math.random() * 10 : Math.random() * 10;
+        let newData2 = data2.length > 0 ? data2[data2.length - 1] + Math.random() * 10 : Math.random() * 10;
         updateChart(newLabel, newData1, newData2);
     }
 
