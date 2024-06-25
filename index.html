@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/widget.css">
     <!-- Icon -->
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
     <script src="https://kit.fontawesome.com/951fcb8c3d.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
@@ -316,25 +318,19 @@
                 // Update your UI with tempData
             });
 
-            // Example for active connections
-            function updateActiveConnections() {
-                fetch('active_connections.json')
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Active connections:', data);
-                        // Update your UI with active connections data
-                    })
-                    .catch(error => console.error('Error fetching active connections:', error));
-            }
 
-            updateActiveConnections();
-        });
     </script>
 
 
     <script src="js/main.js" defer></script>
 
    <style>
+   .simulation-label {
+    font-size: 12px;
+    color: #000;
+    margin-left: 5px;
+}
+
         .hidden {
             display: none;
         }
@@ -369,25 +365,33 @@
                     <a href="#tong-quan">
                                             <span class="icon"><img src="icons/home.png" alt="DashBoard Icon" style="width: 28px; height: 28px;"></span>
                         <span class="title">Dash Board</span>
+                                    <span class="simulation-label">(Simulation)</span>
+
                     </a>
                 </li>
                 <li>
                     <a href="#thiet-bi">
+                    
                                                                 <span class="icon"><img src="icons/task.png" alt="task Icon" style="width: 28px; height: 28px;"></span>
                         <span class="title">Task Editor</span>
+                                    <span class="simulation-label">(Simulation)</span>
+
                     </a>
                 </li>
 <li id="menu-set-auto">
     <a href="#set-auto">
         <span class="icon"><img src="icons/setting.png" alt="setting Icon" style="width: 28px; height: 28px;"></span>
+        
         <span class="title">Setting</span>
+                    <span class="simulation-label">(Simulation)</span>
+
     </a>
 </li>
 
                 <li class="active">
                     <a href="#information">
                                                                                     <span class="icon"><img src="icons/about.png" alt="about Icon" style="width: 28px; height: 28px;"></span>
-                        <span class="title">information</span>
+                        <span class="title">Project Overview</span>
                     </a>
                 </li>
                 <li>
@@ -404,15 +408,13 @@
         <div class="toggle">
             <span class="icon"><img src="icons/menu.png" alt="menu Icon" style="width: 34px; height: 34px;"></span>
         </div>
-          <div class="active-connections">
-            <span class="connection-count" id="activeConnections">0</span> Active Connection<span id="plural-suffix">s</span>
-        </div>
+  
 
         <div class="setting" onclick="navigateToSetAuto()">
             <span class="icon"><img src="icons/setting.png" alt="setting Icon" style="width: 34px; height: 34px;"></span>
         </div>
     </div>
-            <div class="tab-content">
+       <div class="tab-content">
 <div class="content-item" id="information">
     <div class="project-overview" style="padding: 30px; background: #fff; box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); border-radius: 20px; margin-top: 30px; max-width: 1200px; margin-left: auto; margin-right: auto;">
         <div class="card-header">
@@ -420,20 +422,17 @@
         </div>
         <div style="color: #333; font-size: 18px; line-height: 1.8; text-align: justify;">
             <p style="font-size: 22px; font-weight: bold;"><strong>Microfluidic Bacterial Analysis System</strong></p>
-            <p>
-                The Microfluidic Bacterial Analysis System is designed to detect specific bacteria through mating events, utilizing a wavelength sensor to measure bacterial growth and density changes. This system integrates machine learning for data analysis, offering versatility for applications in precise biological studies.
-            </p>
-            <p>
-                Our goal is to develop a "Mini Lab" microfluidic system that operates automatically in response to bacterial growth. The system features modular parts that are easy to replace and includes a mating chamber for two types of bacteria. Supported by a real-time website, it allows for remote control and monitoring of operations using an STM32F446RE microcontroller with FreeRTOS for efficient multitasking.
-            </p>
-            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Product Capabilities:</p>
+            <p>The Microfluidic Bacterial Analysis System is designed to detect bacterial growth using OD600 sensors. This system provides real-time monitoring and graphing of bacterial growth over time. Our goal is to develop a "Mini Lab" microfluidic system that operates automatically in response to bacterial growth. The system features modular parts that are easy to replace. Supported by a real-time website, it allows for remote control and monitoring of operations using an STM32F446RE microcontroller with FreeRTOS for efficient multitasking.</p>
+            
+            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Product Capabilities</h3>
             <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
                 <li>1. <strong>OD600 Sensor Monitoring:</strong> Monitors bacterial growth density.</li>
                 <li>2. <strong>Temperature Control:</strong> Maintains optimal conditions for bacterial growth.</li>
                 <li>3. <strong>Pump Control:</strong> Automates the transfer of bacterial cultures.</li>
                 <li>4. <strong>Web-Based Dashboard:</strong> Provides a user-friendly interface for data reading and sensor testing.</li>
             </ul>
-            <p style="font-size: 20px; color: #287bff; font-weight: bold;">System Components:</p>
+            
+            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">System Components</h3>
             <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
                 <li>- <strong>OD600 Sensors:</strong> Measure bacterial growth in lab tubes and mating chambers.</li>
                 <li>- <strong>Temperature Sensors and Heating Surface:</strong> Ensure optimal growth conditions.</li>
@@ -441,18 +440,42 @@
                 <li>- <strong>Microcontroller (STM32F446RE):</strong> Controls sensors and actuators, running FreeRTOS for multitasking.</li>
                 <li>- <strong>ESP32:</strong> Hosts the real-time website for monitoring and control.</li>
             </ul>
-            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Electrical Scheme:</p>
+            
+            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Electrical Scheme</h3>
             <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
                 <li>- <strong>Microcontroller:</strong> STM32F446RE for controlling sensors and actuators.</li>
                 <li>- <strong>Power Supply:</strong> USB charger for STM32 and ESP32, 230V to 5V adapter for pumps, 230V to 12V adapter for heating and fans.</li>
                 <li>- <strong>Sensors and Actuators:</strong> Connected to the microcontroller to ensure synchronized operation.</li>
             </ul>
-            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Software and Firmware:</p>
+            
+            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Software and Firmware</h3>
             <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
                 <li>- <strong>Control Algorithms:</strong> Implemented in the STM32F446RE microcontroller for sensor readings, actuator operations, and data communication.</li>
                 <li>- <strong>Real-Time Website:</strong> Hosted on ESP32, features a user-friendly interface for real-time monitoring and control of the system.</li>
             </ul>
-            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Experiment Examples:</p>
+            
+            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">System Schematic</h3>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="path_to_your_fritzing_image.png" alt="System Schematic" style="max-width: 100%; height: auto;">
+            </div>
+            <p style="font-size: 18px;">The system schematic illustrates the connections between the STM32F446RE microcontroller, sensors, pumps, heating elements, and the ESP32 module. The schematic also highlights the power supply setup, showing the different voltage adapters used for various components.</p>
+            
+            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Future Work and Risk Management</h3>
+            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
+                <li>- <strong>Additional Experiments:</strong> Gather more data, refine sensor calibration, and enhance experimental setups.</li>
+                <li>- <strong>System Optimization:</strong> Improve control algorithms, enhance user interface, and ensure seamless integration of components.</li>
+                <li>- <strong>Risk Management:</strong> Address potential contamination, integration issues, and sensor calibration challenges.</li>
+            </ul>
+            
+            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Website Simulation Features</h3>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>- <strong>Task Management:</strong> Choose a sensor to set tasks and schedules. Manage multiple sensors and set OD600 values for automatic actions.</li>
+                <li>- <strong>PWM Adjustments:</strong> PWM1 adjusts Pump 1, Pump 2, and Pump 4. PWM2 modifies Pump 3, which is responsible for mixing. When V01 or V02 is set to -1, you will see the value of the ADC instead of the OD600 to get the maximum value of V01 or V02.</li>
+                <li>- <strong>System Diagram:</strong> Visual representation of the system setup and components.</li>
+                <li>- <strong>Data Monitoring:</strong> Real-time graphs for OD600 and temperature values.</li>
+            </ul>
+            
+            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Experiment Examples</h3>
             <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
                 <li>1. <strong>Precision Growth Measurements and Automation:</strong>
                     <ul style="list-style-type: disc; margin-left: 20px;">
@@ -467,24 +490,12 @@
                     </ul>
                 </li>
             </ul>
-            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Future Work and Risk Management:</p>
-            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
-                <li>- <strong>Additional Experiments:</strong> Gather more data, refine sensor calibration, and enhance experimental setups.</li>
-                <li>- <strong>System Optimization:</strong> Improve control algorithms, enhance user interface, and ensure seamless integration of components.</li>
-                <li>- <strong>Risk Management:</strong> Address potential contamination, integration issues, and sensor calibration challenges.</li>
-            </ul>
-            <p style="font-size: 20px; color: #287bff; font-weight: bold;">Website Simulation Features:</p>
-            <ul style="list-style-type: none; padding-left: 0;">
-                <li>- <strong>Task Management:</strong> Choose a sensor to set tasks and schedules. Manage multiple sensors and set OD600 values for automatic actions.</li>
-                <li>- <strong>PWM Adjustments:</strong> PWM1 adjusts Pump 1, Pump 2, and Pump 4. PWM2 modifies Pump 3, which is responsible for mixing. When V01 or V02 is set to -1, you will see the value of the ADC instead of the OD600 to get the maximum value of V01 or V02.</li>
-                <li>- <strong>Active Connections:</strong> Displays the number of active connections to the system.</li>
-                <li>- <strong>System Diagram:</strong> Visual representation of the system setup and components.</li>
-                <li>- <strong>Data Monitoring:</strong> Real-time graphs for OD600 and temperature values.</li>
-            </ul>
         </div>
     </div>
     </div>
         </div>
+
+
                 <div class="content-item" id="tong-quan">
 <div class="card-box" style="padding-right: 10px;">
 
