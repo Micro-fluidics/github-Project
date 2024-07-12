@@ -320,6 +320,177 @@
 
 
     </script>
+<script>
+
+        function updateActiveConnections() {
+            fetch('/active_connections')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('activeConnections').innerText = data.active_connections;
+                });
+        }
+
+        setInterval(updateActiveConnections, 1000); // Update every second
+
+</script>
+
+
+<script>
+    function updateBoxStatus() {
+        fetch('/box_status')
+            .then(response => response.json())
+            .then(data => {
+                const status = data.box_status;
+                const statusElement = document.getElementById('boxStatus');
+
+                statusElement.innerText = status;
+
+                if (status === 'Open') {
+                    statusElement.style.color = 'var(--green)';
+                } else {
+                    statusElement.style.color = 'var(--red)';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching box status:', error);
+            });
+    }
+
+    // Initial call to set the status on page load
+    updateBoxStatus();
+    
+    // Update the status whenever an interrupt occurs
+    setInterval(updateBoxStatus, 1000); // Update every second
+</script>
+
+
+<script>
+function toggleDirection(sensorName, direction) {
+    // Reset button colors
+    $('#forwardButton_' + sensorName + ', #reverseButton_' + sensorName).css('background-color', 'var(--darkgray)');
+    
+    // Set the background color of the clicked button to dark blue
+    if (direction === 'forward') {
+        $("#forwardButton_" + sensorName).css("background-color", "var(--darkblue)");
+    } else if (direction === 'reverse') {
+        $("#reverseButton_" + sensorName).css("background-color", "var(--darkblue)");
+    }
+}
+</script>
+<script>
+function sendAllTasks() {
+    let list = JSON.parse(localStorage.getItem('Devices')) || [];
+    console.log('Sending tasks:', list); // Debugging line to see what is being sent
+    
+    // Check if the list is empty
+    if (list.length === 0) {
+        console.log('No tasks to send');
+        alert('No tasks to send');
+        return; // Exit the function early since there's nothing to send
+    }
+    
+    $.ajax({
+        url: '/sendTasks', // Make sure this is the correct endpoint
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ devices: list }), // Wrapping the list in an object if the server expects it
+        success: function(response) {
+            console.log('Tasks sent successfully:', response);
+            alert('Tasks sent successfully!');
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to send tasks:', error);
+            alert('Error sending tasks. Please check the console for more details.');
+            // More detailed debugging information
+            console.error('XHR Object:', xhr);
+            console.error('Status:', status);
+            console.error('Error:', error);
+        }
+    });
+}
+function sendWashCommand() {
+    const washCommand = {
+        devices: [{
+            type: "Wash",
+            name: "On",
+            folder: "1",
+            location: "1"
+        }]
+    };
+    
+    $.ajax({
+        url: '/sendTasks',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(washCommand),
+        success: function(response) {
+            console.log('Wash command sent successfully:', response);
+            alert('Wash command sent successfully!');
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to send wash command:', error);
+            alert('Error sending wash command. Please check the console for more details.');
+            console.error('XHR Object:', xhr);
+            console.error('Status:', status);
+            console.error('Error:', error);
+        }
+    });
+}
+
+</script>
+
+
+<script>
+function toggleSensor(sensorName, checked) {
+    var state = checked ? 'On' : 'Off';  // Determine state based on checkbox
+    var direction = ''; // Default direction
+    
+    // Check if the sensorName is Pump1, Pump2, or Pump3
+    if (sensorName === 'Pump1' || sensorName === 'Pump2') {
+        // Get direction based on which button is clicked
+        if ($("#forwardButton_" + sensorName).css("background-color") === "rgb(44, 53, 221)") {
+            direction = 'Forward';
+        } else if ($("#reverseButton_" + sensorName).css("background-color") === "rgb(44, 53, 221)") {
+            direction = 'Reverse';
+        }
+    }
+      if (sensorName === 'Pump3' || sensorName === 'Pump4' )
+      {
+                  direction = 'Forward';
+                  }
+    
+    $.ajax({
+        url: '/toggleSensor',
+        method: 'GET',
+        data: { sensorName: sensorName, state: state, direction: direction }, // Send sensor name, state, and direction
+        success: function(response) {
+            console.log('Response:', response);  // Log server response for debugging
+            
+            // Change card name color based on response
+            if (response === 'Sensor toggled') {
+                var cardNameColor = checked ? 'var(--green)' : 'var(--white)';
+                $('.card[data-field="' + sensorName + '"] .card-name').css('color', cardNameColor);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        }
+    });
+}
+</script>
+<script>
+function toggleSwitch(id, event) {
+    if (!event || event.target.tagName !== 'BUTTON') {
+        var checkbox = document.getElementById(id);
+        checkbox.checked = !checkbox.checked;
+        var field = checkbox.closest('.card').getAttribute('data-field');
+        toggleSensor(field, checkbox.checked);
+    }
+}
+</script>
+
+
+
 
 
     <script src="js/main.js" defer></script>
@@ -1984,177 +2155,6 @@ function saveSettings() {
 }
 
 </script>
-
-<script>
-
-        function updateActiveConnections() {
-            fetch('/active_connections')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('activeConnections').innerText = data.active_connections;
-                });
-        }
-
-        setInterval(updateActiveConnections, 1000); // Update every second
-
-</script>
-
-
-<script>
-    function updateBoxStatus() {
-        fetch('/box_status')
-            .then(response => response.json())
-            .then(data => {
-                const status = data.box_status;
-                const statusElement = document.getElementById('boxStatus');
-
-                statusElement.innerText = status;
-
-                if (status === 'Open') {
-                    statusElement.style.color = 'var(--green)';
-                } else {
-                    statusElement.style.color = 'var(--red)';
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching box status:', error);
-            });
-    }
-
-    // Initial call to set the status on page load
-    updateBoxStatus();
-    
-    // Update the status whenever an interrupt occurs
-    setInterval(updateBoxStatus, 1000); // Update every second
-</script>
-
-
-<script>
-function toggleDirection(sensorName, direction) {
-    // Reset button colors
-    $('#forwardButton_' + sensorName + ', #reverseButton_' + sensorName).css('background-color', 'var(--darkgray)');
-    
-    // Set the background color of the clicked button to dark blue
-    if (direction === 'forward') {
-        $("#forwardButton_" + sensorName).css("background-color", "var(--darkblue)");
-    } else if (direction === 'reverse') {
-        $("#reverseButton_" + sensorName).css("background-color", "var(--darkblue)");
-    }
-}
-</script>
-<script>
-function sendAllTasks() {
-    let list = JSON.parse(localStorage.getItem('Devices')) || [];
-    console.log('Sending tasks:', list); // Debugging line to see what is being sent
-    
-    // Check if the list is empty
-    if (list.length === 0) {
-        console.log('No tasks to send');
-        alert('No tasks to send');
-        return; // Exit the function early since there's nothing to send
-    }
-    
-    $.ajax({
-        url: '/sendTasks', // Make sure this is the correct endpoint
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ devices: list }), // Wrapping the list in an object if the server expects it
-        success: function(response) {
-            console.log('Tasks sent successfully:', response);
-            alert('Tasks sent successfully!');
-        },
-        error: function(xhr, status, error) {
-            console.error('Failed to send tasks:', error);
-            alert('Error sending tasks. Please check the console for more details.');
-            // More detailed debugging information
-            console.error('XHR Object:', xhr);
-            console.error('Status:', status);
-            console.error('Error:', error);
-        }
-    });
-}
-function sendWashCommand() {
-    const washCommand = {
-        devices: [{
-            type: "Wash",
-            name: "On",
-            folder: "1",
-            location: "1"
-        }]
-    };
-    
-    $.ajax({
-        url: '/sendTasks',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(washCommand),
-        success: function(response) {
-            console.log('Wash command sent successfully:', response);
-            alert('Wash command sent successfully!');
-        },
-        error: function(xhr, status, error) {
-            console.error('Failed to send wash command:', error);
-            alert('Error sending wash command. Please check the console for more details.');
-            console.error('XHR Object:', xhr);
-            console.error('Status:', status);
-            console.error('Error:', error);
-        }
-    });
-}
-
-</script>
-
-
-<script>
-function toggleSensor(sensorName, checked) {
-    var state = checked ? 'On' : 'Off';  // Determine state based on checkbox
-    var direction = ''; // Default direction
-    
-    // Check if the sensorName is Pump1, Pump2, or Pump3
-    if (sensorName === 'Pump1' || sensorName === 'Pump2') {
-        // Get direction based on which button is clicked
-        if ($("#forwardButton_" + sensorName).css("background-color") === "rgb(44, 53, 221)") {
-            direction = 'Forward';
-        } else if ($("#reverseButton_" + sensorName).css("background-color") === "rgb(44, 53, 221)") {
-            direction = 'Reverse';
-        }
-    }
-      if (sensorName === 'Pump3' || sensorName === 'Pump4' )
-      {
-                  direction = 'Forward';
-                  }
-    
-    $.ajax({
-        url: '/toggleSensor',
-        method: 'GET',
-        data: { sensorName: sensorName, state: state, direction: direction }, // Send sensor name, state, and direction
-        success: function(response) {
-            console.log('Response:', response);  // Log server response for debugging
-            
-            // Change card name color based on response
-            if (response === 'Sensor toggled') {
-                var cardNameColor = checked ? 'var(--green)' : 'var(--white)';
-                $('.card[data-field="' + sensorName + '"] .card-name').css('color', cardNameColor);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
-        }
-    });
-}
-</script>
-<script>
-function toggleSwitch(id, event) {
-    if (!event || event.target.tagName !== 'BUTTON') {
-        var checkbox = document.getElementById(id);
-        checkbox.checked = !checkbox.checked;
-        var field = checkbox.closest('.card').getAttribute('data-field');
-        toggleSensor(field, checkbox.checked);
-    }
-}
-</script>
-
-
 
 
 </body>
