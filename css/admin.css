@@ -7,20 +7,47 @@
 }
 
 :root {
-    --blue: #287bff;
-    --white: #fff;
-    --grey: #f5f5f5;
+    --blue: #2C35DD;
+    --white: #FFFFFF;
+    --grey: #888888;
     --black1: #222;
     --black2: #999;
-    --light-blue: #f0f8ff;
+        --green: #47A025; 
+--red:#FF0000;
+    --light-blue: #ffffff;
     --shadow: rgba(0, 0, 0, 0.15);
     --card-hover: rgba(40, 123, 255, 0.1);
+ --darkgray:#4B4B4B;
+ --darkblue:#090C9B;
+    --background-dark: #121212;
+    --sidebar-background: #1E1E1E;
+    --sidebar-active:#878787;
+    --text-primary-dark: #E0E0E0;
+    --text-secondary-dark: #B0B0B0;
+    --accent-dark: #BB86FC;
+    --card-background-dark: #2C2C2C;
+    --card-border-dark: #3A3A3A;
+    --button-background-dark: #287bff;
+    --button-text-dark: #FFFFFF;
+    --chart-background-dark: #2A2A2A;
+    --chart-line-od1: #4CAF50;
+    --chart-line-od2: #FF5722;
+    --header-background-dark: #1A1A1A;
+    --input-field-background-dark: #1E1E1E;
+    --input-field-border-dark: #444444;
+    --temperature-data-background-dark: #2C2C2C;
+    --graph-axis-dark: #757575;
+    --status-bar-dark: #FF5252;
+
+--hover:#1A1B1C;
 }
 
 body {
     min-height: 100vh;
     overflow-x: hidden;
-    background-color: var(--light-blue);
+    background-color: var(--background-dark);
+    color: var(--text-primary-dark);
+
 }
 
 .wrapper {
@@ -30,13 +57,13 @@ body {
 
 /* menu bar */
 .menu-bar {
-    background-color: var(--blue);
+    background-color: var(--sidebar-background);
     width: 300px;
     height: 100%;
     position: fixed;
     overflow: hidden;
     transition: 0.5s;
-    border-left: 10px solid var(--blue);
+    border-left: 10px solid var(--shadow);
     box-shadow: 5px 0 15px var(--shadow);
 }
 
@@ -61,7 +88,8 @@ body {
 }
 
 .menu-bar ul li:hover {
-    background: var(--white);
+    background-color: var(--sidebar-active);
+
 }
 
 .menu-bar ul li:nth-child(1) {
@@ -76,19 +104,27 @@ body {
     width: 100%;
     display: flex;
     text-decoration: none;
-    color: var(--white);
+    color: var(--text-primary-dark);
+    
 }
 
 .menu-bar ul li:hover a {
-    color: var(--blue);
+    color: var(--white);
+
 }
 
 .menu-bar ul li.active {
-    background: var(--white);
+    background-color: var(--sidebar-active);
+
 }
 
 .menu-bar ul li.active a {
-    color: var(--blue);
+    color: var(--white);
+
+
+}
+.menu-bar ul li:hover a, .menu-bar ul li.active a {
+    color: var(--white);
 }
 
 .menu-bar ul li a .icon {
@@ -116,11 +152,23 @@ body {
 .menu-bar ul li a .title {
     position: relative;
     display: block;
-    padding: 0 10px;
+    padding: 0px;
     height: 60px;
     line-height: 60px;
     text-align: start;
     white-space: nowrap;
+}
+.menu-bar ul li:hover a, .menu-bar ul li.active a {
+    color: var(--white);
+    background-color: var(--sidebar-active);
+}
+
+
+
+.card-box .card:hover {
+    transform: scale(1.05);
+    background-color: var(--sidebar-active);
+    box-shadow: 0 10px 20px var(--shadow);
 }
 
 .main {
@@ -128,7 +176,8 @@ body {
     width: calc(100% - 300px);
     left: 300px;
     min-height: 100vh;
-    background: var(--white);
+    background-color: var(--background-dark);
+
     transition: 0.5s;
     box-shadow: -5px 0 15px var(--shadow);
 }
@@ -136,6 +185,7 @@ body {
 .main.active {
     width: calc(100% - 80px);
     left: 80px;
+
 }
 
 .topbar {
@@ -145,7 +195,8 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
-    background: var(--blue);
+    background-color: var(--sidebar-background);
+
     color: var(--white);
     box-shadow: 0 5px 10px var(--shadow);
 }
@@ -170,34 +221,69 @@ body {
 .card-box {
     position: relative;
     width: 100%;
-    padding: 20px;
+    padding: 10px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust the minmax values as needed */
+    grid-gap: 10px;
 }
 
 .card-box .card {
     position: relative;
-    background: var(--white);
-    padding: 30px;
-    border-radius: 20px;
+    background-color: var(--card-background-dark);
+    color: var(--text-primary-dark);
+    border: 1px solid var(--card-border-dark);
+    margin: 10px;
+    padding: 20px;
+    border-radius: 25px;
+
+
+
     display: flex;
-    justify-content: space-between;
-    cursor: pointer;
-    box-shadow: 0 7px 25px var(--shadow);
+    flex-direction: column; /* Arrange elements in a column */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;  /* Make the card look clickable */
+    box-shadow: 0 1px 10px var(--shadow); /* Slightly smaller shadow */
     transition: all ease-in-out 0.3s;
+    width: 108px; /* Reduced width for a smaller card */
+    height: 120px; /* Reduced height for a smaller card */
 }
 
 .card-box .card:hover {
     transform: translate(-2px, -5px);
-    box-shadow: 0 10px 30px var(--shadow);
+    box-shadow: 0 10px 20px var(--shadow);
     background: var(--card-hover);
+    background-color: var(--hover);
+
+
 }
 
 .switch {
     width: max-content;
     height: max-content;
     display: flex;
+}
+
+.small-switch {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    background-color: var(--black2);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all ease-in-out 0.3s;
+}
+
+.small-switch::before {
+    position: absolute;
+    content: '';
+    width: 18px;
+    height: 18px;
+    background-color: var(--white);
+    border-radius: 50%;
+    top: 1px;
+    left: 1px;
+    transition: transform 0.3s ease-in-out;
 }
 
 .button {
@@ -213,7 +299,7 @@ body {
 .button::before {
     position: absolute;
     content: '';
-    background-color: #fff;
+    background-color: var(--white);
     width: 20px;
     height: 20px;
     border-radius: 100px;
@@ -230,7 +316,7 @@ input:checked + .button::before {
 }
 
 .card-box .card .card-name.checked {
-    color: var(--black1);
+    color: var(--text-primary-dark);
     font-weight: 600;
 }
 
@@ -250,14 +336,14 @@ input:checked + .button::before {
 }
 
 .card-box .card .card-name {
-    color: var(--black2);
+    color: var(--text-secondary-dark);
     font-size: 1.1em;
     margin-top: 5px;
 }
 
 .card-box .card .icon-box {
     font-size: 3.5em;
-    color: var(--black2);
+    color: var(--text-secondary-dark);
 }
 
 .card-box .card:hover .numbers,
@@ -279,7 +365,7 @@ input:checked + .button::before {
 
 .box, .graphBox .box {
     position: relative;
-    background: #fff;
+    background: var(--card-background-dark);
     padding: 20px;
     width: 100%;
     box-shadow: 0 7px 25px var(--shadow);
@@ -301,7 +387,7 @@ input:checked + .button::before {
     position: relative;
     display: grid;
     min-height: 450px;
-    background: var(--white);
+    background: var(--card-background-dark);
     padding: 20px;
     box-shadow: 0 7px 25px var(--shadow);
     border-radius: 20px;
@@ -325,11 +411,12 @@ input:checked + .button::before {
 
 .details table thead td, .cot1 table thead td, .cot2 table thead td {
     font-weight: 600;
+    color: var(--text-primary-dark);
 }
 
 .details .recentorders table tr {
-    color: var(--black1);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--text-primary-dark);
+    border-bottom: 1px solid var(--graph-axis-dark);
 }
 
 .details .recentorders table tr:last-child {
@@ -364,7 +451,7 @@ input:checked + .button::before {
     padding: 20px;
     box-shadow: 0 7px 25px var(--shadow);
     border-radius: 20px;
-    background: var(--white);
+    background: var(--card-background-dark);
 }
 
 .recentcustomers table tr:hover {
@@ -394,7 +481,7 @@ input:checked + .button::before {
 .colum12 .cot1 {
     position: relative;
     min-height: 650px;
-    background: var(--white);
+    background: var(--card-background-dark);
     padding: 20px;
     box-shadow: 0 7px 25px var(--shadow);
     border-radius: 20px;
@@ -406,7 +493,7 @@ input:checked + .button::before {
     padding: 20px;
     box-shadow: 0 7px 25px var(--shadow);
     border-radius: 20px;
-    background: var(--white);
+    background: var(--card-background-dark);
 }
 
 .cot1 table, .cot2 table {
@@ -422,13 +509,16 @@ input:checked + .button::before {
 
 .title-input h4 {
     font-weight: 400;
+    color: var(--text-primary-dark);
 }
 
 .input-box input, select {
     width: 100%;
     font-size: 14px;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--input-field-border-dark);
+    background-color: var(--input-field-background-dark);
+    color: var(--text-primary-dark);
 }
 
 .list-btn {
@@ -439,7 +529,7 @@ input:checked + .button::before {
 }
 
 .btn-form {
-    color: var(--white);
+    color : var(--button-text-dark);
     background: var(--blue);
     min-width: 90px;
     height: 30px;
@@ -447,6 +537,32 @@ input:checked + .button::before {
     border-radius: 6px;
 }
 
+
+.btn-form2 {
+    color: var(--button-text-dark);
+    background: var(--blue);
+    min-width: 40px; /* Slightly wider for better visibility */
+    height: 25px; /* Slightly taller for better clickability */
+    border: none;
+    border-radius: 8px; /* Slightly larger border radius for a softer look */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    font-size: 12px; /* Adjusted font size for better readability */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+    cursor: pointer; /* Change cursor to pointer to indicate clickability */
+    padding: 0 10px; /* Add horizontal padding for better spacing */
+}
+
+/* Hover effect */
+.btn-form2:hover {
+    background: var(--blue); /* Slightly darker blue on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+.btn-form:hover, .btn-form2:hover {
+    background-color: var(--hover);
+
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 .btn-small {
     padding: 2px 5px;
     font-size: 0.8rem;

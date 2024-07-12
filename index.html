@@ -323,19 +323,48 @@
 
 
     <script src="js/main.js" defer></script>
+<style>
+:root {
+    --blue: #2C35DD;
+    --white: #FFFFFF;
+    --grey: #888888;
+    --black1: #222;
+    --black2: #999;
+        --green: #47A025; 
+--red:#FF0000;
+    --light-blue: #ffffff;
+    --shadow: rgba(0, 0, 0, 0.15);
+    --card-hover: rgba(40, 123, 255, 0.1);
+ --darkgray:#4B4B4B;
+ --darkblue:#2C35DD;
+    --background-dark: #121212;
+    --sidebar-background: #1E1E1E;
+    --sidebar-active:#878787;
+    --text-primary-dark: #E0E0E0;
+    --text-secondary-dark: #B0B0B0;
+    --accent-dark: #BB86FC;
+    --card-background-dark: #2C2C2C;
+    --card-border-dark: #3A3A3A;
+    --button-background-dark: #287bff;
+    --button-text-dark: #FFFFFF;
+    --chart-background-dark: #2A2A2A;
+    --chart-line-od1: #4CAF50;
+    --chart-line-od2: #FF5722;
+    --header-background-dark: #1A1A1A;
+    --input-field-background-dark: #1E1E1E;
+    --input-field-border-dark: #444444;
+    --temperature-data-background-dark: #2C2C2C;
+    --graph-axis-dark: #757575;
+    --status-bar-dark: #FF5252;
 
-   <style>
-   .simulation-label {
-    font-size: 12px;
-    color: #000;
-    margin-left: 5px;
+--hover:#1A1B1C;
+}
+.hidden {
+    display: none;
 }
 
-        .hidden {
-            display: none;
-        }
-        
-        .active-connections {
+
+.box-status {
     display: flex;
     align-items: center;
     margin-right: 20px;
@@ -347,7 +376,351 @@
     margin-right: 5px;
 }
 
-    </style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--background-dark); /* Dark background for dark mode */
+    color: var(--text-primary-dark); /* Primary text color for dark mode */
+        overflow-x: hidden; /* Ensure no horizontal overflow */
+
+}
+
+.dashboard-container {
+    padding: 20px 40px;
+    width: 100%; /* Use full width */
+    max-width: auto; /* Adjust the max-width as needed */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: width 0.3s ease; /* Smooth transition for width changes */
+    overflow-x: hidden; /* Ensure no horizontal overflow */
+}
+
+.dashboard-container.expanded {
+    width: 100%; /* Expand to full width when menu is hidden */
+    overflow-x: hidden; /* Ensure no horizontal overflow when expanded */
+}
+
+.graphs-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Ensure it takes full width */
+    margin-bottom: 20px;
+    gap: 10px; /* Increased gap for better spacing */
+}
+
+.graph-container {
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px; /* Increased padding for better spacing */
+    margin: 0; /* Removed margin, use gap in .graphs-container instead */
+    overflow: hidden; /* Ensure content does not overflow */
+    flex-grow: 1; /* Ensure graphs grow to fill available space */
+
+
+
+
+}
+
+.graph1 {
+    flex:2;
+}
+
+.graph2 {
+    flex: 1;
+}
+
+.buttons-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    padding: 20px 40px;
+    width: 100%;
+    margin-top: 20px; /* Space between sections */
+}
+
+.task-container {
+
+    height: 206px; /* Set maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    margin-top: 10px; /* Optional: Add margin to separate from the graph */
+    padding: 20px; /* Increased padding for better spacing */
+    width: 100%; /* Set width to 100% */
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    position: relative; /* Ensure the footer is positioned relative to the container */
+    border: 1px solid var(--card-border-dark); /* Card border color for dark mode */
+    border-radius: 35px; /* Slightly larger border radius */
+    background: var(--card-background-dark); /* Card background color for dark mode */
+    box-shadow: 0 4px 8px var(--shadow); /* Soft shadow for better depth */
+}
+
+.data-recevied {
+    max-height: auto; /* Set maximum height */
+    width: 100%; /* Set width to 100% */
+        padding: 20px; /* Increased padding for better spacing */
+        margin-top: 10px; /* Optional: Add margin to separate from the graph */
+    position: relative; /* Ensure the footer is positioned relative to the container */
+    border: 1px solid var(--card-border-dark); /* Card border color for dark mode */
+    border-radius: 35px; /* Slightly larger border radius */
+    background: var(--card-background-dark); /* Card background color for dark mode */
+    box-shadow: 0 4px 8px var(--shadow); /* Soft shadow for better depth */
+
+}
+
+
+
+.weather-container {
+    max-height: auto; /* Set maximum height */
+    margin-top:10px; /* Optional: Add margin to separate from the graph */
+    padding: 20px; /* Increased padding for better spacing */
+    width: 100%; /* Set width to 100% */
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    position: relative; /* Ensure the footer is positioned relative to the container */
+    border: 1px solid var(--card-border-dark); /* Card border color for dark mode */
+    border-radius: 35px; /* Slightly larger border radius */
+    background: var(--card-background-dark); /* Card background color for dark mode */
+    box-shadow: 0 4px 8px var(--shadow); /* Soft shadow for better depth */
+
+}
+
+.container-od {
+    max-height: auto; /* Set maximum height */
+    margin-top: 10px; /* Optional: Add margin to separate from the graph */
+    padding: 20px; /* Increased padding for better spacing */
+    width: 100%; /* Set width to 100% */
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    position: relative; /* Ensure the footer is positioned relative to the container */
+    border: 1px solid var(--card-border-dark); /* Card border color for dark mode */
+    border-radius: 35px; /* Slightly larger border radius */
+    background: var(--card-background-dark); /* Card background color for dark mode */
+    box-shadow: 0 4px 8px var(--shadow); /* Soft shadow for better depth */
+}
+
+.container-control {
+    max-height: auto; /* Set maximum height */
+    margin-top: 10px; /* Optional: Add margin to separate from the graph */
+    padding: 5px; /* Increased padding for better spacing */
+    width: 100%; /* Set width to 100% */
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    position: relative; /* Ensure the footer is positioned relative to the container */
+    border: 1px solid var(--card-border-dark); /* Card border color for dark mode */
+    border-radius: 35px; /* Slightly larger border radius */
+    background: var(--card-background-dark); /* Card background color for dark mode */
+    box-shadow: 0 4px 8px var(--shadow); /* Soft shadow for better depth */
+}
+
+/* Custom scrollbar styles for WebKit browsers */
+.task-container::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+}
+
+.task-container::-webkit-scrollbar-track {
+    background: var(--background-dark); /* Background of the scrollbar track */
+    border-radius: 10px; /* Round the track edges */
+}
+
+.task-container::-webkit-scrollbar-thumb {
+    background: var(--text-secondary-dark); /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Round the thumb edges */
+}
+
+.task-container::-webkit-scrollbar-thumb:hover {
+    background: var(--text-primary-dark); /* Darker color when hovered */
+}
+
+/* Custom scrollbar styles for Firefox */
+@-moz-document url-prefix() {
+    .task-container {
+        scrollbar-width: thin; /* Makes the scrollbar thinner */
+        scrollbar-color: var(--text-secondary-dark) var(--background-dark); /* Thumb and track colors */
+    }
+}
+
+/* Scrollbar styles for Internet Explorer and Edge */
+.task-container {
+    -ms-overflow-style: -ms-autohiding-scrollbar; /* Auto-hiding scrollbar */
+}
+
+table {
+    width: 100%;
+    table-layout: fixed; /* Ensure the table has a fixed layout */
+    border-collapse: collapse;
+    margin-bottom: 10px; /* Reduce bottom margin */
+    display: block; /* Enable block display to handle overflow */
+}
+
+table thead, table tbody {
+    display: table; /* Ensure thead and tbody are table elements */
+    width: 100%; /* Ensure they take full width */
+}
+
+table thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--background-dark); /* Background color for table header */
+}
+
+table thead tr th {
+    font-weight: bold;
+    padding: 5px;
+    border-bottom: 1px solid var(--card-border-dark); /* Border color for table header */
+    text-align: center; /* Center align text */
+    width: 20%; /* Set explicit width for each column */
+    word-wrap: break-word; /* Ensure long text wraps within the cell */
+    white-space: nowrap; /* Prevent text from breaking within the cell */
+    color: var(--text-primary-dark); /* Text color for table header */
+}
+
+table tbody tr td {
+    padding: 5px;
+    text-align: center; /* Center align text */
+    width: 20%; /* Set explicit width for each column */
+    word-wrap: break-word; /* Ensure long text wraps within the cell */
+    white-space: nowrap; /* Prevent text from breaking within the cell */
+    color: var(--text-primary-dark); /* Text color for table body */
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--card-background-dark); /* Background color for footer */
+    position: sticky; /* Ensure the footer stays at the bottom */
+    bottom: 0; /* Stick to the bottom of the container */
+    color: var(--text-primary-dark); /* Text color for footer */
+}
+
+.card-footer button {
+    background-color: var(--green);
+    color: var(--button-text-dark);
+    padding: 5px 10px;
+    font-size: 12px; /* Reduce font size */
+    border: none;
+}
+.task-container, .data-recevied, .data-container, .weather-container, .container-od, .container-control {
+    background-color: var(--card-background-dark);
+
+    border: 1px solid var(--card-border-dark);
+    color: var(--text-primary-dark);
+}
+.card-header h2 {
+    color: var(--blue);
+}
+
+.details .recentorders table tr {
+    color: var(--text-primary-dark);
+}
+
+.details .recentorders table tr:hover {
+    background-color: var(--sidebar-active);
+}
+
+.card-footer {
+    background-color: var(--card-background-dark);
+    color: var(--text-primary-dark);
+}
+
+.card-footer button {
+    background-color: var(--green);
+    color: var(--button-text-dark);
+    padding: 5px 10px;
+    font-size: 12px;
+    border: none;
+}
+
+.card-box .card .numbers {
+    color: var(--white);
+}
+
+.card-box .card .card-name, .card-box .card .icon-box {
+    color: var(--text-secondary-dark);
+}
+
+.card-box .card:hover .numbers, .card-box .card:hover .card-name, .card-box .card:hover .icon-box {
+    color: var(--white);
+}
+
+.details table thead tr th, .details table tbody tr td {
+    color: var(--text-primary-dark);
+    border-bottom: 1px solid var(--card-border-dark);
+}
+
+.btn-formgreen {
+    color : var(--button-text-dark);
+    background: var(--green);
+    min-width: 90px;
+    height: 30px;
+    border: none;
+    border-radius: 6px;
+}
+.btn-formgreen:hover{
+
+    background-color: var(--hover);
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-form2:hover {
+    background-color: var(--blue);
+}
+
+input:checked + .button {
+    background-color: var(--blue);
+
+}
+
+.small-img {
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+</style>
 </head>
 
 <body>
@@ -357,624 +730,289 @@
                 <li>
                 
            <a href="#">
-        <span class="icon"><img src="icons/user.png" alt="User Icon" style="width: 28px; height: 28px;"></span>
+                        <span class="icon"><img src="/icons?name=user.png" alt="User Icon" style="width: 28px; height: 28px;"></span>
                         <span class="title">Ben Berni & Moran Tsoran</span>
                     </a>
                 </li>
                 <li >
                     <a href="#tong-quan">
-                                            <span class="icon"><img src="icons/home.png" alt="DashBoard Icon" style="width: 28px; height: 28px;"></span>
-                        <span class="title">Dash Board</span>
-                                    <span class="simulation-label">(Simulation)</span>
-
+                                            <span class="icon"><img src="/icons?name=home.png" alt="DashBoard Icon" style="width: 28px; height: 28px;"></span>
+                        <span class="title">Dash Board (Simulation)</span>
                     </a>
                 </li>
                 <li>
                     <a href="#thiet-bi">
-                    
-                                                                <span class="icon"><img src="icons/task.png" alt="task Icon" style="width: 28px; height: 28px;"></span>
-                        <span class="title">Task Editor</span>
-                                    <span class="simulation-label">(Simulation)</span>
-
+                                                                <span class="icon"><img src="/icons?name=task.png" alt="task Icon" style="width: 28px; height: 28px;"></span>
+                        <span class="title">Task Editor (Simulation)</span>
                     </a>
                 </li>
 <li id="menu-set-auto">
     <a href="#set-auto">
-        <span class="icon"><img src="icons/setting.png" alt="setting Icon" style="width: 28px; height: 28px;"></span>
-        
-        <span class="title">Setting</span>
-                    <span class="simulation-label">(Simulation)</span>
-
+        <span class="icon"><img src="/icons?name=setting.png" alt="setting Icon" style="width: 28px; height: 28px;"></span>
+        <span class="title">Setting (Simulation)</span>
     </a>
 </li>
 
                 <li class="active">
                     <a href="#information">
-                                                                                    <span class="icon"><img src="icons/about.png" alt="about Icon" style="width: 28px; height: 28px;"></span>
+                                                                                    <span class="icon"><img src="/icons?name=about.png" alt="about Icon" style="width: 28px; height: 28px;"></span>
                         <span class="title">Project Overview</span>
                     </a>
-                </li>
-     
+              </li>
             </ul>
         </div>
         
 <div class="main">
     <div class="topbar">
         <div class="toggle">
-            <span class="icon"><img src="icons/menu.png" alt="menu Icon" style="width: 34px; height: 34px;"></span>
+            <span class="icon"><img src="/icons?name=menu.png" alt="menu Icon" style="width: 34px; height: 34px;"></span>
         </div>
-  
+<div class="box-status">
+    Box Status: <span id="boxStatus" style="color: var(--red);">undefined</span>
+</div>
+
+
 
         <div class="setting" onclick="navigateToSetAuto()">
-            <span class="icon"><img src="icons/setting.png" alt="setting Icon" style="width: 34px; height: 34px;"></span>
+            <span class="icon"><img src="/icons?name=setting.png" alt="setting Icon" style="width: 34px; height: 34px;"></span>
         </div>
     </div>
-       <div class="tab-content">
-<div class="content-item" id="information">
-    <div class="project-overview" style="padding: 30px; background: #fff; box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); border-radius: 20px; margin-top: 30px; max-width: 1200px; margin-left: auto; margin-right: auto;">
-        <div class="card-header">
-            <h2 style="text-align: center; color: #287bff; font-weight: bold; margin-bottom: 30px;">Project Overview</h2>
-        </div>
-        <div style="color: #333; font-size: 18px; line-height: 1.8; text-align: justify;">
-            <p style="font-size: 22px; font-weight: bold;"><strong>Microfluidic Bacterial Analysis System</strong></p>
-            <p>The Microfluidic Bacterial Analysis System is designed to detect bacterial growth using OD600 sensors. This system provides real-time monitoring and graphing of bacterial growth over time. Our goal is to develop a "Mini Lab" microfluidic system that operates automatically in response to bacterial growth. The system features modular parts that are easy to replace. Supported by a real-time website, it allows for remote control and monitoring of operations using an STM32F446RE microcontroller with FreeRTOS for efficient multitasking.</p>
+            <div class="tab-content">
             
-            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Product Capabilities</h3>
-            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
-                <li>1. <strong>OD600 Sensor Monitoring:</strong> Monitors bacterial growth density.</li>
-                <li>2. <strong>Temperature Control:</strong> Maintains optimal conditions for bacterial growth.</li>
-                <li>3. <strong>Pump Control:</strong> Automates the transfer of bacterial cultures.</li>
-                <li>4. <strong>Web-Based Dashboard:</strong> Provides a user-friendly interface for data reading and sensor testing.</li>
-            </ul>
             
-            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">System Components</h3>
-            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
-                <li>- <strong>OD600 Sensors:</strong> Measure bacterial growth in lab tubes and mating chambers.</li>
-                <li>- <strong>Temperature Sensors and Heating Surface:</strong> Ensure optimal growth conditions.</li>
-                <li>- <strong>Pumps:</strong> Automate air insertion, bacterial mixing, and cleaning processes.</li>
-                <li>- <strong>Microcontroller (STM32F446RE):</strong> Controls sensors and actuators, running FreeRTOS for multitasking.</li>
-                <li>- <strong>ESP32:</strong> Hosts the real-time website for monitoring and control.</li>
-            </ul>
-            
-            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Electrical Scheme</h3>
-            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
-                <li>- <strong>Microcontroller:</strong> STM32F446RE for controlling sensors and actuators.</li>
-                <li>- <strong>Power Supply:</strong> USB charger for STM32 and ESP32, 230V to 5V adapter for pumps, 230V to 12V adapter for heating and fans.</li>
-                <li>- <strong>Sensors and Actuators:</strong> Connected to the microcontroller to ensure synchronized operation.</li>
-            </ul>
-            
-            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Software and Firmware</h3>
-            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
-                <li>- <strong>Control Algorithms:</strong> Implemented in the STM32F446RE microcontroller for sensor readings, actuator operations, and data communication.</li>
-                <li>- <strong>Real-Time Website:</strong> Hosted on ESP32, features a user-friendly interface for real-time monitoring and control of the system.</li>
-            </ul>
-            
-
-            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Future Work and Risk Management</h3>
-            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
-                <li>- <strong>Additional Experiments:</strong> Gather more data, refine sensor calibration, and enhance experimental setups.</li>
-                <li>- <strong>System Optimization:</strong> Improve control algorithms, enhance user interface, and ensure seamless integration of components.</li>
-                <li>- <strong>Risk Management:</strong> Address potential contamination, integration issues, and sensor calibration challenges.</li>
-            </ul>
-            
-  <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Website Simulation Features</h3>
-<ul style="list-style-type: none; padding-left: 0;">
-    <li>- <strong>DashBoard Simulation:</strong>
-        <ul style="list-style-type: none; padding-left: 0;">
-            <li>System Diagram - Visual representation of the system setup and components.</li>
-            <li>Data Monitoring - Real-time graphs for OD600 and temperature values.</li>
-        </ul>
-    </li>
-    <li>- <strong>Task Editor Simulation:</strong> Task Management - Choose a sensor to set tasks and schedules. </li>
-    <li>- <strong>Settings Simulation: PWM and V0 Adjustments :</strong> PWM1 adjusts Pump 1, Pump 2, and Pump 4. PWM2 modifies Pump 3, responsible for mixing. When V01 or V02 is set to -1, the ADC value is displayed instead of OD600 to obtain the maximum V01 or V02 value.</li>
-</ul>
-
-            <h3 style="color: #287bff; font-weight: bold; margin-top: 30px;">Experiment Examples</h3>
-            <ul style="list-style-type: none; padding-left: 0; margin-bottom: 20px;">
-                <li>1. <strong>Precision Growth Measurements and Automation:</strong>
-                    <ul style="list-style-type: disc; margin-left: 20px;">
-                        <li><strong>Goal:</strong> Quantify bacterial growth using OD600 sensors and automate culture transfer.</li>
-                        <li><strong>Steps:</strong> Calibration with water and diluted coffee, pump activation based on OD600 readings.</li>
-                    </ul>
-                </li>
-                <li>2. <strong>System Functionality and Component Validation:</strong>
-                    <ul style="list-style-type: disc; margin-left: 20px;">
-                        <li><strong>Goal:</strong> Validate system power requirements, mixing behavior, and temperature control.</li>
-                        <li><strong>Steps:</strong> Measure power consumption, verify pump and heating surface functionality, and automate data recording.</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-    </div>
-        </div>
-
-
                 <div class="content-item" id="tong-quan">
-<div class="card-box" style="padding-right: 10px;">
+                <div class="dashboard-container">
+    <div class="graphs-container">
 
-                    
-<div class="card" data-field="Pump1">
+        <div class="graph-container graph1">
+                <div class="container-od ">
+<h2 class="text-widget" style="color: #fff; font-size: 24px;">OD 600 (Simulation)</h2>
+<p style="color: #bbb; font-size: 16px; text-align: center;">
+    This simulation shows the growth of two bacteria over time, with OD1 starting at 0.1 and increasing, and OD2 starting at 0.4 and increasing. The growth increments randomly between 0.01 and 0.09 every 2 seconds.
+</p>
+<button class="btn-form" style="width: 120px; margin-left: 60px; font-size: 14px" onclick="downloadExcel()">Download OD Data</button>
+
+<canvas id="myChart" width="230" height="auto" ></canvas>
+    </div>
+                <div class="container-control ">
+<h2 class="text-widget" style="color: #fff; font-size: 24px; ">Control Sensor</h2>
+
+            <div class="card-box">
+    <div class="card" data-field="Heating" onclick="toggleSwitch('toggle_Heating')">
+     <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="card-name" style="color:var(--white); padding-bottom: 18px;">Heating</div>
+            <div class="icon-box" >
+            <img src="/icons?name=Heating.png" alt="Heating Icon" >
+        </div>
+                </div>
+        <input type="checkbox" id="toggle_Heating" style="display:none;">
+    </div>
+
+
+
+  
+
+
+    <div class="card" data-field="Fan" onclick="toggleSwitch('toggle_FAN')">
+     <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="card-name" style="color:var(--white); padding-bottom: 18px;">Fan</div>
+                    <div class="icon-box">
+            <img src="/icons?name=fan.png" alt="Fan Icon" >
+        </div>
+                        </div>
+        <input type="checkbox" id="toggle_FAN" style="display:none;">
+    </div>
+ <div class="card" data-field="Pump3" onclick="toggleSwitch('toggle_pump3')">
+     <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="card-name" style="color:var(--white); padding-bottom: 18px;">Vibrate 1</div>
+                    <div class="icon-box" >
+            <img src="/icons?name=shake.png" alt="Pump Icon">
+ </div>
+                </div>
+        <input type="checkbox" id="toggle_pump3" style="display:none;">
+    </div>
+
+    <div class="card" data-field="Pump4" onclick="toggleSwitch('toggle_pump4')">
+     <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="card-name" style="color:var(--white); padding-bottom: 18px;">Vibrate 2</div>
+            <div class="icon-box" >
+            <img src="/icons?name=shake.png" alt="Pump Icon">
+        </div>
+                </div>
+        <input type="checkbox" id="toggle_pump4" style="display:none;">
+    </div>
+  
+
+
+    
+    
+    
+
+
+    <div class="card" data-field="Led1" onclick="toggleSwitch('toggle_LED1')">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="card-name" style="color:var(--white); padding-bottom: 18px;">Led 1</div>
+                    <div class="icon-box">
+            <img src="/icons?name=led.png" alt="LED Icon">
+        </div>
+                </div>
+        <input type="checkbox" id="toggle_LED1" style="display:none;">
+    </div>
+
+<div class="card" data-field="Led2" onclick="toggleSwitch('toggle_LED2', event)">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="card-name" style="color:var(--white); padding-bottom: 18px;">Led 2</div>
+        <div class="icon-box">
+            <img src="/icons?name=led.png" alt="LED Icon" ">
+        </div>
+    </div>
+    <input type="checkbox" id="toggle_LED2" style="display:none;">
+</div>
+
+    
+    
+<div class="card" data-field="Pump1" onclick="toggleSwitch('toggle_pump1', event)">
     <div>
         <div class="icon-box"></div>
-        <div class="card-name" style="color:red">Pump 1</div>
-        <img src="icons/pump.png" alt="Pump Icon">
+        <div class="card-name" style="color:var(--white)">Pump 1</div>
+        <img src="/icons?name=pump.png" alt="Pump Icon">
     </div>
-<div style="display: flex; flex-direction: column;">
-    <button class="btn-form" id="forwardButton_Pump1" onclick="toggleDirection('Pump1', 'forward')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; margin-bottom: 5px; background-color: blue;">Forward</button>
-    <button class="btn-form" id="reverseButton_Pump1" onclick="toggleDirection('Pump1', 'reverse')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; background-color: gray;">Reverse</button>
-</div>
-    <div class="switch">
-        <input type="checkbox" id="toggle_pump1" onchange="toggleSensor('Pump1', this.checked);">
-        <label for="toggle_pump1" class="button"></label>
+    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin-top: 10px;">
+            <button class="btn-form2" id="reverseButton_Pump1" onclick="toggleDirection('Pump1', 'reverse'); event.stopPropagation();"style= "margin-right: 5px;background-color: var(--darkgray);">&#8595;</button>
+        <button class="btn-form2" id="forwardButton_Pump1" onclick="toggleDirection('Pump1', 'forward'); event.stopPropagation();" style= "background-color:  var(--darkblue);">&#8593;</button>
+
     </div>
+    <input type="checkbox" id="toggle_pump1" style="display:none;">
 </div>
 
+<div class="card" data-field="Pump2" onclick="toggleSwitch('toggle_pump2', event)">
+    <div>
+        <div class="icon-box"></div>
+        <div class="card-name" style="color:var(--white)">Pump 2</div>
+        <img src="/icons?name=pump.png" alt="Pump Icon">
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin-top: 10px;">
+            <button class="btn-form2" id="reverseButton_Pump2" onclick="toggleDirection('Pump2', 'reverse'); event.stopPropagation();"style= "margin-right: 5px;background-color: var(--darkgray);">&#8595;</button>
+        <button class="btn-form2" id="forwardButton_Pump2" onclick="toggleDirection('Pump2', 'forward'); event.stopPropagation();" style= "background-color: var(--darkblue);">&#8593;</button>
 
-<div class="card" data-field="Pump2">
-    <div>
-        <div class="icon-box">
-        </div>
-        <div class="card-name" style="color:red">Pump 2</div>
-   <img src="icons/pump.png" alt="Pump Icon">
     </div>
-<div style="display: flex; flex-direction: column;">
-    <button class="btn-form" id="forwardButton_Pump2" onclick="toggleDirection('Pump2', 'forward')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; margin-bottom: 5px; background-color: blue;">Forward</button>
-    <button class="btn-form" id="reverseButton_Pump2" onclick="toggleDirection('Pump2', 'reverse')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; background-color: gray;">Reverse</button>
+    <input type="checkbox" id="toggle_pump2" style="display:none;">
+
 </div>
-    <div class="switch">
-        <input type="checkbox" id="toggle_pump2" onchange="toggleSensor('Pump2', this.checked);">
-        <label for="toggle_pump2" class="button"></label>
-    </div>
-</div>
-<div class="card" data-field="Pump3">
-    <div>
-        <div class="icon-box">
-        </div>
-        <div class="card-name" style="color:red">Pump 3</div>
-   <img src="icons/pump.png" alt="Pump Icon">
-    </div>
-<div style="display: flex; flex-direction: column;">
-    <button class="btn-form" id="forwardButton_Pump3" onclick="toggleDirection('Pump3', 'forward')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; margin-bottom: 5px; background-color: blue;">Forward</button>
-    <button class="btn-form" id="reverseButton_Pump3" onclick="toggleDirection('Pump3', 'reverse')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; background-color: gray;">Reverse</button>
-</div>
-    <div class="switch">
-        <input type="checkbox" id="toggle_pump3" onchange="toggleSensor('Pump3', this.checked);">
-        <label for="toggle_pump3" class="button"></label>
-    </div>
-</div>
-<div class="card" data-field="Pump4">
-    <div>
-        <div class="icon-box">
-        </div>
-        <div class="card-name" style="color:red">Pump 4</div>
-   <img src="icons/pump.png" alt="Pump Icon">
-    </div>
-<div style="display: flex; flex-direction: column;">
-    <button class="btn-form" id="forwardButton_Pump4" onclick="toggleDirection('Pump4', 'forward')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; margin-bottom: 5px; background-color: blue;">Forward</button>
-    <button class="btn-form" id="reverseButton_Pump4" onclick="toggleDirection('Pump4', 'reverse')" style="padding: 3px 8px; font-size: 13px; width: 50px; height: 25px; background-color: gray;">Reverse</button>
-</div>
-    <div class="switch">
-        <input type="checkbox" id="toggle_pump4" onchange="toggleSensor('Pump4', this.checked);">
-        <label for="toggle_pump4" class="button"></label>
-    </div>
 </div>
     </div>
-<div class="card-box" style="padding-left: 90px;">
-<div class="card" data-field="Heating" style="width: 80%;">
-    <div>
-        <div class="icon-box">
+
         </div>
-        <div class="card-name " style="padding-bottom: 5px; color:red ;">Heating</div>
-        <img src="icons/Heating.png" alt="Heating Icon">
-    </div>
-    <div class="switch">
-        <input type="checkbox" id="toggle_Heating" onchange="toggleSensor('Heating', this.checked);">
-        <label for="toggle_Heating" class="button"></label>
-    </div>
-      </div>
-    <div class="card" data-field="Fan" style="width: 80%;">
-    <div>
-        <div class="icon-box">
-        </div>
-<div class="card-name" style="padding-bottom: 5px; padding-left: 10px;color:red;">Fan</div>
-        <img src="icons/fan.png" alt="FAN Icon">
-    </div>
-    <div class="switch">
-        <input type="checkbox" id="toggle_FAN" onchange="toggleSensor('Fan', this.checked);">
-        <label for="toggle_FAN" class="button"></label>
-    </div>
-      </div>
-   <div class="card" data-field="Led1" style="width: 80%;">
-    <div>
-        <div class="icon-box">
-        </div>
-        <div class="card-name" style="padding-bottom: 1px; padding-left: 10px;color:red;">Led 1</div>
-       <img src="icons/led.png" alt="LED Icon">
-    </div>
-    <div class="switch">
-        <input type="checkbox" id="toggle_LED1" onchange="toggleSensor('Led1', this.checked);">
-        <label for="toggle_LED1" class="button"></label>
-    </div>
-      </div>
-       <div class="card" data-field="Led2" style="width: 80%;">
-    <div>
-        <div class="icon-box ">
-        </div>
-        <div class="card-name" style="padding-bottom: 1px; padding-left: 10px;color:red;">Led 2</div>
-      <img src="icons/led.png" alt="LED Icon">
-    </div>
-    <div class="switch">
-        <input type="checkbox" id="toggle_LED2" onchange="toggleSensor('Led2', this.checked);">
-        <label for="toggle_LED2" class="button"></label>
-    </div>
-      </div>
-    </div>
-<div class="graphBox" style="  margin-top: -30px;">
-    <div class="widget">
-        <div class="percent">
-            <svg id="circle1">
-                <circle cx="70" cy="70" r="70"></circle>
-                <circle cx="70" cy="70" r="70"></circle>
-            </svg>
-            <div class="number">
-                <h2 id="Temp">25.2<span>°C</span></h2>
+        <div class="graph-container graph2">
+
+                <div class=" data-recevied">
+        <h2 class="text-widget" style="color: #fff; font-size: 24px ;">Received Data</h2>
+
+                       <div class="widgets-row">
+            <div class="widget">
+                <div class="percent">
+                    <svg id="circle3">
+                        <circle cx="45" cy="45" r="45"></circle>
+                        <circle cx="45" cy="45" r="45"></circle>
+                    </svg>
+                    <div class="number">
+                        <h2 id="adc1">NaN<span></span></h2>
+                    </div>
+                    <h2 class="text-widget" style="text-align: center;">OD 1</h2>
+                </div>
             </div>
-            <h2 class="text-widget" style="text-align: center;">Temp</h2>
-        </div>
-    </div>
-    <div class="widget">
-        <div class="percent">
-            <svg id="circle2">
-                <circle cx="70" cy="70" r="70"></circle>
-                <circle cx="70" cy="70" r="70"></circle>
-            </svg>
-            <div class="number">
-                <h2 id="Humidity">45<span>%</span></h2>
+            <div class="widget">
+                <div class="percent">
+                    <svg id="circle4">
+                        <circle cx="45" cy="45" r="45"></circle>
+                        <circle cx="45" cy="45" r="45"></circle>
+                    </svg>
+                    <div class="number">
+                        <h2 id="adc2">NaN<span></span></h2>
+                    </div>
+                    <h2 class="text-widget" style="text-align: center;">OD 2</h2>
+                </div>
             </div>
-            <h2 class="text-widget" style="text-align: center;">Humidity</h2>
-        </div>
-    </div>
-    <div class="widget">
-        <div class="percent">
-            <svg id="circle3">
-                <circle cx="70" cy="70" r="70"></circle>
-                <circle cx="70" cy="70" r="70"></circle>
-            </svg>
-            <div class="number">
-                <h2 id="adc1">NaN<span></span></h2>
+                    <div class="widget">
+                <div class="percent">
+                    <svg id="circle1">
+                        <circle cx="45" cy="45" r="45"></circle>
+                        <circle cx="45" cy="45" r="45"></circle>
+                    </svg>
+                    <div class="number">
+                        <h2 id="Temp">NaN<span>°C</span></h2>
+                    </div>
+                    <h2 class="text-widget" style="text-align: center;">Temp</h2>
+                </div>
             </div>
-            <h2 class="text-widget" style="text-align: center;">LDR 1</h2>
-        </div>
-    </div>
-    <div class="widget">
-        <div class="percent">
-            <svg id="circle4">
-                <circle cx="70" cy="70" r="70"></circle>
-                <circle cx="70" cy="70" r="70"></circle>
-            </svg>
-            <div class="number">
-                <h2 id="adc2">NaN<span></span></h2>
+            <div class="widget">
+                <div class="percent">
+                    <svg id="circle2">
+                        <circle cx="45" cy="45" r="45"></circle>
+                        <circle cx="45" cy="45" r="45"></circle>
+                    </svg>
+                    <div class="number">
+                        <h2 id="Humidity">NaN<span>%</span></h2>
+                    </div>
+                    <h2 class="text-widget" style="text-align: center;">Humidity</h2>
+                </div>
             </div>
-            <h2 class="text-widget" style="text-align: center;">LDR 2</h2>
         </div>
-    </div>
-</div>
-
-
-<div class="box-container" style="display: flex;">
-    <div class="box" style="width: 65%;margin-left: 20px">
-<h2 class="text-widget" style="color: #287bff;">System Diagram</h2>
-        <!-- You can add your content for system task information here -->
-        <!-- For example, display sensor time -->
- 
-        <!-- Diagram representing system tasks -->
-        <svg class="system-diagram" viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg">
-
-
-
-<!-- Line representing the sequence of tasks -->
-
-
-
-
-<!-- Additional lines for task sequence -->
-
-<defs>
-
-<style>.cls-1{fill:none;stroke:#020202;stroke-miterlimit:5;stroke-width:0.4px;}</style>
-
-</defs>
-
-<g id="test_tubes" data-name="test tubes" transform="translate(60 115) scale(4.6)">
-
-
-<line class="cls-1" x1="5.81" y1="1.5" x2="12.8" y2="1.5"/>
-
-<line class="cls-1" x1="20.95" y1="1.5" x2="27.59" y2="1.5"/>
-
-<line class="cls-1" x1="35.81" y1="1.5" x2="42.8" y2="1.5"/>
-
-<path class="cls-1" d="M7.32,1.5h3.82a0,0,0,0,1,0,0V16.77a1.91,1.91,0,0,1-1.91,1.91h0a1.91,1.91,0,0,1-1.91-1.91V1.5a0,0,0,0,1,0,0Z"/>
-
-<line class="cls-1" x1="0.55" y1="22.5" x2="47.45" y2="22.5"/>
-
-<line class="cls-1" x1="0.55" y1="6.27" x2="47.45" y2="6.27"/>
-
-<path class="cls-1" d="M22.32,1.5h3.82a0,0,0,0,1,0,0V16.77a1.91,1.91,0,0,1-1.91,1.91h0a1.91,1.91,0,0,1-1.91-1.91V1.5a0,0,0,0,1,0,0Z"/>
-<path class="cls-1" d="M37.32,1.5h3.82a0,0,0,0,1,0,0V16.77a1.91,1.91,0,0,1-1.91,1.91h0a1.91,1.91,0,0,1-1.91-1.91V1.5a0,0,0,0,1,0,0Z"/>
-
-<line class="cls-1" x1="1.5" y1="6.27" x2="1.5" y2="22.5"/>
-
-<line class="cls-1" x1="46.5" y1="6.27" x2="46.45" y2="22.5"/>
-
-<line class="cls-1" x1="7.32" y1="12" x2="11.14" y2="12"/>
-
-<line class="cls-1" x1="22.36" y1="12" x2="26.38" y2="12"/>
-<line class="cls-1" x1="37.36" y1="9" x2="41.38" y2="9"/>
-</g>
-<!-- chip-->
-<g stroke="#000" transform="translate(500 -50) scale(-0.16,0.16)">
-
-
-  <path transform="matrix(5.9364 0 0 5.9364 -1628.5 -2462.5)" d="m305.18 539.12h126.27v-5.5556h-126.27zm0 0" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <path transform="matrix(5.9364 0 0 5.9364 -1628.5 -2462.5)" d="m305.18 533.51 20.964-40.84" fill="none" stroke-linecap="round"/>
-  <path transform="matrix(5.9364 0 0 5.9364 -1628.5 -2462.5)" d="m431.51 533.76 15.115-40.748" fill="none" stroke-linecap="round" stroke-width=".99516"/>
-  <path transform="matrix(5.9364 0 0 5.9364 -1628.5 -2462.5)" d="m431.56 539.07 15.259-41.342" fill="none" stroke-linecap="round"/>
-  <path transform="matrix(5.9364 0 0 5.9364 -1628.5 -2462.5)" d="m446.66 492.98 0.13818 4.7397" fill="none" stroke-linecap="round" stroke-width=".98092"/>
-  <path transform="matrix(5.9364 0 0 5.9364 -1628.5 -2462.5)" d="m326.4 492.64 120.17 0.28887" fill="none" stroke-linecap="round"/>
-  <path transform="matrix(5.9364 0 0 5.9364 -1628.5 -2462.5)" d="m331.9 511.85h4.8338l1.4976-2.5939h1.8859l-3.017 5.2253h1.8326l3.015-5.222h1.8918l-3.0019 5.199h1.8898l2.9992-5.1944h1.9076l-3.0019 5.199h1.8898l2.9979-5.1924h1.8602l-3.0065 5.2075h1.8944l2.9894-5.1779h1.8931l-2.9979 5.1931h1.8865l1.5009-2.5998h17.23" fill="none"/>
-  <path transform="matrix(5.9364 0 -1.7455 5.674 -1628.5 -2462.5)" d="m489.59 535.16c3.04e-4 0.81788-0.63366 1.4815-1.416 1.4815-0.78172 0-1.4158-0.66366-1.4161-1.4815 1.52e-4 -0.81856 0.63432-1.4815 1.416-1.4815 0.78238 0 1.4162 0.66298 1.4161 1.4815" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.1947"/>
-  <path transform="matrix(-2.4262 5.418 -5.9364 0 -1628.5 -2462.5)" d="m549.69-615.86 24.143 3.8e-5v14.924l-24.143-3.8e-5zm0 0" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.1671"/>
-
-  <path transform="matrix(5.9364 0 0 5.9364 -1628.5 -2462.5)" d="m383.25 518.14h34.652" fill="none"/>
-  <path transform="matrix(5.9364 0 -1.7455 5.674 -1628.5 -2462.5)" d="m579.63 542.26c-1.52e-4 0.81857-0.63432 1.4815-1.416 1.4815-0.78238 0-1.4162-0.66298-1.4161-1.4815 3.55e-4 -0.81788 0.63386-1.4809 1.4162-1.4809 0.78172 0 1.4156 0.66298 1.4159 1.4809" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.1947"/>
-
-
-  <path transform="matrix(5.9364 0 0 5.9364 -1628.5 -2462.5)" d="m388.18 505.95h34.652" fill="none"/>
-  <path transform="matrix(5.9364 0 -1.7455 5.674 -1628.5 -2462.5)" d="m580.8 529.5c3.04e-4 0.81788-0.63366 1.4815-1.416 1.4815-0.78172 0-1.4158-0.66366-1.4161-1.4815 1.52e-4 -0.81856 0.63432-1.4815 1.416-1.4815 0.78238 0 1.4162 0.66298 1.4161 1.4815" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.1947"/>
-
-
- </g>
- 
-            <text id="adc1-delay-text" x="81.5" y="199.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;"></text>
-    <text id="adc2-delay-text" x="147.5" y="199.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;"></text>
-
-<g  transform="translate(93 175) scale(0.4) rotate(90)"><path d="M16.4035149,39.1778564l-0.0285034,9.9707642c0,0.2373047,0.0878906,0.6865234,0.6796875,1.0327148   c0.3632813,0.2109375,0.8193359,0.3164063,1.2773438,0.3164063c0.4599609,0,0.921875-0.1069336,1.2910156-0.3212891   c0.5751953-0.3486328,0.6611328-0.7875977,0.6611328-1.0166016l0.0279541-8.2880249   c1.9517212,0.5653076,4.0825195,0.8534546,6.2161865,0.8534546c2.1166992,0,4.2286377-0.2849121,6.1638184-0.8415527   l-0.0270996,8.2648926c0,0.2373047,0.0878906,0.6865234,0.6796875,1.0327148   c0.3632813,0.2109375,0.8193359,0.3164063,1.2773438,0.3164063c0.4599609,0,0.921875-0.1069336,1.2910156-0.3212891   c0.5751953-0.3486328,0.6611328-0.7875977,0.6611328-1.0166016l0.02948-9.9628296   c2.4984741-1.5379028,3.8837891-3.5637817,3.8894653-5.7407837l0.0136719-4.0595703   c0-0.0054932-0.0028687-0.0100098-0.0030518-0.0154419c0.0038452-1.5812378-0.723877-3.0965576-2.0976563-4.4008179   l-0.008667-15.3532715c0-0.0016479-0.0009766-0.0030518-0.0009766-0.0046997c0-0.0040283,0.0009766-0.0078735,0.0009766-0.0119019   C38.3945427,7.6535034,37.110363,5.8356323,34.782238,4.491394c-4.5947266-2.652832-12.0458984-2.6518555-16.609375,0.0009766   c-2.2915649,1.3312988-3.555542,3.1292114-3.565918,5.06427c-0.0001221,0.0042114-0.0024414,0.0076904-0.0024414,0.0119019   c0,0.0102539,0,0.0205078,0,0.0307617l0.0039063,6.1235352c0,0.2758789,0.2236328,0.4995117,0.5,0.4995117   s0.5-0.2241211,0.5-0.5004883l-0.0019531-3.2543945c2.2161102,3.0158739,7.1791992,4.21875,10.9238281,4.21875   c0.0010986,0,0.0021973-0.000061,0.0032959-0.000061c1.443924-0.0004158,3.0922394-0.1672173,4.6965332-0.5715332   l0.0130615,5.3421021c0,0.1787109,0.0957031,0.3432617,0.25,0.4321289c0.0771484,0.0444336,0.1640625,0.0668945,0.25,0.0668945   s0.171875-0.0219727,0.2490234-0.0664063l3.5859375-2.0620117c0.1552734-0.0893555,0.2509766-0.2553711,0.2509766-0.4350586   l-0.0140381-5.3485718c0.7227898-0.5365229,1.2272797-1.0633326,1.5843506-1.5493774l0.006897,12.6875   c-0.000061,0.0024414-0.0020142,0.0043335-0.0020142,0.0068359v3.449707c0,1.8113976-1.4710617,3.2860394-3.0507813,4.1982422   c-4.2998047,2.4980469-11.3105469,2.5024414-15.6279297,0.0092773c-1.5998859-0.92803-3.1151609-2.4177532-3.109375-4.2626953   c-0.0000639-0.1006947-0.0039825-6.3144436-0.0039063-6.1933594c0-0.2758789-0.2236328-0.4995117-0.5-0.4995117   s-0.5,0.2241211-0.5,0.5004883l0.0015869,2.5394897c-1.3761597,1.3151855-2.1090088,2.8338013-2.1090088,4.4082642   c0,0.0106812,0.00177,0.0211182,0.0018311,0.0317993l-0.0135498,4.0140991   C12.4866447,35.579895,13.8798943,37.6225586,16.4035149,39.1778564z M18.6748161,5.3566284   c2.1445313-1.2460938,4.9658203-1.8686523,7.7919922-1.8686523s5.6572266,0.6230469,7.8154297,1.8696289   c2.0068359,1.1582031,3.1123047,2.6694336,3.1152344,4.2543945c0.0009308,0.8027-0.3329353,1.6410189-0.7919312,2.2720947   c-4.591671,6.315361-20.9886169,4.1753197-21.0010376-2.2984619C15.6025505,8.010437,16.6933708,6.5089722,18.6748161,5.3566284z    M32.2412224,20.5924683l-0.0117188-4.7543945c0.8603058-0.2729769,1.8183365-0.6870356,2.5869141-1.1254883l0.0117188,4.3920898   L32.2412224,20.5924683z M19.313488,40.5509644L19.2841911,49.15448c-0.0039063,0.0175781-0.0449219,0.0854492-0.1708984,0.1616211   c-0.4130859,0.2407227-1.1425781,0.2402344-1.5556641,0.0009766c-0.1396484-0.081543-0.1826172-0.1518555-0.1826172-0.1669922   l0.0273438-9.3989258C17.8118534,39.9572983,18.7626228,40.3627281,19.313488,40.5509644z M35.5742302,49.15448   c-0.0039063,0.0175781-0.0449219,0.0854492-0.1708984,0.1616211c-0.4140625,0.2407227-1.1435547,0.2402344-1.5556641,0.0009766   c-0.1396484-0.081543-0.1826172-0.1518555-0.1826172-0.1669922l0.0283203-8.5805664   c0.4668159-0.1615715,1.3933716-0.5461235,1.9082031-0.8066406L35.5742302,49.15448z M39.4931755,33.4533081   c-0.0081482,3.1450233-3.4722214,5.3241768-6.4511719,6.2792969c-0.0012817,0.0004272-0.0018921,0.0018311-0.0031738,0.0022583   c-5.3180294,1.758419-11.8170948,1.0901604-15.8190918-1.2214966c-2.4091797-1.3901367-3.7324219-3.2104492-3.7265625-5.1259766   l0.0029297-0.9384766c0.9656839,1.4460487,2.3803844,2.4482231,3.9139404,3.2246704   c5.453064,2.7626343,13.7576904,2.6480103,18.9327393-0.3599243c1.4379082-0.8356438,2.553112-1.9103584,3.1533203-2.7954102   L39.4931755,33.4533081z M14.6142693,26.3991089v2.1894531c0,2.2285862,1.6761532,4.0061684,3.6083984,5.1220703   c2.2978516,1.3266602,5.3095703,1.9897461,8.3193359,1.9897461c3.0136719,0,6.0253906-0.6650391,8.3125-1.9951172   c1.9085999-1.1088676,3.5481682-2.8849621,3.5537109-5.0639648l-0.0012207-2.1938477   c0.7284546,0.9227905,1.1047363,1.9257202,1.0979004,2.9477539c0,0.0004883,0,0.0004883,0,0.0009766   c-0.0087891,1.8901367-1.3095703,3.6835938-3.6611328,5.050293c-4.8681736,2.8320122-12.7794132,3.0091934-18.0445557,0.3030396   c-2.1783524-1.1210365-4.297081-2.9745903-4.2923584-5.4207153v-0.0004883c0-0.0011597-0.0006714-0.0020752-0.0006714-0.0032349   C13.509594,28.3155518,13.8880119,27.3203125,14.6142693,26.3991089z"/><path d="M15.110363,20.3786011c0.2763672,0,0.5-0.2241211,0.5-0.5l-0.0009766-2.2490234c0-0.2763672-0.2236328-0.5-0.5-0.5   s-0.5,0.2241211-0.5,0.5l0.0009766,2.2490234C14.610363,20.1549683,14.8339958,20.3786011,15.110363,20.3786011z"/><path d="M26.5205193,14.4630737c3.3856907,0,8.0416069-1.6100817,8.0371094-4.8574219   c-0.0019531-1.3603516-0.8828125-2.6176758-2.4814453-3.5405273c-2.600769-1.5016479-6.5525513-1.7242432-9.5745239-0.6986694   c-0.0673218,0.0056152-0.1312256,0.0258179-0.1923828,0.0586548c-1.9749088,0.7142982-3.8678818,2.1182399-3.8649292,4.164917   C18.4491444,12.926548,23.1272545,14.4630737,26.5205193,14.4630737z M19.5559196,10.2492065h6.616394l2.9089355,2.9492188   C25.5750351,13.9690876,20.4337101,12.957305,19.5559196,10.2492065z M30.1765251,12.8850098l-2.5997314-2.6358032h5.8757935   C33.0295181,11.6001568,31.5101757,12.427968,30.1765251,12.8850098z M26.4785271,5.7116089   c1.84375,0,3.6894531,0.4067383,5.0976563,1.2197266c1.12146,0.6473999,1.7994995,1.4595947,1.9490967,2.3178711h-6.9348145   L23.487072,6.1027832C24.4358635,5.8508911,25.4525261,5.7116089,26.4785271,5.7116089z M22.4202385,6.4451294l2.7657471,2.8040771   h-5.7120361C19.6969872,7.8813014,21.1379623,6.9555964,22.4202385,6.4451294z"/><path d="M31.5088005,27.9244995c0.0771484,0.0444336,0.1630859,0.0664063,0.2490234,0.0664063   s0.171875-0.0219727,0.2490234-0.0664063l3.5869141-2.0620117c0.15625-0.0898438,0.2519531-0.2568359,0.2509766-0.4370117   l-0.0234375-3.3789063c-0.0009766-0.1777344-0.0966797-0.3417969-0.2509766-0.4301758   c-0.1542969-0.0888672-0.34375-0.0888672-0.4980469,0l-3.5859375,2.0620117   c-0.15625,0.0898438-0.2519531,0.2568359-0.2509766,0.4370117l0.0224609,3.3789063   C31.2588005,27.6720581,31.3545036,27.8361206,31.5088005,27.9244995z M34.8271446,22.9108276l0.0156403,2.2299805   l-2.5908203,1.4892578l-0.0146484-2.2299805L34.8271446,22.9108276z"/></g>
-
-<g  transform="translate(162 175) scale(0.4) rotate(90)"><path d="M16.4035149,39.1778564l-0.0285034,9.9707642c0,0.2373047,0.0878906,0.6865234,0.6796875,1.0327148   c0.3632813,0.2109375,0.8193359,0.3164063,1.2773438,0.3164063c0.4599609,0,0.921875-0.1069336,1.2910156-0.3212891   c0.5751953-0.3486328,0.6611328-0.7875977,0.6611328-1.0166016l0.0279541-8.2880249   c1.9517212,0.5653076,4.0825195,0.8534546,6.2161865,0.8534546c2.1166992,0,4.2286377-0.2849121,6.1638184-0.8415527   l-0.0270996,8.2648926c0,0.2373047,0.0878906,0.6865234,0.6796875,1.0327148   c0.3632813,0.2109375,0.8193359,0.3164063,1.2773438,0.3164063c0.4599609,0,0.921875-0.1069336,1.2910156-0.3212891   c0.5751953-0.3486328,0.6611328-0.7875977,0.6611328-1.0166016l0.02948-9.9628296   c2.4984741-1.5379028,3.8837891-3.5637817,3.8894653-5.7407837l0.0136719-4.0595703   c0-0.0054932-0.0028687-0.0100098-0.0030518-0.0154419c0.0038452-1.5812378-0.723877-3.0965576-2.0976563-4.4008179   l-0.008667-15.3532715c0-0.0016479-0.0009766-0.0030518-0.0009766-0.0046997c0-0.0040283,0.0009766-0.0078735,0.0009766-0.0119019   C38.3945427,7.6535034,37.110363,5.8356323,34.782238,4.491394c-4.5947266-2.652832-12.0458984-2.6518555-16.609375,0.0009766   c-2.2915649,1.3312988-3.555542,3.1292114-3.565918,5.06427c-0.0001221,0.0042114-0.0024414,0.0076904-0.0024414,0.0119019   c0,0.0102539,0,0.0205078,0,0.0307617l0.0039063,6.1235352c0,0.2758789,0.2236328,0.4995117,0.5,0.4995117   s0.5-0.2241211,0.5-0.5004883l-0.0019531-3.2543945c2.2161102,3.0158739,7.1791992,4.21875,10.9238281,4.21875   c0.0010986,0,0.0021973-0.000061,0.0032959-0.000061c1.443924-0.0004158,3.0922394-0.1672173,4.6965332-0.5715332   l0.0130615,5.3421021c0,0.1787109,0.0957031,0.3432617,0.25,0.4321289c0.0771484,0.0444336,0.1640625,0.0668945,0.25,0.0668945   s0.171875-0.0219727,0.2490234-0.0664063l3.5859375-2.0620117c0.1552734-0.0893555,0.2509766-0.2553711,0.2509766-0.4350586   l-0.0140381-5.3485718c0.7227898-0.5365229,1.2272797-1.0633326,1.5843506-1.5493774l0.006897,12.6875   c-0.000061,0.0024414-0.0020142,0.0043335-0.0020142,0.0068359v3.449707c0,1.8113976-1.4710617,3.2860394-3.0507813,4.1982422   c-4.2998047,2.4980469-11.3105469,2.5024414-15.6279297,0.0092773c-1.5998859-0.92803-3.1151609-2.4177532-3.109375-4.2626953   c-0.0000639-0.1006947-0.0039825-6.3144436-0.0039063-6.1933594c0-0.2758789-0.2236328-0.4995117-0.5-0.4995117   s-0.5,0.2241211-0.5,0.5004883l0.0015869,2.5394897c-1.3761597,1.3151855-2.1090088,2.8338013-2.1090088,4.4082642   c0,0.0106812,0.00177,0.0211182,0.0018311,0.0317993l-0.0135498,4.0140991   C12.4866447,35.579895,13.8798943,37.6225586,16.4035149,39.1778564z M18.6748161,5.3566284   c2.1445313-1.2460938,4.9658203-1.8686523,7.7919922-1.8686523s5.6572266,0.6230469,7.8154297,1.8696289   c2.0068359,1.1582031,3.1123047,2.6694336,3.1152344,4.2543945c0.0009308,0.8027-0.3329353,1.6410189-0.7919312,2.2720947   c-4.591671,6.315361-20.9886169,4.1753197-21.0010376-2.2984619C15.6025505,8.010437,16.6933708,6.5089722,18.6748161,5.3566284z    M32.2412224,20.5924683l-0.0117188-4.7543945c0.8603058-0.2729769,1.8183365-0.6870356,2.5869141-1.1254883l0.0117188,4.3920898   L32.2412224,20.5924683z M19.313488,40.5509644L19.2841911,49.15448c-0.0039063,0.0175781-0.0449219,0.0854492-0.1708984,0.1616211   c-0.4130859,0.2407227-1.1425781,0.2402344-1.5556641,0.0009766c-0.1396484-0.081543-0.1826172-0.1518555-0.1826172-0.1669922   l0.0273438-9.3989258C17.8118534,39.9572983,18.7626228,40.3627281,19.313488,40.5509644z M35.5742302,49.15448   c-0.0039063,0.0175781-0.0449219,0.0854492-0.1708984,0.1616211c-0.4140625,0.2407227-1.1435547,0.2402344-1.5556641,0.0009766   c-0.1396484-0.081543-0.1826172-0.1518555-0.1826172-0.1669922l0.0283203-8.5805664   c0.4668159-0.1615715,1.3933716-0.5461235,1.9082031-0.8066406L35.5742302,49.15448z M39.4931755,33.4533081   c-0.0081482,3.1450233-3.4722214,5.3241768-6.4511719,6.2792969c-0.0012817,0.0004272-0.0018921,0.0018311-0.0031738,0.0022583   c-5.3180294,1.758419-11.8170948,1.0901604-15.8190918-1.2214966c-2.4091797-1.3901367-3.7324219-3.2104492-3.7265625-5.1259766   l0.0029297-0.9384766c0.9656839,1.4460487,2.3803844,2.4482231,3.9139404,3.2246704   c5.453064,2.7626343,13.7576904,2.6480103,18.9327393-0.3599243c1.4379082-0.8356438,2.553112-1.9103584,3.1533203-2.7954102   L39.4931755,33.4533081z M14.6142693,26.3991089v2.1894531c0,2.2285862,1.6761532,4.0061684,3.6083984,5.1220703   c2.2978516,1.3266602,5.3095703,1.9897461,8.3193359,1.9897461c3.0136719,0,6.0253906-0.6650391,8.3125-1.9951172   c1.9085999-1.1088676,3.5481682-2.8849621,3.5537109-5.0639648l-0.0012207-2.1938477   c0.7284546,0.9227905,1.1047363,1.9257202,1.0979004,2.9477539c0,0.0004883,0,0.0004883,0,0.0009766   c-0.0087891,1.8901367-1.3095703,3.6835938-3.6611328,5.050293c-4.8681736,2.8320122-12.7794132,3.0091934-18.0445557,0.3030396   c-2.1783524-1.1210365-4.297081-2.9745903-4.2923584-5.4207153v-0.0004883c0-0.0011597-0.0006714-0.0020752-0.0006714-0.0032349   C13.509594,28.3155518,13.8880119,27.3203125,14.6142693,26.3991089z"/><path d="M15.110363,20.3786011c0.2763672,0,0.5-0.2241211,0.5-0.5l-0.0009766-2.2490234c0-0.2763672-0.2236328-0.5-0.5-0.5   s-0.5,0.2241211-0.5,0.5l0.0009766,2.2490234C14.610363,20.1549683,14.8339958,20.3786011,15.110363,20.3786011z"/><path d="M26.5205193,14.4630737c3.3856907,0,8.0416069-1.6100817,8.0371094-4.8574219   c-0.0019531-1.3603516-0.8828125-2.6176758-2.4814453-3.5405273c-2.600769-1.5016479-6.5525513-1.7242432-9.5745239-0.6986694   c-0.0673218,0.0056152-0.1312256,0.0258179-0.1923828,0.0586548c-1.9749088,0.7142982-3.8678818,2.1182399-3.8649292,4.164917   C18.4491444,12.926548,23.1272545,14.4630737,26.5205193,14.4630737z M19.5559196,10.2492065h6.616394l2.9089355,2.9492188   C25.5750351,13.9690876,20.4337101,12.957305,19.5559196,10.2492065z M30.1765251,12.8850098l-2.5997314-2.6358032h5.8757935   C33.0295181,11.6001568,31.5101757,12.427968,30.1765251,12.8850098z M26.4785271,5.7116089   c1.84375,0,3.6894531,0.4067383,5.0976563,1.2197266c1.12146,0.6473999,1.7994995,1.4595947,1.9490967,2.3178711h-6.9348145   L23.487072,6.1027832C24.4358635,5.8508911,25.4525261,5.7116089,26.4785271,5.7116089z M22.4202385,6.4451294l2.7657471,2.8040771   h-5.7120361C19.6969872,7.8813014,21.1379623,6.9555964,22.4202385,6.4451294z"/><path d="M31.5088005,27.9244995c0.0771484,0.0444336,0.1630859,0.0664063,0.2490234,0.0664063   s0.171875-0.0219727,0.2490234-0.0664063l3.5869141-2.0620117c0.15625-0.0898438,0.2519531-0.2568359,0.2509766-0.4370117   l-0.0234375-3.3789063c-0.0009766-0.1777344-0.0966797-0.3417969-0.2509766-0.4301758   c-0.1542969-0.0888672-0.34375-0.0888672-0.4980469,0l-3.5859375,2.0620117   c-0.15625,0.0898438-0.2519531,0.2568359-0.2509766,0.4370117l0.0224609,3.3789063   C31.2588005,27.6720581,31.3545036,27.8361206,31.5088005,27.9244995z M34.8271446,22.9108276l0.0156403,2.2299805   l-2.5908203,1.4892578l-0.0146484-2.2299805L34.8271446,22.9108276z"/></g>
-
-<path d="m19.754 59.527v-0.027344c0-0.55078 0.44922-1 1-1h2.6797v-29.609c0-0.10938 0.019531-0.21484 0.050781-0.31641 2.1328-9.4531 7.1758-16.055 13.379-19.82 4.1211-2.5039 8.7578-3.7539 13.395-3.7539 4.6367 0 9.2812 1.25 13.41 3.7422 6.2617 3.7773 11.363 10.402 13.516 19.836 0.03125 0.097656 0.050781 0.20312 0.050781 0.3125v29.609h2.0156c0.55078 0 1 0.44922 1 1v14.543c0 0.55078-0.44922 1-1 1h-11.457c0.035156 2.2461-0.046875 3.4883-0.58594 4.2891-0.61719 0.92188-1.4727 1.0859-2.918 1.0898-0.015624 1.7539-0.023437 3.7617-0.023437 6.0039 0 2.6836 0.011719 5.1797 0.035156 7.4609l0.007813 0.10938c0 0.55078-0.44922 1-1 1h-3.8008c-0.55078 0-1-0.44922-1-1l0.003907-0.09375c-0.027344-2.8789-0.042969-5.3672-0.042969-7.4805 0-1.8828 0.011719-3.8789 0.03125-6.0039-1.4297-0.003907-2.2773-0.17188-2.8945-1.0898-0.53906-0.80469-0.62109-2.043-0.58594-4.2891h-9.1602c0.027344 2.2656-0.089844 3.5195-0.66016 4.3164-0.64453 0.90234-1.5195 1.0625-2.9648 1.0625-0.015625 1.7578-0.027344 3.7539-0.027344 6.0039 0 2.6914 0.011719 5.1719 0.035157 7.4609l0.007812 0.10938c0 0.55078-0.44922 1-1 1h-3.8008c-0.55078 0-1-0.44922-1-1l0.003906-0.09375c-0.027344-2.8711-0.042969-5.375-0.042969-7.4805 0-1.875 0.011719-3.8828 0.035156-6.0039-1.4336-0.003906-2.2734-0.17187-2.8789-1.0977-0.52734-0.80078-0.59375-2.0391-0.55469-4.2812h-12.246c-0.55078 0-1-0.44922-1-1v-14.516zm31.551-16.656c-0.98438-1.7578-1.9805-2.9805-2.9805-3.6758-0.57812-0.40234-1.1602-0.61719-1.7344-0.64062-0.57422-0.023438-1.1797 0.13672-1.8086 0.48828l-0.046875 0.027343c-1.1211 0.64063-2.3008 1.8555-3.5352 3.6367-0.3125 0.45312-0.93359 0.56641-1.3867 0.25391s-0.56641-0.93359-0.25391-1.3867c1.4102-2.0312 2.8086-3.4492 4.1953-4.2383l0.054688-0.03125c0.95703-0.53516 1.9141-0.78125 2.8672-0.73828 0.95703 0.039063 1.8867 0.375 2.7773 0.99219 0.97266 0.67578 1.9141 1.7031 2.8164 3.0781 1.125-1.4141 2.2422-2.4336 3.3516-3.0547 0.95703-0.53516 1.9141-0.78125 2.8633-0.73828 0.95703 0.042969 1.8867 0.375 2.7773 0.99609 1.2539 0.86719 2.4492 2.3203 3.5859 4.3438l0.011719 0.019531 0.007813 0.011719 0.003906 0.007812 0.007812 0.011719 0.039063 0.078125 0.007812 0.019531v0.003907l0.007813 0.019531v0.003906l0.007812 0.019531v0.003906l0.007813 0.019532v0.003906l0.007812 0.019531v0.003907l0.007813 0.019531v0.003906l0.007812 0.019531v0.003906l0.007813 0.019532v0.003906l0.003906 0.019531v0.003907l0.003906 0.019531v0.003906l0.003907 0.019531v0.003906l0.003906 0.019532v15.914h10.23v-29.512c-2.0273-8.8398-6.7734-15.023-12.594-18.531-3.8203-2.3047-8.1055-3.4609-12.383-3.4609s-8.5586 1.1523-12.363 3.4648c-5.7578 3.4961-10.449 9.6641-12.457 18.523v29.516h9.0781l0.019532-5.1797-0.019532-5.9375-0.003906-0.10547c0-0.55078 0.44922-1 1-1h8.4961c0.21875 0 0.42188 0.070312 0.58594 0.19141l0.83984 0.50391c2.9727 1.7227 5.5234 2.4492 7.6484 2.1797 2.0195-0.25781 3.7148-1.457 5.0703-3.5977l0.27734-0.46094c0.11719-0.19141 0.28906-0.33203 0.48438-0.41016l0.015625-0.007812h0.007813l0.11719-0.035157 0.011719-0.003906h0.011718l0.011719-0.003906h0.011719l0.023438-0.003907 0.011718-0.003906h0.015625l0.007813-0.003906h0.050781c0.19922-0.015625 0.40625 0.03125 0.58984 0.14062 0.19141 0.11719 0.33203 0.28906 0.41016 0.48438l0.007813 0.015625v0.007813l0.035156 0.11719 0.003906 0.011719v0.011718l0.003906 0.011719v0.011719l0.003906 0.023438 0.003907 0.011718v0.015625l0.003906 0.007813v0.050781l0.003906 0.09375v0.023437c0.12891 4.4688-1.2305 7.5312-4.082 9.1758-2.7266 1.5781-6.7891 1.7539-12.168 0.52344-0.57422 0.007813-0.95703 0.22656-1.1445 0.65234-0.24219 0.54297-0.29297 1.375-0.16016 2.4883h20.289v-15.539c-0.94922-1.6562-1.9102-2.8203-2.8711-3.4844-0.57812-0.40234-1.1602-0.61719-1.7344-0.64062-0.57813-0.023438-1.1836 0.13672-1.8125 0.48828-1.1289 0.62891-2.3164 1.8438-3.5625 3.6328l-0.011719 0.019531-0.007813 0.011719-0.007812 0.007812-0.007813 0.011719-0.003906 0.007812-0.027344 0.03125-0.003906 0.007813-0.015625 0.015625-0.011719 0.015625-0.082031 0.082031-0.015625 0.011719-0.003906 0.003906-0.015625 0.011719-0.003906 0.003906-0.015626 0.011719-0.003906 0.003906-0.015625 0.011719-0.003906 0.003906-0.015625 0.011719-0.003906 0.003906-0.015625 0.011719-0.003907 0.003906-0.023437 0.011719-0.011719 0.007812-0.007812 0.003906-0.011719 0.007813-0.007813 0.007813-0.046874 0.03125-0.078126 0.039062-0.019531 0.007812h-0.003906l-0.019531 0.007813h-0.003906l-0.019532 0.007813h-0.003906l-0.019531 0.007812h-0.003907l-0.019531 0.007812h-0.003906l-0.019531 0.007813-0.14062 0.023437h-0.14844l-0.019531-0.003906h-0.003906l-0.019532-0.003906h-0.003906l-0.023437-0.003906h-0.003907l-0.019531-0.003906h-0.003906l-0.019531-0.003907h-0.003906l-0.019532-0.003906-0.023437-0.003906-0.09375-0.03125-0.019531-0.007813h-0.003907l-0.019531-0.007812h-0.003906l-0.019532-0.007813h-0.003906l-0.019531-0.007812h-0.003906l-0.019531-0.007813-0.003907-0.003906-0.070312-0.035156-0.011719-0.007813-0.007812-0.003906-0.011719-0.007813-0.007813-0.007812-0.023437-0.015625-0.007813-0.007813-0.011718-0.007812-0.007813-0.003906-0.03125-0.027344-0.007813-0.003906-0.015624-0.015625-0.015626-0.011719-0.082031-0.082031-0.011719-0.015625-0.003906-0.003906-0.011718-0.015626-0.003907-0.003906-0.011719-0.015625-0.003906-0.003906-0.011718-0.015625-0.003907-0.003906-0.011719-0.015625-0.003906-0.003907-0.011718-0.015624-0.003907-0.003907-0.011719-0.023437-0.007812-0.011719-0.003906-0.007813-0.007813-0.011718-0.007812-0.007813-0.007813-0.011719-0.011718-0.019531zm6.7344 5.9727c-1.3555 1.2969-2.9297 2.0586-4.7148 2.2852-2.5742 0.32812-5.5391-0.48438-8.8945-2.4297l-0.69922-0.42188h-7.2266l0.027344 5.0391-0.027344 5.1797h4.2148c-0.14062-1.3789-0.03125-2.4766 0.33203-3.293 0.55078-1.2422 1.5664-1.8555 3.043-1.8398h0.17578l0.019531 0.003907h0.003907l0.070312 0.011718c4.9219 1.1367 8.5352 1.043 10.828-0.28516 1.4805-0.85547 2.4258-2.2773 2.8477-4.2617zm-17.801 44.148c-0.023437-2.4961-0.035156-4.6914-0.035156-6.5703 0-2.1641 0.015625-4.4961 0.046875-6.9844v-0.15234l0.003906-0.015625v-0.007812l0.003906-0.015625v-0.007813l0.003907-0.015625v-0.007812l0.003906-0.015625v-0.007813l0.003906-0.015625v-0.007812l0.003907-0.015625 0.003906-0.007813 0.003906-0.015625 0.003906-0.007812 0.003906-0.015625 0.003907-0.007813 0.003906-0.015625 0.003906-0.007812 0.003907-0.015625 0.0625-0.125 0.007812-0.011719 0.015625-0.03125 0.007813-0.011719 0.003906-0.007812 0.007812-0.011719 0.003906-0.007813 0.007813-0.011718 0.003906-0.007813 0.007813-0.011719 0.003906-0.007812 0.007812-0.011719 0.007813-0.007812 0.007813-0.011719 0.003906-0.007812 0.011718-0.011719 0.003907-0.007813 0.03125-0.03125 0.003906-0.007812 0.058594-0.058594 0.011719-0.007812 0.019531-0.019532 0.007812-0.003906 0.011719-0.007812 0.007812-0.007813 0.011719-0.007813 0.007813-0.003906 0.011718-0.007812 0.007813-0.003906 0.011719-0.007813 0.007812-0.003906 0.011719-0.007813 0.007813-0.003906 0.011718-0.007812 0.03125-0.015626 0.011719-0.007812 0.14844-0.074219 0.015626-0.003906 0.03125-0.015625 0.015624-0.003906 0.007813-0.003906 0.015625-0.003907h0.007812l0.015626-0.003906 0.007812-0.003906 0.015625-0.003907 0.007813-0.003906 0.015624-0.003906h0.007813l0.015625-0.003906 0.007812-0.003906 0.015626-0.003907h0.03125l0.015624-0.003906h0.12891c1.3594 0.03125 2.0977 0.039063 2.2852-0.22266 0.27344-0.38281 0.32422-1.332 0.29688-3.1523h-8.875c-0.035156 1.8398-0.007812 2.8125 0.23828 3.1875 0.14453 0.22656 0.83984 0.21875 2.1758 0.1875h0.13672l0.019531 0.003906h0.007813l0.019531 0.003907h0.007813l0.019531 0.003906h0.007812l0.019532 0.003906h0.007812l0.019532 0.003906h0.007812l0.015625 0.003906 0.007813 0.003907 0.015624 0.003906h0.007813l0.015625 0.003906 0.007812 0.003907 0.015626 0.003906 0.023437 0.011718h0.007813l0.25781 0.12891 0.015625 0.011719 0.007813 0.003906 0.011718 0.011718 0.007813 0.003907 0.011719 0.011719 0.007812 0.003906 0.011719 0.011718 0.007812 0.003907 0.011719 0.011719 0.007812 0.003906 0.03125 0.03125 0.003907 0.007812 0.03125 0.03125 0.003906 0.007813 0.011719 0.011719 0.003906 0.007812 0.011719 0.011719 0.003906 0.007812 0.011719 0.011719 0.003906 0.007812 0.011719 0.011719 0.003906 0.007813 0.023437 0.03125 0.14453 0.28906 0.003906 0.015625 0.003906 0.007813 0.003906 0.015625 0.003907 0.007812 0.003906 0.015625v0.007813l0.007813 0.042969v0.007812l0.003906 0.019531v0.007813l0.003906 0.019531v0.007813l0.003906 0.019531v0.007812l0.003906 0.019531v0.16406c-0.023437 1.9766-0.035156 4.2891-0.035156 6.957 0 2.3477 0.007813 4.5312 0.027344 6.5703h1.8086zm22.059 0c-0.023437-2.5-0.035156-4.6836-0.035156-6.5703 0-2.168 0.015625-4.4922 0.042969-6.9844v-0.15234l0.003906-0.015625v-0.007812l0.003906-0.015625v-0.007813l0.003906-0.015625v-0.007812l0.003906-0.015625v-0.007813l0.003907-0.015625v-0.007812l0.003906-0.015625 0.003906-0.007813 0.003907-0.015625 0.003906-0.007812 0.003906-0.015625 0.003906-0.007813 0.003906-0.015625 0.003907-0.007812 0.003906-0.015625 0.0625-0.125 0.007813-0.011719 0.015624-0.03125 0.007813-0.011719 0.003906-0.007812 0.007813-0.011719 0.003906-0.007813 0.007812-0.011718 0.003907-0.007813 0.007812-0.011719 0.003907-0.007812 0.007812-0.011719 0.007812-0.007812 0.007813-0.011719 0.003906-0.007812 0.011719-0.011719 0.003906-0.007813 0.03125-0.03125 0.003906-0.007812 0.058594-0.058594 0.011719-0.007812 0.019531-0.019532 0.007813-0.003906 0.011719-0.007812 0.007812-0.007813 0.011719-0.007813 0.007812-0.003906 0.011719-0.007812 0.007812-0.003906 0.011719-0.007813 0.007813-0.003906 0.011718-0.007813 0.007813-0.003906 0.011719-0.007812 0.03125-0.015626 0.011718-0.007812 0.14844-0.074219 0.015625-0.003906 0.03125-0.015625 0.015625-0.003906 0.007812-0.003906 0.015626-0.003907h0.007812l0.015625-0.003906 0.007813-0.003906 0.015624-0.003907 0.007813-0.003906 0.015625-0.003906h0.007812l0.015626-0.003906 0.007812-0.003906 0.015625-0.003907h0.03125l0.015625-0.003906h0.12891c1.3438 0.03125 2.0508 0.039063 2.207-0.19531 0.25-0.375 0.28516-1.3438 0.25-3.1797h-8.793c-0.035157 1.8359 0 2.8047 0.25 3.1797 0.15625 0.23438 0.85938 0.22656 2.207 0.19531h0.13672l0.019531 0.003906h0.007812l0.019532 0.003907h0.007812l0.019532 0.003906h0.007812l0.019531 0.003906h0.007813l0.019531 0.003906h0.007813l0.015624 0.003906 0.007813 0.003907 0.015625 0.003906h0.007812l0.015626 0.003906 0.007812 0.003907 0.015625 0.003906 0.023437 0.011718h0.007813l0.25781 0.12891 0.015624 0.011719 0.007813 0.003906 0.011719 0.011718 0.007812 0.003907 0.011719 0.011719 0.007813 0.003906 0.011718 0.011718 0.007813 0.003907 0.011719 0.011719 0.007812 0.003906 0.03125 0.03125 0.003906 0.007812 0.03125 0.03125 0.003906 0.007813 0.011719 0.011719 0.003907 0.007812 0.011718 0.011719 0.003906 0.007812 0.011719 0.011719 0.003907 0.007812 0.011718 0.011719 0.003906 0.007813 0.023438 0.03125 0.14453 0.28906 0.003907 0.015625 0.003906 0.007813 0.003906 0.015625 0.003906 0.007812 0.003906 0.015625v0.007813l0.007813 0.042969v0.007812l0.003906 0.019531v0.007813l0.003907 0.019531v0.007813l0.003906 0.019531v0.007812l0.003906 0.019531v0.16406c-0.023438 1.9688-0.035156 4.2969-0.035156 6.957 0 2.3398 0.007812 4.5352 0.027344 6.5703h1.8086zm-40.543-19.953h56.488v-12.539h-56.492v12.539z" transform="translate(181 196) rotate(-90) scale(0.2)"/>
-
-<path d="m19.754 59.527v-0.027344c0-0.55078 0.44922-1 1-1h2.6797v-29.609c0-0.10938 0.019531-0.21484 0.050781-0.31641 2.1328-9.4531 7.1758-16.055 13.379-19.82 4.1211-2.5039 8.7578-3.7539 13.395-3.7539 4.6367 0 9.2812 1.25 13.41 3.7422 6.2617 3.7773 11.363 10.402 13.516 19.836 0.03125 0.097656 0.050781 0.20312 0.050781 0.3125v29.609h2.0156c0.55078 0 1 0.44922 1 1v14.543c0 0.55078-0.44922 1-1 1h-11.457c0.035156 2.2461-0.046875 3.4883-0.58594 4.2891-0.61719 0.92188-1.4727 1.0859-2.918 1.0898-0.015624 1.7539-0.023437 3.7617-0.023437 6.0039 0 2.6836 0.011719 5.1797 0.035156 7.4609l0.007813 0.10938c0 0.55078-0.44922 1-1 1h-3.8008c-0.55078 0-1-0.44922-1-1l0.003907-0.09375c-0.027344-2.8789-0.042969-5.3672-0.042969-7.4805 0-1.8828 0.011719-3.8789 0.03125-6.0039-1.4297-0.003907-2.2773-0.17188-2.8945-1.0898-0.53906-0.80469-0.62109-2.043-0.58594-4.2891h-9.1602c0.027344 2.2656-0.089844 3.5195-0.66016 4.3164-0.64453 0.90234-1.5195 1.0625-2.9648 1.0625-0.015625 1.7578-0.027344 3.7539-0.027344 6.0039 0 2.6914 0.011719 5.1719 0.035157 7.4609l0.007812 0.10938c0 0.55078-0.44922 1-1 1h-3.8008c-0.55078 0-1-0.44922-1-1l0.003906-0.09375c-0.027344-2.8711-0.042969-5.375-0.042969-7.4805 0-1.875 0.011719-3.8828 0.035156-6.0039-1.4336-0.003906-2.2734-0.17187-2.8789-1.0977-0.52734-0.80078-0.59375-2.0391-0.55469-4.2812h-12.246c-0.55078 0-1-0.44922-1-1v-14.516zm31.551-16.656c-0.98438-1.7578-1.9805-2.9805-2.9805-3.6758-0.57812-0.40234-1.1602-0.61719-1.7344-0.64062-0.57422-0.023438-1.1797 0.13672-1.8086 0.48828l-0.046875 0.027343c-1.1211 0.64063-2.3008 1.8555-3.5352 3.6367-0.3125 0.45312-0.93359 0.56641-1.3867 0.25391s-0.56641-0.93359-0.25391-1.3867c1.4102-2.0312 2.8086-3.4492 4.1953-4.2383l0.054688-0.03125c0.95703-0.53516 1.9141-0.78125 2.8672-0.73828 0.95703 0.039063 1.8867 0.375 2.7773 0.99219 0.97266 0.67578 1.9141 1.7031 2.8164 3.0781 1.125-1.4141 2.2422-2.4336 3.3516-3.0547 0.95703-0.53516 1.9141-0.78125 2.8633-0.73828 0.95703 0.042969 1.8867 0.375 2.7773 0.99609 1.2539 0.86719 2.4492 2.3203 3.5859 4.3438l0.011719 0.019531 0.007813 0.011719 0.003906 0.007812 0.007812 0.011719 0.039063 0.078125 0.007812 0.019531v0.003907l0.007813 0.019531v0.003906l0.007812 0.019531v0.003906l0.007813 0.019532v0.003906l0.007812 0.019531v0.003907l0.007813 0.019531v0.003906l0.007812 0.019531v0.003906l0.007813 0.019532v0.003906l0.003906 0.019531v0.003907l0.003906 0.019531v0.003906l0.003907 0.019531v0.003906l0.003906 0.019532v15.914h10.23v-29.512c-2.0273-8.8398-6.7734-15.023-12.594-18.531-3.8203-2.3047-8.1055-3.4609-12.383-3.4609s-8.5586 1.1523-12.363 3.4648c-5.7578 3.4961-10.449 9.6641-12.457 18.523v29.516h9.0781l0.019532-5.1797-0.019532-5.9375-0.003906-0.10547c0-0.55078 0.44922-1 1-1h8.4961c0.21875 0 0.42188 0.070312 0.58594 0.19141l0.83984 0.50391c2.9727 1.7227 5.5234 2.4492 7.6484 2.1797 2.0195-0.25781 3.7148-1.457 5.0703-3.5977l0.27734-0.46094c0.11719-0.19141 0.28906-0.33203 0.48438-0.41016l0.015625-0.007812h0.007813l0.11719-0.035157 0.011719-0.003906h0.011718l0.011719-0.003906h0.011719l0.023438-0.003907 0.011718-0.003906h0.015625l0.007813-0.003906h0.050781c0.19922-0.015625 0.40625 0.03125 0.58984 0.14062 0.19141 0.11719 0.33203 0.28906 0.41016 0.48438l0.007813 0.015625v0.007813l0.035156 0.11719 0.003906 0.011719v0.011718l0.003906 0.011719v0.011719l0.003906 0.023438 0.003907 0.011718v0.015625l0.003906 0.007813v0.050781l0.003906 0.09375v0.023437c0.12891 4.4688-1.2305 7.5312-4.082 9.1758-2.7266 1.5781-6.7891 1.7539-12.168 0.52344-0.57422 0.007813-0.95703 0.22656-1.1445 0.65234-0.24219 0.54297-0.29297 1.375-0.16016 2.4883h20.289v-15.539c-0.94922-1.6562-1.9102-2.8203-2.8711-3.4844-0.57812-0.40234-1.1602-0.61719-1.7344-0.64062-0.57813-0.023438-1.1836 0.13672-1.8125 0.48828-1.1289 0.62891-2.3164 1.8438-3.5625 3.6328l-0.011719 0.019531-0.007813 0.011719-0.007812 0.007812-0.007813 0.011719-0.003906 0.007812-0.027344 0.03125-0.003906 0.007813-0.015625 0.015625-0.011719 0.015625-0.082031 0.082031-0.015625 0.011719-0.003906 0.003906-0.015625 0.011719-0.003906 0.003906-0.015626 0.011719-0.003906 0.003906-0.015625 0.011719-0.003906 0.003906-0.015625 0.011719-0.003906 0.003906-0.015625 0.011719-0.003907 0.003906-0.023437 0.011719-0.011719 0.007812-0.007812 0.003906-0.011719 0.007813-0.007813 0.007813-0.046874 0.03125-0.078126 0.039062-0.019531 0.007812h-0.003906l-0.019531 0.007813h-0.003906l-0.019532 0.007813h-0.003906l-0.019531 0.007812h-0.003907l-0.019531 0.007812h-0.003906l-0.019531 0.007813-0.14062 0.023437h-0.14844l-0.019531-0.003906h-0.003906l-0.019532-0.003906h-0.003906l-0.023437-0.003906h-0.003907l-0.019531-0.003906h-0.003906l-0.019531-0.003907h-0.003906l-0.019532-0.003906-0.023437-0.003906-0.09375-0.03125-0.019531-0.007813h-0.003907l-0.019531-0.007812h-0.003906l-0.019532-0.007813h-0.003906l-0.019531-0.007812h-0.003906l-0.019531-0.007813-0.003907-0.003906-0.070312-0.035156-0.011719-0.007813-0.007812-0.003906-0.011719-0.007813-0.007813-0.007812-0.023437-0.015625-0.007813-0.007813-0.011718-0.007812-0.007813-0.003906-0.03125-0.027344-0.007813-0.003906-0.015624-0.015625-0.015626-0.011719-0.082031-0.082031-0.011719-0.015625-0.003906-0.003906-0.011718-0.015626-0.003907-0.003906-0.011719-0.015625-0.003906-0.003906-0.011718-0.015625-0.003907-0.003906-0.011719-0.015625-0.003906-0.003907-0.011718-0.015624-0.003907-0.003907-0.011719-0.023437-0.007812-0.011719-0.003906-0.007813-0.007813-0.011718-0.007812-0.007813-0.007813-0.011719-0.011718-0.019531zm6.7344 5.9727c-1.3555 1.2969-2.9297 2.0586-4.7148 2.2852-2.5742 0.32812-5.5391-0.48438-8.8945-2.4297l-0.69922-0.42188h-7.2266l0.027344 5.0391-0.027344 5.1797h4.2148c-0.14062-1.3789-0.03125-2.4766 0.33203-3.293 0.55078-1.2422 1.5664-1.8555 3.043-1.8398h0.17578l0.019531 0.003907h0.003907l0.070312 0.011718c4.9219 1.1367 8.5352 1.043 10.828-0.28516 1.4805-0.85547 2.4258-2.2773 2.8477-4.2617zm-17.801 44.148c-0.023437-2.4961-0.035156-4.6914-0.035156-6.5703 0-2.1641 0.015625-4.4961 0.046875-6.9844v-0.15234l0.003906-0.015625v-0.007812l0.003906-0.015625v-0.007813l0.003907-0.015625v-0.007812l0.003906-0.015625v-0.007813l0.003906-0.015625v-0.007812l0.003907-0.015625 0.003906-0.007813 0.003906-0.015625 0.003906-0.007812 0.003906-0.015625 0.003907-0.007813 0.003906-0.015625 0.003906-0.007812 0.003907-0.015625 0.0625-0.125 0.007812-0.011719 0.015625-0.03125 0.007813-0.011719 0.003906-0.007812 0.007812-0.011719 0.003906-0.007813 0.007813-0.011718 0.003906-0.007813 0.007813-0.011719 0.003906-0.007812 0.007812-0.011719 0.007813-0.007812 0.007813-0.011719 0.003906-0.007812 0.011718-0.011719 0.003907-0.007813 0.03125-0.03125 0.003906-0.007812 0.058594-0.058594 0.011719-0.007812 0.019531-0.019532 0.007812-0.003906 0.011719-0.007812 0.007812-0.007813 0.011719-0.007813 0.007813-0.003906 0.011718-0.007812 0.007813-0.003906 0.011719-0.007813 0.007812-0.003906 0.011719-0.007813 0.007813-0.003906 0.011718-0.007812 0.03125-0.015626 0.011719-0.007812 0.14844-0.074219 0.015626-0.003906 0.03125-0.015625 0.015624-0.003906 0.007813-0.003906 0.015625-0.003907h0.007812l0.015626-0.003906 0.007812-0.003906 0.015625-0.003907 0.007813-0.003906 0.015624-0.003906h0.007813l0.015625-0.003906 0.007812-0.003906 0.015626-0.003907h0.03125l0.015624-0.003906h0.12891c1.3594 0.03125 2.0977 0.039063 2.2852-0.22266 0.27344-0.38281 0.32422-1.332 0.29688-3.1523h-8.875c-0.035156 1.8398-0.007812 2.8125 0.23828 3.1875 0.14453 0.22656 0.83984 0.21875 2.1758 0.1875h0.13672l0.019531 0.003906h0.007813l0.019531 0.003907h0.007813l0.019531 0.003906h0.007812l0.019532 0.003906h0.007812l0.019532 0.003906h0.007812l0.015625 0.003906 0.007813 0.003907 0.015624 0.003906h0.007813l0.015625 0.003906 0.007812 0.003907 0.015626 0.003906 0.023437 0.011718h0.007813l0.25781 0.12891 0.015625 0.011719 0.007813 0.003906 0.011718 0.011718 0.007813 0.003907 0.011719 0.011719 0.007812 0.003906 0.011719 0.011718 0.007812 0.003907 0.011719 0.011719 0.007812 0.003906 0.03125 0.03125 0.003907 0.007812 0.03125 0.03125 0.003906 0.007813 0.011719 0.011719 0.003906 0.007812 0.011719 0.011719 0.003906 0.007812 0.011719 0.011719 0.003906 0.007812 0.011719 0.011719 0.003906 0.007813 0.023437 0.03125 0.14453 0.28906 0.003906 0.015625 0.003906 0.007813 0.003906 0.015625 0.003907 0.007812 0.003906 0.015625v0.007813l0.007813 0.042969v0.007812l0.003906 0.019531v0.007813l0.003906 0.019531v0.007813l0.003906 0.019531v0.007812l0.003906 0.019531v0.16406c-0.023437 1.9766-0.035156 4.2891-0.035156 6.957 0 2.3477 0.007813 4.5312 0.027344 6.5703h1.8086zm22.059 0c-0.023437-2.5-0.035156-4.6836-0.035156-6.5703 0-2.168 0.015625-4.4922 0.042969-6.9844v-0.15234l0.003906-0.015625v-0.007812l0.003906-0.015625v-0.007813l0.003906-0.015625v-0.007812l0.003906-0.015625v-0.007813l0.003907-0.015625v-0.007812l0.003906-0.015625 0.003906-0.007813 0.003907-0.015625 0.003906-0.007812 0.003906-0.015625 0.003906-0.007813 0.003906-0.015625 0.003907-0.007812 0.003906-0.015625 0.0625-0.125 0.007813-0.011719 0.015624-0.03125 0.007813-0.011719 0.003906-0.007812 0.007813-0.011719 0.003906-0.007813 0.007812-0.011718 0.003907-0.007813 0.007812-0.011719 0.003907-0.007812 0.007812-0.011719 0.007812-0.007812 0.007813-0.011719 0.003906-0.007812 0.011719-0.011719 0.003906-0.007813 0.03125-0.03125 0.003906-0.007812 0.058594-0.058594 0.011719-0.007812 0.019531-0.019532 0.007813-0.003906 0.011719-0.007812 0.007812-0.007813 0.011719-0.007813 0.007812-0.003906 0.011719-0.007812 0.007812-0.003906 0.011719-0.007813 0.007813-0.003906 0.011718-0.007813 0.007813-0.003906 0.011719-0.007812 0.03125-0.015626 0.011718-0.007812 0.14844-0.074219 0.015625-0.003906 0.03125-0.015625 0.015625-0.003906 0.007812-0.003906 0.015626-0.003907h0.007812l0.015625-0.003906 0.007813-0.003906 0.015624-0.003907 0.007813-0.003906 0.015625-0.003906h0.007812l0.015626-0.003906 0.007812-0.003906 0.015625-0.003907h0.03125l0.015625-0.003906h0.12891c1.3438 0.03125 2.0508 0.039063 2.207-0.19531 0.25-0.375 0.28516-1.3438 0.25-3.1797h-8.793c-0.035157 1.8359 0 2.8047 0.25 3.1797 0.15625 0.23438 0.85938 0.22656 2.207 0.19531h0.13672l0.019531 0.003906h0.007812l0.019532 0.003907h0.007812l0.019532 0.003906h0.007812l0.019531 0.003906h0.007813l0.019531 0.003906h0.007813l0.015624 0.003906 0.007813 0.003907 0.015625 0.003906h0.007812l0.015626 0.003906 0.007812 0.003907 0.015625 0.003906 0.023437 0.011718h0.007813l0.25781 0.12891 0.015624 0.011719 0.007813 0.003906 0.011719 0.011718 0.007812 0.003907 0.011719 0.011719 0.007813 0.003906 0.011718 0.011718 0.007813 0.003907 0.011719 0.011719 0.007812 0.003906 0.03125 0.03125 0.003906 0.007812 0.03125 0.03125 0.003906 0.007813 0.011719 0.011719 0.003907 0.007812 0.011718 0.011719 0.003906 0.007812 0.011719 0.011719 0.003907 0.007812 0.011718 0.011719 0.003906 0.007813 0.023438 0.03125 0.14453 0.28906 0.003907 0.015625 0.003906 0.007813 0.003906 0.015625 0.003906 0.007812 0.003906 0.015625v0.007813l0.007813 0.042969v0.007812l0.003906 0.019531v0.007813l0.003907 0.019531v0.007813l0.003906 0.019531v0.007812l0.003906 0.019531v0.16406c-0.023438 1.9688-0.035156 4.2969-0.035156 6.957 0 2.3398 0.007812 4.5352 0.027344 6.5703h1.8086zm-40.543-19.953h56.488v-12.539h-56.492v12.539z" transform="translate(112 196) rotate(-90) scale(0.2)"/>
-
-<!-- If it exists, do the following -->
-
-
-  <defs>
-    <!-- Blue Gradient -->
-    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#7f7fff;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#4d4dff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1a1aff;stop-opacity:1" />
-    </linearGradient>
-    <!-- Red Gradient -->
-    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#ff9999;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#ff4d4d;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#b30000;stop-opacity:1" />
-    </linearGradient>
-    <!-- Green Gradient -->
-    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#99ff99;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#4dff4d;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#00b300;stop-opacity:1" />
-    </linearGradient>
-    <!-- Black Gradient -->
-    <linearGradient id="blackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#999999;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#4d4d4d;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
-    </linearGradient>
-    <!-- Yellow Gradient -->
-    <linearGradient id="yellowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#ffff99;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#ffff4d;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#ffcc00;stop-opacity:1" />
-    </linearGradient>
-    <!-- Purple Gradient -->
-    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#e599ff;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#bf40bf;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#800080;stop-opacity:1" />
-    </linearGradient>
-    <!-- Orange Gradient -->
-    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#ffcc99;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#ff944d;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#ff6600;stop-opacity:1" />
-    </linearGradient>
-    <!-- Pink Gradient -->
-    <linearGradient id="pinkGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#ff99cc;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#ff66b2;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#ff3399;stop-opacity:1" />
-    </linearGradient>
-    <!-- Brown Gradient -->
-    <linearGradient id="brownGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#d2b48c;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#a0522d;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#8b4513;stop-opacity:1" />
-    </linearGradient>
-    <!-- Teal Gradient -->
-    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#66cccc;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#339999;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#006666;stop-opacity:1" />
-    </linearGradient>
-<linearGradient id="brightCoralMarkerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-  <stop offset="0%" style="stop-color:#ffc67d;stop-opacity:1" />
-  <stop offset="50%" style="stop-color:#ff99b4;stop-opacity:1" />
-  <stop offset="100%" style="stop-color:#ff66b3;stop-opacity:1" />
-</linearGradient>
-
-    <linearGradient id="deepBlueMarkerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-  <stop offset="0%" style="stop-color:#03055b;stop-opacity:1" />
-  <stop offset="50%" style="stop-color:#0047a5;stop-opacity:1" />
-  <stop offset="100%" style="stop-color:#00008f;stop-opacity:1" />
-</linearGradient>
-    
-  </defs>
-
-  <style>
-    .pipe-line {
-      stroke: black;
-      stroke-width: 1.2;
-      stroke-linecap: round;
-    }
-  </style>
-
-  <!-- Simple line representing the pipe -->
-
-  <line x1="100" y1="121" x2="100" y2="13" class="pipe-line" />
-    <line x1="100" y1="13" x2="259" y2="13" class="pipe-line" />
-
-    <line x1="280" y1="13" x2="359" y2="13" class="pipe-line" />
-  <line x1="359" y1="13" x2="359" y2="36" class="pipe-line" />
-  
-  
-  <line x1="175" y1="121" x2="175" y2="48" class="pipe-line" />
-    <line x1="175" y1="48" x2="259" y2="48" class="pipe-line" />
-        <line x1="279" y1="48" x2="363" y2="48" class="pipe-line" />
-
-      <line x1="245" y1="121" x2="245" y2="83" class="pipe-line" />
-    <line x1="245" y1="83" x2="259" y2="83" class="pipe-line" />
-  
-        <line x1="279" y1="83" x2="415" y2="83" class="pipe-line" />
-                <line x1="415" y1="83" x2="415" y2="43" class="pipe-line" />
-                
-                
-                
-  <line x1="108" y1="121" x2="108" y2="80" class="pipe-line" />
-    <line x1="168" y1="121" x2="168" y2="80" class="pipe-line" />
-    
-    
-        <line x1="108" y1="80" x2="168" y2="80" class="pipe-line" />
+        </div >
+                                    <div class="weather-container">
+                    <h2 class="text-widget" style="color: #fff; font-size: 24px;padding-bottom: 20px;">Temperature</h2>
+                    <p style="color: #bbb; font-size: 16px; text-align: center;padding-bottom: 10px;">
+    This simulation displays the temperature around 25°C with small fluctuations and humidity around 60% with small fluctuations over time.
+</p>
+<button class="btn-form" style="width: 124px; margin-left: 40px;   font-size: 14px; " onclick="downloadTempExcel()">Download Temp Data</button>
         
-            <line x1="140" y1="61" x2="140" y2="40" class="pipe-line" />
-        
-  <rect x="120" y="125" rx="3" ry="3" width="34" height="9" fill="url(#blueGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="137" y="130" font-family="Arial, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Tempature</text>
-
-  <rect x="72" y="165" rx="3" ry="3" width="19" height="8" fill="url(#orangeGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="81.5" y="169.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">ADC 1</text>
-
-  <rect x="141" y="165" rx="3" ry="3" width="19" height="8" fill="url(#orangeGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="150.5" y="169.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">ADC 2</text>
-
-  <!-- Rectangle and text for another element (Green) -->
-  <rect x="182" y="165" rx="3" ry="3" width="19" height="8" fill="url(#greenGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="191.5" y="169.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Led 1</text>
-  
-  <rect x="113" y="165" rx="3" ry="3" width="19" height="8" fill="url(#greenGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="122.5" y="169.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Led 2</text>
-
-  <!-- Rectangle and text for another element (Black) -->
-  <rect x="260" y="26" rx="3" ry="3" width="19" height="8" fill="url(#brownGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="269.5" y="30.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Pump1</text>
-
-  <!-- Rectangle and text for another element (Black) -->
-  <rect x="260" y="61" rx="3" ry="3" width="19" height="8" fill="url(#brownGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="269.5" y="65.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Pump2</text>
-  <!-- Rectangle and text for another element (Black) -->
-  <rect x="260" y="96" rx="3" ry="3" width="19" height="8" fill="url(#brownGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="269.5" y="100.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Pump3</text>
-    <rect x="130" y="82" rx="3" ry="3" width="19" height="8" fill="url(#brownGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="139.5" y="86.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Pump4</text>
-  <rect x="441" y="141" rx="3" ry="3" width="19" height="8" fill="url(#tealGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="450.5" y="145.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Fan</text>
-  <rect x="353" y="127" rx="3" ry="3" width="23" height="10" fill="url(#redGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="364.5" y="131.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Heating</text>
-    <rect x="128" y="32" rx="3" ry="3" width="27" height="8" fill="url(#yellowGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="141.5" y="36.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Air Filter</text>
-      <rect x="223" y="204" rx="3" ry="3" width="36" height="8" fill="url(#deepBlueMarkerGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="241.5" y="208.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Water Tube</text>
-      <rect x="147" y="204" rx="3" ry="3" width="48" height="8" fill="url(#deepBlueMarkerGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="171.5" y="208.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Bacterial 2 Tube</text>
-        <rect x="79" y="204" rx="3" ry="3" width="48" height="8" fill="url(#deepBlueMarkerGrad)" stroke="black" stroke-width="0.5"/>
-  <text x="103.5" y="208.5" font-family="Verdana, sans-serif" font-size="7" alignment-baseline="middle" text-anchor="middle" fill="white" style="text-shadow: 1px 1px 2px black;">Bacterial 1 Tube</text>
-<path d="M35.6,20.12H95.82a27.14,27.14,0,0,1,27.06,27.06V74.13A25.33,25.33,0,0,1,97.62,99.39H92.38l4.17,9.71a3.27,3.27,0,0,1,.34,1.46,3.32,3.32,0,0,1-3.32,3.32H44.43a3.39,3.39,0,0,1-1.12-.2,3.31,3.31,0,0,1-2-4.23l3.6-10H35.6a10.93,10.93,0,0,1-7.75-3.23h0a11,11,0,0,1-3.21-7.75V85H14.7A5.57,5.57,0,0,1,9.14,79.4V65.07H0V54.44H9.14V40.11a5.57,5.57,0,0,1,5.56-5.56h9.92V31.11a11,11,0,0,1,3.22-7.75l0,0a11,11,0,0,1,7.74-3.22Zm-11,58.2V41.19H15.78V78.32ZM31.26,36.8a3.47,3.47,0,0,1,.17,1.07V81.64a3.36,3.36,0,0,1-.17,1.06v5.7a4.33,4.33,0,0,0,1.26,3.07h0a4.27,4.27,0,0,0,3.06,1.27H92.5v-66H35.6A4.27,4.27,0,0,0,32.54,28h0a4.33,4.33,0,0,0-1.26,3.07V36.8ZM56,0H81.86a8,8,0,0,1,7.93,7.93h0a8,8,0,0,1-7.93,7.93H56a8,8,0,0,1-7.93-7.93h0A8,8,0,0,1,56,0ZM85.16,99.39H51.94l-2.81,7.85h39.4l-3.37-7.85ZM44.55,81.58a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64Zm0-18.14a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64Zm0-18.15a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64ZM99.14,27V92.69a18.69,18.69,0,0,0,17.1-18.56V47.18A20.51,20.51,0,0,0,99.14,27Z" transform="translate(150 80)  scale(0.17) rotate(180)"/>
-<path d="M35.6,20.12H95.82a27.14,27.14,0,0,1,27.06,27.06V74.13A25.33,25.33,0,0,1,97.62,99.39H92.38l4.17,9.71a3.27,3.27,0,0,1,.34,1.46,3.32,3.32,0,0,1-3.32,3.32H44.43a3.39,3.39,0,0,1-1.12-.2,3.31,3.31,0,0,1-2-4.23l3.6-10H35.6a10.93,10.93,0,0,1-7.75-3.23h0a11,11,0,0,1-3.21-7.75V85H14.7A5.57,5.57,0,0,1,9.14,79.4V65.07H0V54.44H9.14V40.11a5.57,5.57,0,0,1,5.56-5.56h9.92V31.11a11,11,0,0,1,3.22-7.75l0,0a11,11,0,0,1,7.74-3.22Zm-11,58.2V41.19H15.78V78.32ZM31.26,36.8a3.47,3.47,0,0,1,.17,1.07V81.64a3.36,3.36,0,0,1-.17,1.06v5.7a4.33,4.33,0,0,0,1.26,3.07h0a4.27,4.27,0,0,0,3.06,1.27H92.5v-66H35.6A4.27,4.27,0,0,0,32.54,28h0a4.33,4.33,0,0,0-1.26,3.07V36.8ZM56,0H81.86a8,8,0,0,1,7.93,7.93h0a8,8,0,0,1-7.93,7.93H56a8,8,0,0,1-7.93-7.93h0A8,8,0,0,1,56,0ZM85.16,99.39H51.94l-2.81,7.85h39.4l-3.37-7.85ZM44.55,81.58a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64Zm0-18.14a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64Zm0-18.15a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64ZM99.14,27V92.69a18.69,18.69,0,0,0,17.1-18.56V47.18A20.51,20.51,0,0,0,99.14,27Z" transform="translate(260 60)  scale(0.17) rotate(-90)"/>
-<path d="M35.6,20.12H95.82a27.14,27.14,0,0,1,27.06,27.06V74.13A25.33,25.33,0,0,1,97.62,99.39H92.38l4.17,9.71a3.27,3.27,0,0,1,.34,1.46,3.32,3.32,0,0,1-3.32,3.32H44.43a3.39,3.39,0,0,1-1.12-.2,3.31,3.31,0,0,1-2-4.23l3.6-10H35.6a10.93,10.93,0,0,1-7.75-3.23h0a11,11,0,0,1-3.21-7.75V85H14.7A5.57,5.57,0,0,1,9.14,79.4V65.07H0V54.44H9.14V40.11a5.57,5.57,0,0,1,5.56-5.56h9.92V31.11a11,11,0,0,1,3.22-7.75l0,0a11,11,0,0,1,7.74-3.22Zm-11,58.2V41.19H15.78V78.32ZM31.26,36.8a3.47,3.47,0,0,1,.17,1.07V81.64a3.36,3.36,0,0,1-.17,1.06v5.7a4.33,4.33,0,0,0,1.26,3.07h0a4.27,4.27,0,0,0,3.06,1.27H92.5v-66H35.6A4.27,4.27,0,0,0,32.54,28h0a4.33,4.33,0,0,0-1.26,3.07V36.8ZM56,0H81.86a8,8,0,0,1,7.93,7.93h0a8,8,0,0,1-7.93,7.93H56a8,8,0,0,1-7.93-7.93h0A8,8,0,0,1,56,0ZM85.16,99.39H51.94l-2.81,7.85h39.4l-3.37-7.85ZM44.55,81.58a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64Zm0-18.14a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64Zm0-18.15a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64ZM99.14,27V92.69a18.69,18.69,0,0,0,17.1-18.56V47.18A20.51,20.51,0,0,0,99.14,27Z"/transform="translate(260 25)  scale(0.17) rotate(-90)"/>
-<path d="M35.6,20.12H95.82a27.14,27.14,0,0,1,27.06,27.06V74.13A25.33,25.33,0,0,1,97.62,99.39H92.38l4.17,9.71a3.27,3.27,0,0,1,.34,1.46,3.32,3.32,0,0,1-3.32,3.32H44.43a3.39,3.39,0,0,1-1.12-.2,3.31,3.31,0,0,1-2-4.23l3.6-10H35.6a10.93,10.93,0,0,1-7.75-3.23h0a11,11,0,0,1-3.21-7.75V85H14.7A5.57,5.57,0,0,1,9.14,79.4V65.07H0V54.44H9.14V40.11a5.57,5.57,0,0,1,5.56-5.56h9.92V31.11a11,11,0,0,1,3.22-7.75l0,0a11,11,0,0,1,7.74-3.22Zm-11,58.2V41.19H15.78V78.32ZM31.26,36.8a3.47,3.47,0,0,1,.17,1.07V81.64a3.36,3.36,0,0,1-.17,1.06v5.7a4.33,4.33,0,0,0,1.26,3.07h0a4.27,4.27,0,0,0,3.06,1.27H92.5v-66H35.6A4.27,4.27,0,0,0,32.54,28h0a4.33,4.33,0,0,0-1.26,3.07V36.8ZM56,0H81.86a8,8,0,0,1,7.93,7.93h0a8,8,0,0,1-7.93,7.93H56a8,8,0,0,1-7.93-7.93h0A8,8,0,0,1,56,0ZM85.16,99.39H51.94l-2.81,7.85h39.4l-3.37-7.85ZM44.55,81.58a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64Zm0-18.14a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64Zm0-18.15a3.32,3.32,0,0,1,0-6.64h36a3.32,3.32,0,0,1,0,6.64ZM99.14,27V92.69a18.69,18.69,0,0,0,17.1-18.56V47.18A20.51,20.51,0,0,0,99.14,27Z"/transform="translate(260 95)  scale(0.17) rotate(-90)"/>
- <!--fan 2-->
-<path d="M10 3c0 1.313-.304 2.508-.8 3.4a2 2 0 0 0-1.484-.38c-.28-.982-.91-2.04-1.838-2.969a8 8 0 0 0-.491-.454A6 6 0 0 1 8 2c.691 0 1.355.117 1.973.332Q10 2.661 10 3m0 5q0 .11-.012.217c1.018-.019 2.2-.353 3.331-1.006a8 8 0 0 0 .57-.361 6 6 0 0 0-2.53-3.823 9 9 0 0 1-.145.64c-.34 1.269-.944 2.346-1.656 3.079.277.343.442.78.442 1.254m-.137.728a2 2 0 0 1-1.07 1.109c.525.87 1.405 1.725 2.535 2.377q.3.174.605.317a6 6 0 0 0 2.053-4.111q-.311.11-.641.199c-1.264.339-2.493.356-3.482.11ZM8 10c-.45 0-.866-.149-1.2-.4-.494.89-.796 2.082-.796 3.391q0 .346.027.678A6 6 0 0 0 8 14c.94 0 1.83-.216 2.623-.602a8 8 0 0 1-.497-.458c-.925-.926-1.555-1.981-1.836-2.96Q8.149 10 8 10M6 8q0-.12.014-.239c-1.02.017-2.205.351-3.34 1.007a8 8 0 0 0-.568.359 6 6 0 0 0 2.525 3.839 8 8 0 0 1 .148-.653c.34-1.267.94-2.342 1.65-3.075A2 2 0 0 1 6 8m-3.347-.632c1.267-.34 2.498-.355 3.488-.107.196-.494.583-.89 1.07-1.1-.524-.874-1.406-1.733-2.541-2.388a8 8 0 0 0-.594-.312 6 6 0 0 0-2.06 4.106q.309-.11.637-.199M8 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2" transform="translate(433 153) scale(2.1)"/>
-<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" transform="translate(433 153) scale(2.1)"/>
-
- <!--heating-->
-<path d="M9.39,40.32h96.73a9.41,9.41,0,0,1,9.39,9.38v54.81a9.41,9.41,0,0,1-9.39,9.38H94.84V122a.92.92,0,0,1-.92.92H85.35a.93.93,0,0,1-.93-.92v-8.07H31.08V122a.92.92,0,0,1-.92.92H21.59a.93.93,0,0,1-.93-.92v-8.07H9.39A9.39,9.39,0,0,1,0,104.51V49.7a9.39,9.39,0,0,1,9.39-9.38ZM24.66,2.79A2.08,2.08,0,0,1,26.25.11a2.64,2.64,0,0,1,3.17,1.33c3,7.54.85,12.88-1.05,17.58-1.64,4-3,7.49.63,11.38a1.89,1.89,0,0,1-.42,3A2.86,2.86,0,0,1,25.05,33c-5.37-5.71-3.57-10.16-1.46-15.36C25.26,13.59,27.14,9,24.66,2.79ZM72,2.78A2.06,2.06,0,0,1,73.58.11a2.64,2.64,0,0,1,3.18,1.33C79.76,9,77.6,14.32,75.7,19c-1.63,4-3,7.49.63,11.38a1.89,1.89,0,0,1-.42,3A2.84,2.84,0,0,1,72.38,33C67,27.3,68.81,22.85,70.92,17.64,72.59,13.59,74.45,9,72,2.78Zm15.75,0A2.06,2.06,0,0,1,89.33.12a2.64,2.64,0,0,1,3.18,1.32c3,7.55.84,12.89-1.06,17.58-1.63,4-3,7.49.63,11.38a1.89,1.89,0,0,1-.42,3A2.86,2.86,0,0,1,88.13,33c-5.37-5.7-3.57-10.16-1.46-15.36,1.67-4,3.54-8.68,1.08-14.86Zm-47.33,0A2.06,2.06,0,0,1,42,.11a2.64,2.64,0,0,1,3.18,1.33C48.18,9,46,14.32,44.12,19c-1.63,4-3,7.49.63,11.38a1.89,1.89,0,0,1-.42,3A2.84,2.84,0,0,1,40.8,33c-5.37-5.7-3.57-10.15-1.46-15.36C41,13.59,42.87,9,40.42,2.78Zm15.75,0A2.06,2.06,0,0,1,57.75.12a2.64,2.64,0,0,1,3.18,1.32c3,7.55.84,12.89-1.06,17.58-1.63,4-3,7.49.63,11.38a1.89,1.89,0,0,1-.42,3A2.86,2.86,0,0,1,56.55,33c-5.37-5.7-3.57-10.16-1.46-15.36,1.67-4,3.54-8.68,1.08-14.86Zm38,50.37a2.77,2.77,0,0,1,5.53,0v48.13a2.77,2.77,0,1,1-5.53,0V53.16Zm-15.63,0a2.77,2.77,0,0,1,5.53,0v48.13a2.77,2.77,0,1,1-5.53,0V53.16Zm-15.63,0a2.77,2.77,0,0,1,5.53,0v48.13a2.77,2.77,0,1,1-5.53,0V53.16Zm-15.63,0a2.77,2.77,0,0,1,5.53,0v48.13a2.77,2.77,0,1,1-5.53,0V53.16Zm-15.63,0a2.76,2.76,0,0,1,5.52,0v48.13a2.76,2.76,0,1,1-5.52,0V53.16ZM16,53.16a2.76,2.76,0,1,1,5.52,0v48.13a2.76,2.76,0,1,1-5.52,0V53.16Zm90.08-7.5H9.39a4.06,4.06,0,0,0-4,4v54.81a4.06,4.06,0,0,0,4,4h96.73a4.06,4.06,0,0,0,4-4V49.7a4.06,4.06,0,0,0-4-4Z" transform="translate(312 225) rotate(-90) scale(0.7)"
-
->
-        </svg>
-    </div>
-    <div class="box" style="width: 30%; margin-left: 24px;">
-        <div class="card-header">
-            <h2>System Task Integrate</h2>
-        <h4>Total: <span id="tongsosp1">0</span></h4>
+            <canvas id="myChart3" width="178" height="auto" ></canvas>
         </div>
-        <table>
-            <thead>
-                <tr>
-                    <td style="padding-left: 23px;">#</td>
-                    <td style="padding-left: 32px;">Sensor</td>
-                    <td>Command</td>
-                    <td style="padding-left: 12px;">Time On</td>
-                    <td style="padding-left: 22px;">Delay</td>
-                    <td style="padding-bottom: 52px;"></td>
-                </tr>
-            </thead>
-            <tbody id="listDevice1">
-                <!-- Your table rows here -->
-                <tr>
-                    <td>1</td>
-                    <td>Sensor Name</td>
-                    <td>Command</td>
-                    <td>Time On</td>
-                    <td>Delay</td>
-                    <td></td>
-                </tr>
-                <!-- Add more rows as needed -->
-            </tbody>
-        </table>
-        <div class="card-header" style="color: green; width: 100%; padding-top: 32px;">
-            <h2 style="color: green;">Send All The Task</h2>
-            <div style="display: flex; justify-content: flex-start; width: 20%;">
-                <button class="btn-form" onclick="sendAllTasks()" style="background-color: green; color: white; padding: 5px 10px; font-size: 14px;">Run</button>
+                            <div class="task-container">
+    <div class="card-header">
+                                                            <h2 class="text-widget" style="color: #fff; font-size: 26px;padding-bottom: 16px;">System Task Integrate</h2>
+                    <h3>Total Task Number : <span id="tongsosp1">0</span></h3>
+                </div>
+                            <table>
+
+        <tr style="border-bottom: 1px solid #ccc;margin-bottom: 20px;">
+
+                                            <th style="text-align: right;padding-right: 27px;">      #</th> <!-- Counter header -->
+
+                                        <th style="text-align: center;padding-left: 12px;"> Sensor</th>
+                                        <th style="text-align: center;padding-right: 8px; ">Command</th>
+                                        <th style="text-align: left; padding-left: 2px;">Time On</th>
+                                        <th style="text-align: left; padding-right: 24px;">Delay </th> <!-- New Location header -->
+
+
+                                    </tr >
+
+                    <tbody id="listDevice1">
+                        <!-- Your table rows here -->
+                        <tr>
+                    
+
+            <td colspan="15" style="text-align: center;">No Task Waiting Add Task</td>
+
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+                <div class="card-footer ">
+                    <h2 style="color: var(--green);">Send All The Task</h2>
+                    <div style="display: flex; justify-content: flex-start;">
+                        <button class="btn-formgreen" onclick="sendAllTasks()" style="color: white; padding: 5px 10px; font-size: 14px;">Run</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div></div>
-<div class="box-container"  style="display: flex; padding-top: 32px; padding-bottom: 32px;">
-    <div class="box" style="width: 65%;margin-left: 20px">
-        <h2 class="text-widget" style="color: #287bff;">OD 600</h2>
-        <canvas height="140" id="myChart"></canvas>
-        <button class="btn-form" onclick="downloadExcel()">Download Excel</button>
-        
-
-
-    </div>
-    <div class="box" style="width: 30%; margin-left: 30px;">
-        <h2 class="text-widget" style="color: #287bff;">Temperature</h2>
-        <canvas id="myChart3" style="width: 90%; height: 456px;"></canvas>
-    </div>
-</div>
-</div>
-
-
+             </div>            </div>
+                                  </div>                 </div>             
 <div class="content-item" id="thiet-bi">
     <div class="colum12">
         <div class="cot1">
             <div class="card-header">
-                <h2>Choose Sensor</h2>
+<h2 style="color: var(--white);">Choose Sensor</h2>
             </div>
             <form>
                 <div class="title-input">
@@ -985,8 +1023,8 @@
                         <option value="choose">-Choose Sensor-</option>
                         <option value="Pump1">Pump 1</option>
                         <option value="Pump2">Pump 2</option>
-                        <option value="Pump3">Pump 3</option>
-                        <option value="Pump4">Pump 4</option>
+                        <option value="Vibration1">Vibration 1</option>
+                        <option value="Vibration2">Vibration 2</option>
                         <option value="Heating">Heating</option>
                         <option value="Fan">Fan</option>
                         <option value="ADC1">Wait For Adc 1</option>
@@ -1015,32 +1053,33 @@
                         <input type="text" id="location" placeholder="Enter Delay To The Next Task Run" oninput="updateDelayValue()">
                     </div>
                 </div>
-                <div class="list-btn">
-    <button class="btn-form" type="button" onclick="AddDevice()">More</button>
+          <div class="list-btn"style="padding-left:50px">
+    <button class="btn-form" type="button" onclick="AddDevice()" style="margin-left: auto;">Add Device</button>
+    <button class="btn-form" type="button" onclick="SaveDeviceChanges()" style="margin-left: auto;">Save Changes</button>
 
-                    <button class="btn-form" type="button" onclick="SaveDeviceChanges()">Save Changes</button>
-                </div>
+</div>
+
             </form>
-  <p style="margin-top: 20px; color: #666; font-size: 18px; text-align: center; max-width: 600px; padding: 10px; margin-left: auto; margin-right: auto;">
+  <p style="margin-top: 20px; color: #fff; font-size: 18px; text-align: center; max-width: 600px; padding: 10px; margin-left: auto; margin-right: auto;">
                 Choose a sensor to set tasks and schedules. Manage multiple sensors and set OD600 values for automatic actions.
             </p>
     </div>
 
                         <div class="cot2">
                             <div class="card-header">
-                                <h2>System Task Integrate</h2>
+                                <h2 style="color: var(--white);">System Task Integrate</h2>
                                 <h4>Total : <span id="tongsosp">0</span></h4>
                             </div>
                             <table>
                                 <thead>
                                     <tr>
-                                            <td>#</td> <!-- Counter header -->
+                                            <td style="text-align: right; padding-left: 55px;">      #</td> <!-- Counter header -->
 
-                                        <td>Sensor</td>
-                                        <td>Command</td>
-                                        <td>Time On</td>
-                                        <td>Delay </td> <!-- New Location header -->
-<td style="text-align: right; padding-right: 45px; margin-left: 0;">Edit Or Delete</td>
+                                        <td style="text-align: right; padding-left: 89px;">Sensor</td>
+                                        <td style="text-align: right; padding-left: 68px;">Command</td>
+                                        <td style="text-align: right; padding-right: 180px;">Time On</td>
+                                        <td >Delay </td> <!-- New Location header -->
+<td >Edit Or Delete</td>
 
 
 
@@ -1051,21 +1090,15 @@
                                     </tr>
                                 </thead>
                                 <tbody id="listDevice">
-                                    <!-- <tr>
-                                        <td>Pump1</td>
-                                        <td>Pump1 khách </td>
-                                        <td>den1 </td>
-                                        <td>
+                                  
 
-                                        </td>
-                                    </tr> -->
 
                                 </tbody>
                             </table>
 <div class="card-header">
-    <h2 style="color: green;">Send All The Task</h2>
+    <h2 style="color: var(--green);">Send All The Task</h2>
     <div style="display: flex; justify-content: flex-start; width: 50%;">
-        <button class="btn-form" onclick="sendAllTasks()" style="background-color: green; color: white;">Run</button>
+        <button class="btn-formgreen" onclick="sendAllTasks()" style=" color: white;">Run</button>
     </div>
 </div>
 
@@ -1074,7 +1107,7 @@
                         
                     </div>
                 </div>
-<div class="content-item" id="set-auto" style="text-align: center;">
+<div class="content-item" id="set-auto" style="text-align: center;padding-top:20px;">
     <div class="lds-grid">
         <div></div>
         <div></div>
@@ -1085,43 +1118,204 @@
         <div></div>
         <div></div>
     </div>
-    <h2 class="text-widget">Updating...</h2>
+    <h2 class="text-widget" >Updating...</h2>
 
     <!-- New section for setting values -->
-    <div style="background: #fff; box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); border-radius: 20px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; width: 60%; margin-left: auto; margin-right: auto;">
-        <h2 class="text-widget" style="color: #287bff; font-weight: 600; letter-spacing: 1px; margin-bottom: 20px;">Set Values</h2>
-        <form id="setValuesForm">
-            <div style="display: flex; flex-direction: column; margin-bottom: 15px; width: 100%;">
-                <label for="pwm1" style="font-weight: 600; color: var(--black2); margin-bottom: 5px;">PWM 1:</label>
-                <input type="text" id="pwm1" name="pwm1" placeholder="Enter PWM 1 value" style="padding: 10px; border: 1px solid #ccc; border-radius: 6px; width: 100%;">
-            </div>
-            <div style="display: flex; flex-direction: column; margin-bottom: 15px; width: 100%;">
-                <label for="pwm2" style="font-weight: 600; color: var(--black2); margin-bottom: 5px;">PWM 2:</label>
-                <input type="text" id="pwm2" name="pwm2" placeholder="Enter PWM 2 value" style="padding: 10px; border: 1px solid #ccc; border-radius: 6px; width: 100%;">
-            </div>
-            <div style="display: flex; flex-direction: column; margin-bottom: 15px; width: 100%;">
-                <label for="v01" style="font-weight: 600; color: var(--black2); margin-bottom: 5px;">V01 Value:</label>
-                <input type="text" id="v01" name="v01" placeholder="Enter V01 value" style="padding: 10px; border: 1px solid #ccc; border-radius: 6px; width: 100%;">
-            </div>
-            <div style="display: flex; flex-direction: column; margin-bottom: 15px; width: 100%;">
-                <label for="v02" style="font-weight: 600; color: var(--black2); margin-bottom: 5px;">V02 Value:</label>
-                <input type="text" id="v02" name="v02" placeholder="Enter V02 value" style="padding: 10px; border: 1px solid #ccc; border-radius: 6px; width: 100%;">
-            </div>
-            <div class="list-btn" style="display: flex; justify-content: center; margin-top: 20px;">
-                <button type="button" class="btn-form" onclick="saveSettings()" style="color: var(--white); background: var(--blue); min-width: 90px; height: 30px; border: none; border-radius: 6px; transition: all 0.3s ease; cursor: pointer;">Save</button>
-            </div>
-        </form>
-         <p style="margin-top: 20px; color: #666;">
-        PWM1 adjusts Pump 1, Pump 2, and Pump 4. PWM2 modifies Pump 3, which is responsible for mixing.
-        When V01 or V02 is set to -1, you will see the value of the ADC instead of the OD600 to get the maximum value of V01 or V02.
-    </p>
-    </div>
-
-
-    </div>
-
-    </div>
     
+    <div style="background: #2C2C2C; box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); border-radius: 20px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; width: 60%; margin-left: auto; margin-right: auto;">
+    
+
+<!-- Existing content before "Set Values" section --><h2 class="text-widget" style="color: #fff; font-weight: 600; letter-spacing: 1px; margin-bottom: 20px; font-size: 26px;">Adjust Values</h2>
+<p style="color: #bbb; text-align: center; font-size: 16px; margin-bottom: 20px; max-width: 80%; line-height: 1.5;">
+    Adjust the speeds for Pump 1 and Pump 2, and the vibrations for the tubes. Set V01 and V02 for the OD600 formula, which measures light absorption to find optical density. Use -1 to show ADC values for calibration.
+</p>
+
+
+<form id="setValuesForm">
+    <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 15px;">
+        <label for="pwm1" style="font-weight: 600; color: var(--white); margin-bottom: 5px;">Pump 1 & 2 Speed:</label>
+        <input type="text" id="pwm1" name="pwm1" placeholder="Enter Pump 1 & 2 speed value" 
+               style="padding: 10px; border: 1px solid #ccc; border-radius: 6px; color:#fff; background-color:#222; text-align: center;">
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 15px;">
+        <label for="pwm2" style="font-weight: 600; color: var(--white); margin-bottom: 5px;">Vibration Speed 1 (Tube 1):</label>
+        <input type="text" id="pwm2" name="pwm2" placeholder="Enter Vibration Speed 1 value" 
+               style="padding: 10px; border: 1px solid #ccc; border-radius: 6px; color: #fff; background-color: #222; text-align: center;">
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 15px;">
+        <label for="pwm3" style="font-weight: 600; color: var(--white); margin-bottom: 5px;">Vibration Speed 2 (Tube 2):</label>
+        <input type="text" id="pwm3" name="pwm3" placeholder="Enter Vibration Speed 2 value" 
+               style="padding: 10px; border: 1px solid #ccc; border-radius: 6px; color: #fff; background-color: #222; text-align: center;">
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 15px;">
+        <label for="v01" style="font-weight: 600; color: var(--white); margin-bottom: 5px;">V01 Value (OD600 Check):</label>
+        <input type="text" id="v01" name="v01" placeholder="Enter V01 value" 
+               style="padding: 10px; border: 1px solid #ccc; border-radius: 6px; color: #fff; background-color: #222; text-align: center;">
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 15px;">
+        <label for="v02" style="font-weight: 600; color: var(--white); margin-bottom: 5px;">V02 Value (OD600 Check):</label>
+        <input type="text" id="v02" name="v02" placeholder="Enter V02 value" 
+               style="padding: 10px; border: 1px solid #ccc; border-radius: 6px; color: #fff; background-color: #222; text-align: center;">
+    </div>
+    <div class="list-btn" style="display: flex; justify-content: center; padding-top: 20px;">
+        <button type="button" class="btn-form" onclick="saveSettings()" style="color: var(--white); min-width: 90px; height: 30px; border: none; border-radius: 6px; transition: all 0.3s ease; cursor: pointer; font-size: 14px;">Save</button>
+    </div>
+
+
+
+
+
+<!-- "Start Automatic Wash System" section placed after the "Save" button -->
+<h2 class="text-widget" style="color: #fff; font-weight: 600; letter-spacing: 1px; margin-top: 30px; padding-bottom: 20px; font-size: 24px;">Start Automatic Wash System</h2>
+
+<p style="color: #bbb; text-align: center; font-size: 16px; margin-bottom: 30px; max-width: 100%; line-height: 1.5;padding-top: 2px;">
+    During the wash, Pump 1 and Pump 2 pump detergent from Pump 3 for 60 seconds and then stop.
+</p>
+
+<button type="button" class="btn-form" onclick="sendWashCommand()" style="color: var(--white); border: none; border-radius: 6px; transition: all 0.3s ease; cursor: pointer; font-size: 14px; margin-top: 2px;">Start Wash</button>
+<p style="padding-top:50px;">
+    
+</p>
+</form>
+    </div>
+    </div>
+<div class="content-item" id="information">
+
+<div style="background: #2C2C2C; box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); border-radius: 20px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; width: 70%; margin-left: auto; margin-right: auto;">
+    <div class="card-header">
+        <h2 style="color: #fff; font-weight: 600; letter-spacing: 1px; margin-bottom: 20px; font-size: 26px;">Project Overview</h2>
+    </div>
+    <p style="margin-top: 20px; color: #fff; font-size: 18px; line-height: 1.6; text-align: center;">
+        <strong style="color:#47A025;font-size: 22px;">Microfluidic Bacterial Analysis System</strong>
+        <br><br>
+        The system detects bacterial growth using OD600 sensors, provides real-time monitoring, and transfers samples to a mating chamber.<br> It integrates an STM32F446RE microcontroller with FreeRTOS for multitasking and an ESP32 module for hosting the monitoring website.
+    </p>
+    <div style="text-align: left; width: 100%; max-width: 800px; margin-top: 20px;">
+        <strong style="color: #47A025;font-size: 18px;">Product Capabilities and System Components:</strong>
+        <ul style="list-style-type: none; padding-left: 10px; line-height: 1.5;">
+            <li>1. <strong>OD600 Sensor Monitoring:</strong> Tracks bacterial growth using OD600 sensors in tubes and chambers.</li>
+            <li>2. <strong>Temp Control:</strong> Maintains optimal conditions with temperature sensors, heating surfaces, heating plates, and fans.</li>
+            <li>3. <strong>Pump Control:</strong> Automates culture transfer, air insertion, mixing, and cleaning.</li>
+             <li>4. <strong>IR Sensor:</strong> Stops OD readings if the box is opened to prevent light interference.</li>
+            <li>5. <strong>Web-Based Dashboard:</strong> User-friendly interface hosted on an ESP32 for real-time data monitoring.</li>
+            <li>6. <strong>Microcontroller (STM32F446RE):</strong> Controls sensors and actuators, running FreeRTOS for multitasking.</li>
+        </ul>
+        <br>
+        <strong style="color: #47A025;font-size: 18px; ">System Scheme:</strong>
+        <ul style="list-style-type: none; padding-left: 10px; line-height: 1.5;">
+        <div style="margin-top: 5px; text-align: center;">
+              <img 
+    src="" 
+    alt="System Diagram (In Progress)" 
+    class="small-img" 
+    onclick="showImage(this)" 
+    style="height: 300px; width: 600px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;" 
+    title="Image is currently being built in Figma">
+
+            </div>
+            <li>- <strong>Microcontroller:</strong> STM32F446RE for control.</li>
+            <li>- <strong>Power Supply:</strong> USB for STM32/ESP32, 230V to 5V/12V adapters.</li>
+            <li>- <strong>Sensors and Actuators:</strong> Synchronized with the microcontroller.</li>
+        </ul>
+        <br>
+        <div style="text-align: left; width: 100%; max-width: 800px; margin-top: 20px;">
+            <strong style="color: #47A025;font-size: 18px;">System Diagram:</strong>
+            <div style="margin-top: 5px; text-align: center;">
+                <img src="icons?name=system_diagram.png" alt="System Diagram" class="small-img" onclick="showImage(this)" style="height: 300px; width: 600px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
+            </div>
+            <ul style="list-style-type: none; padding-left: 10px; line-height: 1.5;">
+                <li>- <strong style="color: #B0B0B0;">Bacterial 1 Tube and Bacterial 2 Tube:</strong> ADC1 and ADC2 read the OD600 measurements from the bacterial cultures.</li>
+                <li>- <strong style="color: #B0B0B0;">Mating Tube:</strong> Transfers samples from the bacterial tubes for mating processes.</li>
+                <li>- <strong style="color: #B0B0B0;">Temperature Control:</strong> Monitors temperature and uses heating and fan for regulation.</li>
+                <li>- <strong style="color: #B0B0B0;">Air Filters:</strong> Pump3 and Pump4 mix filtered air into the system for aerobic conditions.</li>
+                <li>- <strong style="color: #B0B0B0;">Pumps:</strong> Pump1 and Pump2 transfer cultures from Bacterial Tubes to the Mating Tube.</li>
+            </ul>
+        </div>
+        <br>
+        <strong style="color: #47A025;font-size: 18px;">Website Features:</strong>
+        <ul style="list-style-type: none; padding-left: 10px; margin-left: 0;">
+            <li style="margin-bottom: 10px; list-style-type: none; margin-left: 0;"><strong style="color: #fff;">DashBoard Simulation:</strong>
+                <ul style="list-style-type: none; margin-left: 10px; line-height: 1.5;">
+                    <li>- <strong style="color: #B0B0B0;">Data Monitoring:</strong> Real-time graphs for OD600 and temperature values.</li>
+                    <li>- <strong style="color: #B0B0B0;">Received Data:</strong> Displays OD1, OD2, Temperature, and Humidity readings.</li>
+                    <li>- <strong style="color: #B0B0B0;">Control Sensor:</strong> Provides controls for Heating, Fan, Vibrate, LED, and Pump operations.</li>
+                    <li>- <strong style="color: #B0B0B0;">System Task Integrate:</strong> Allows scheduling and running tasks for sensors and actuators.</li>
+                </ul>
+            </li>
+            <li style="margin-bottom: 10px; list-style-type: none; margin-left: 0;"><strong style="color: #fff;">Task Editor Simulation:</strong>
+                <ul style="list-style-type: none; margin-left: 10px; line-height: 1.5;">
+                    <li>- <strong style="color: #B0B0B0;">Choose Sensor:</strong> Select a sensor to set tasks and schedules.</li>
+                    <li>- <strong style="color: #B0B0B0;">Manage Tasks:</strong> Add, edit, and delete tasks for various sensors and actuators.</li>
+                    <li>- <strong style="color: #B0B0B0;">Send All Tasks:</strong> Submit all configured tasks to the system for execution.</li>
+                </ul>
+            </li>
+            <li style="margin-bottom: 10px; list-style-type: none; margin-left: 0;"><strong style="color: #fff;">Settings Simulation:</strong>
+                <ul style="list-style-type: none; margin-left: 10px; line-height: 1.5;">
+                    <li>- <strong style="color: #B0B0B0;">Adjust Values:</strong> Set the speeds for Pump 1 and Pump 2, and the vibrations for the tubes. Configure V01 and V02 for the OD600 formula, which measures light absorption to find optical density. Use -1 to display ADC values for calibration.</li>
+                    <li>- <strong style="color: #B0B0B0;">Start Automatic Wash:</strong> During the wash, Pump 1 and Pump 2 detergent from Pump 3 for 60 seconds and then stop.</li>
+                </ul>
+            </li>
+        </ul>
+
+<div style="text-align: left; width: 100%; max-width: 800px; margin-top: 20px;">
+    <strong style="color: #47A025;font-size: 18px;">Software and Firmware:</strong>
+    <ul style="list-style-type: none; padding-left: 20px; line-height: 1.5;">
+
+        <li>- <strong>Firmware:</strong> The STM32F446RE, programmed in C using STM32CubeIDE, runs FreeRTOS for real-time tasks.</li>
+        <li>- <strong>Real-Time Website:</strong> Hosted on the ESP32, running Arduino code. HTML, CSS, and JavaScript are burned to flash memory using SPIFFS and the ESP32 Sketch Data Upload tool.</li>
+
+        <li>- <strong>Data Communication:</strong> Reliable UART communication between STM32F446RE and ESP32 ensures accurate data transfer.</li>
+    </ul>
+</div>
+<br>
+
+        <p style="margin-top: 20px; color: #fff; font-size: 18px; line-height: 1.6; text-align: center;">
+            <strong style="color:#47A025;font-size: 22px;">Pictures & Videos</strong>
+        </p>
+        <div style="margin-top: 20px; text-align: center;">
+            <div style="display: flex; justify-content: center;">
+                <img src="/icons?name=picture1.png" alt="Microfluidic Bacterial Analysis System - Image 1" class="small-img" onclick="showImage(this)" style="height: 200px; width: 200px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
+                <img src="/icons?name=picture2.png" alt="Microfluidic Bacterial Analysis System - Image 2" class="small-img" onclick="showImage(this)" style="height: 200px; width: 200px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
+            </div>
+
+            <!-- Modal to display the enlarged image -->
+            <div id="imageModal" class="modal">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <img class="modal-content" id="modalImg">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showImage(img) {
+        var modal = document.getElementById("imageModal");
+        var modalImg = document.getElementById("modalImg");
+        modal.style.display = "block";
+        modalImg.src = img.src;
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("imageModal");
+        modal.style.display = "none";
+    }
+</script>
+
+
+    <script>
+function showImage(img) {
+    var modal = document.getElementById("imageModal");
+    var modalImg = document.getElementById("modalImg");
+    modal.style.display = "block";
+    modalImg.src = img.src;
+}
+
+function closeModal() {
+    var modal = document.getElementById("imageModal");
+    modal.style.display = "none";
+}
+</script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
     <canvas id="myChart"></canvas>
@@ -1433,8 +1627,9 @@ document.addEventListener('DOMContentLoaded', function() {
         datasets: [{
             label: 'Temperature',
             data: [],
-            borderColor: '#36a2eb', // Vibrant blue color
-            backgroundColor: 'rgba(54, 162, 235, 0.2)', // Light blue background
+            borderColor: 'rgba(200, 233, 255, 1)', // Bright Blue
+            backgroundColor: 'rgba(255, 233, 255, 0.2)', // Light Blue Background
+            borderWidth: 2,
             tension: 0.4
         }]
     };
@@ -1446,26 +1641,32 @@ document.addEventListener('DOMContentLoaded', function() {
             responsive: true,
             maintainAspectRatio: true, // Maintain aspect ratio
             scales: {
-                y: {
-                   beginAtZero: true,
+                  y: {
+                    beginAtZero: true,
                     ticks: {
                         stepSize: 10,
-                        color: '#666'
+                        color: '#E0E0E0' // Light text color for dark mode
                     },
                     title: {
                         display: true,
                         text: 'Temperature (°C)',
-                        color: '#666'
+                        color: '#E0E0E0' // Light text color for dark mode
+                    },
+                    grid: {
+                        color: '#3A3A3A' // Grid line color for dark mode
                     }
                 },
-                x: {
+               x: {
                     ticks: {
-                        color: '#666'
+                        color: '#E0E0E0' // Light text color for dark mode
                     },
                     title: {
                         display: true,
                         text: 'Time',
-                        color: '#666'
+                        color: '#E0E0E0' // Light text color for dark mode
+                    },
+                    grid: {
+                        color: '#3A3A3A' // Grid line color for dark mode
                     }
                 }
             },
@@ -1473,13 +1674,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 legend: {
                     display: true,
                     labels: {
-                        color: '#666'
+                        color: '#E0E0E0' // Light text color for dark mode
                     }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Dark tooltip background
+                    titleColor: '#E0E0E0', // Light text color for tooltip title
+                    bodyColor: '#E0E0E0', // Light text color for tooltip body
+                    borderColor: '#E0E0E0', // Light border color for tooltip
+                    borderWidth: 1
                 }
             }
         }
     };
-
     var myChart3 = new Chart(ctx3, config5);
 
     function simulateTemperature() {
@@ -1514,7 +1721,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     simulateTemperature(); // Simulate immediately
     setInterval(simulateTemperature, 3000); // Simulate every 3 seconds
+    
+    
+        // Function to download the Temperature and Humidity data as an Excel file
+    window.downloadTempExcel = function() {
+        const ws = XLSX.utils.json_to_sheet(temperatureData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Temperature and Humidity Data');
+        XLSX.writeFile(wb, 'temperature_humidity_data.xlsx');
+    }
 });
+
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -1532,17 +1749,17 @@ document.addEventListener('DOMContentLoaded', function() {
             datasets: [{
                     label: 'OD1',
                     data: data1,
-                    backgroundColor: 'rgba(0, 0, 0, 0)', // No background color
-                    borderColor: 'rgba(54, 162, 235, 1)', // Solid Blue
-                    borderWidth: 1,
+                    backgroundColor: 'rgba(255, 165, 0, 1)', // No background color
+                    borderColor: 'rgba(255, 165, 0, 1)', // Bright Yellow
+                    borderWidth: 2,
                     fill: false // Do not fill under the line
                 },
                 {
                     label: 'OD2',
                     data: data2,
-                    backgroundColor: 'rgba(0, 0, 0, 0)', // No background color
-                    borderColor: 'rgba(255, 99, 132, 1)', // Solid Red
-                    borderWidth: 1,
+                    backgroundColor: 'rgba(128, 0, 128, 1)', // No background color
+                    borderColor: 'rgba(128, 0, 128, 1)', // Bright Red
+                    borderWidth: 2,
                     fill: false // Do not fill under the line
                 },
             ]
@@ -1552,24 +1769,31 @@ document.addEventListener('DOMContentLoaded', function() {
             scales: {
                 y: {
                     beginAtZero: true,
+                    max: 5, // Set maximum value for Y axis
                     ticks: {
-                        stepSize: 500,
-                        color: '#666'
+                        stepSize: 0.1,
+                        color: '#E0E0E0' // Light text color
                     },
                     title: {
                         display: true,
                         text: 'OD 600',
-                        color: '#666'
+                        color: '#E0E0E0' // Light text color
+                    },
+                    grid: {
+                        color: '#3A3A3A' // Grid line color
                     }
                 },
                 x: {
                     ticks: {
-                        color: '#666'
+                        color: '#E0E0E0' // Light text color
                     },
                     title: {
                         display: true,
                         text: 'Time',
-                        color: '#666'
+                        color: '#E0E0E0' // Light text color
+                    },
+                    grid: {
+                        color: '#3A3A3A' // Grid line color
                     }
                 }
             },
@@ -1577,14 +1801,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 legend: {
                     display: true,
                     labels: {
-                        color: '#666'
+                        color: '#E0E0E0' // Light text color
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                    borderColor: '#fff',
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Dark tooltip background
+                    titleColor: '#E0E0E0', // Light text color for tooltip title
+                    bodyColor: '#E0E0E0', // Light text color for tooltip body
+                    borderColor: '#E0E0E0', // Light border color for tooltip
                     borderWidth: 1
                 }
             },
@@ -1615,8 +1839,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Update ADC values
-document.getElementById('adc1').innerHTML = isNaN(newData1) ? "NaN" : newData1.toFixed(0);
-document.getElementById('adc2').innerHTML = isNaN(newData2) ? "NaN" : newData2.toFixed(0);
+        document.getElementById('adc1').innerHTML = isNaN(newData1) ? "NaN" : newData1.toFixed(2);
+        document.getElementById('adc2').innerHTML = isNaN(newData2) ? "NaN" : newData2.toFixed(2);
 
         // Update the SVG circles
         const circle3 = document.getElementById('circle3').querySelector('circle:nth-child(2)');
@@ -1625,27 +1849,44 @@ document.getElementById('adc2').innerHTML = isNaN(newData2) ? "NaN" : newData2.t
         const radius4 = circle4.r.baseVal.value;
         const circumference3 = 2 * Math.PI * radius3;
         const circumference4 = 2 * Math.PI * radius4;
-        const offset3 = circumference3 - (isNaN(newData1) ? 0 : (newData1 / 4095) * circumference3);
-        const offset4 = circumference4 - (isNaN(newData2) ? 0 : (newData2 / 4095) * circumference4);
+        const offset3 = circumference3 - (isNaN(newData1) ? 0 : (newData1 / 5) * circumference3); // Adjusted to OD scale
+        const offset4 = circumference4 - (isNaN(newData2) ? 0 : (newData2 / 5) * circumference4); // Adjusted to OD scale
         circle3.style.strokeDasharray = `${circumference3}`;
         circle3.style.strokeDashoffset = `${offset3}`;
         circle4.style.strokeDasharray = `${circumference4}`;
         circle4.style.strokeDashoffset = `${offset4}`;
     }
 
+    let od1 = 0.1;
+    let od2 = 0.4;
+
     // Function to simulate ADC data
-    function simulateAndPlotData() {
+     function simulateAndPlotData() {
         let newLabel = new Date().toLocaleTimeString();
-        let newData1 = data1.length > 0 ? data1[data1.length - 1] + Math.random() * 10 : Math.random() * 10;
-        let newData2 = data2.length > 0 ? data2[data2.length - 1] + Math.random() * 10 : Math.random() * 10;
-        updateChart(newLabel, newData1, newData2);
+
+        // Increment OD1 by a random value between 0.05 and 0.1 until it reaches 1
+        if (od1 < 3) {
+            od1 += Math.random() * (0.09 - 0.01) + 0.01;
+
+            if (od1 > 3) od1 = 3; // Ensure OD1 does not exceed 1
+        }
+
+        // Increment OD2 by a random value between 0.05 and 0.1 until it reaches 1
+        if (od2 < 3) {
+            od2 += Math.random() * (0.09 - 0.01) + 0.01;
+
+            if (od2 > 3) od2 = 3; // Ensure OD2 does not exceed 1
+        }
+
+
+        updateChart(newLabel, od1, od2);
     }
 
     // Simulate data and update chart initially
     simulateAndPlotData();
 
     // Set interval to simulate data and update chart periodically
-    setInterval(simulateAndPlotData, 3000); // Update every 3 seconds
+    setInterval(simulateAndPlotData, 2000); // Update every 2 seconds
 
     // Function to download the Excel file
     window.downloadExcel = function() {
@@ -1659,7 +1900,33 @@ document.getElementById('adc2').innerHTML = isNaN(newData2) ? "NaN" : newData2.t
 
 
 
+<script>
+    function updateBoxStatus() {
+        fetch('/box_status')
+            .then(response => response.json())
+            .then(data => {
+                const status = data.box_status;
+                const statusElement = document.getElementById('boxStatus');
 
+                statusElement.innerText = status;
+
+                if (status === 'Open') {
+                    statusElement.style.color = 'var(--green)';
+                } else {
+                    statusElement.style.color = 'var(--red)';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching box status:', error);
+            });
+    }
+
+    // Initial call to set the status on page load
+    updateBoxStatus();
+    
+    // Update the status whenever an interrupt occurs
+    setInterval(updateBoxStatus, 1000); // Update every second
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     function showTab(tabId, menuId) {
