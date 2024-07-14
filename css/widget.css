@@ -36,26 +36,40 @@
 .container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Add space between widgets */
-    margin-bottom: 20px; /* Space between rows */
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 .widgets-row {
     display: flex;
-    justify-content: space-between; /* Add space between widgets */
+    flex-wrap: wrap;
+    justify-content: space-between;
     width: 100%;
-    margin-bottom: 20px; /* Space between rows */
+    margin-bottom: 20px;
 }
 
 .widget {
-    flex-basis: calc(50% - 10px); /* Each widget takes up half of the row width minus the gap */
-    height: 120px; /* Adjust height as needed */
+    flex: 1 1 calc(20% - 10px);
+    height: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-bottom: 10px; /* Added margin for spacing */
-    pointer-events: none; /* Disable pointer events */
+    margin-bottom: 10px;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .widget {
+        flex: 1 1 calc(100% - 10px);
+    }
+}
+
+@media (max-width: 480px) {
+    .widget {
+        flex: 1 1 calc(100% - 10px);
+    }
 }
 
 .widget .percent {

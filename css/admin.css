@@ -55,7 +55,6 @@ body {
     width: 100%;
 }
 
-/* menu bar */
 .menu-bar {
     background-color: var(--sidebar-background);
     width: 300px;
@@ -223,10 +222,9 @@ body {
     width: 100%;
     padding: 10px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust the minmax values as needed */
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     grid-gap: 10px;
 }
-
 .card-box .card {
     position: relative;
     background-color: var(--card-background-dark);
@@ -569,13 +567,414 @@ input:checked + .button::before {
     margin: 2px;
     min-width: 10px;
 }
+hidden {
+    display: none;
+}
 
-/* responsive */
+
+.box-status {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.connection-count {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--background-dark); /* Dark background for dark mode */
+    color: var(--text-primary-dark); /* Primary text color for dark mode */
+        overflow-x: hidden; /* Ensure no horizontal overflow */
+
+}
+
+.dashboard-container {
+    padding: 0px 40px;
+    width: 100%; /* Use full width */
+    max-width: auto; /* Adjust the max-width as needed */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: width 0.3s ease; /* Smooth transition for width changes */
+    overflow-x: hidden; /* Ensure no horizontal overflow */
+}
+
+.dashboard-container.expanded {
+    width: 100%; /* Expand to full width when menu is hidden */
+    overflow-x: hidden; /* Ensure no horizontal overflow when expanded */
+}
+
+.graphs-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Ensure it takes full width */
+    margin-bottom: 20px;
+    gap: 10px; /* Increased gap for better spacing */
+}
+
+.graph-container {
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px; /* Increased padding for better spacing */
+    margin: 0; /* Removed margin, use gap in .graphs-container instead */
+    overflow: hidden; /* Ensure content does not overflow */
+    flex-grow: 1; /* Ensure graphs grow to fill available space */
+
+
+
+
+}
+
+.graph1 {
+    flex:3;
+        flex-grow: 2; /* Make this container grow twice as much as .graph2 */
+
+}
+
+.graph2 {
+    flex: 1;
+        display: flex;
+
+        flex-direction: column;
+    flex-grow: 1;
+
+
+}
+
+.buttons-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    padding: 20px 40px;
+    width: 100%;
+    margin-top: 20px; /* Space between sections */
+}
+
+
+.weather-container, .data-recevied, .container-od, .container-control{
+    height: auto; /* Set maximum height */
+    margin-top: 10px; /* Optional: Add margin to separate from the graph */
+    padding: 20px; /* Increased padding for better spacing */
+    width: 100%; /* Set width to 100% */
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    position: relative; /* Ensure the footer is positioned relative to the container */
+    border: 1px solid var(--card-border-dark); /* Card border color for dark mode */
+    border-radius: 35px; /* Slightly larger border radius */
+    background: var(--card-background-dark); /* Card background color for dark mode */
+    box-shadow: 0 4px 8px var(--shadow); /* Soft shadow for better depth */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allow the containers to grow and fill space */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+.task-container {
+
+    height: 236px; /* Set maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    margin-top: 10px; /* Optional: Add margin to separate from the graph */
+    padding: 20px; /* Increased padding for better spacing */
+    width: 100%; /* Set width to 100% */
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    position: relative; /* Ensure the footer is positioned relative to the container */
+    border: 1px solid var(--card-border-dark); /* Card border color for dark mode */
+    border-radius: 35px; /* Slightly larger border radius */
+    background: var(--card-background-dark); /* Card background color for dark mode */
+    box-shadow: 0 4px 8px var(--shadow); /* Soft shadow for better depth */
+        flex-grow: 1; /* Allow the containers to grow and fill space */
+}
+
+.graph2-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* Ensure .container-od takes the combined space of .weather-container and .data-recevied */
+.graph1 {
+    flex-grow: 2; /* Make this container grow twice as much as .weather-container and .data-recevied */
+}
+
+.graph2 {
+    flex-grow: 1; /* Allow these containers to grow and fill space equally */
+    margin-bottom: 10px; /* Space between the two graphs */
+}
+
+@media (max-width: 768px) {
+    .graphs-container {
+        flex-direction: column;
+    }
+
+    .graph1, .graph2-container {
+        width: 100%;
+    }
+
+    .container-od, .weather-container, .data-recevied {
+        height: auto; /* Adjust for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .graph1, .graph2-container {
+        width: 100%;
+    }
+
+    .container-od, .weather-container, .data-recevied {
+        height: auto; /* Adjust for smaller screens */
+    }
+}
+
+
+/* Custom scrollbar styles for WebKit browsers */
+.task-container::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+}
+
+.task-container::-webkit-scrollbar-track {
+    background: var(--background-dark); /* Background of the scrollbar track */
+    border-radius: 10px; /* Round the track edges */
+}
+
+.task-container::-webkit-scrollbar-thumb {
+    background: var(--text-secondary-dark); /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Round the thumb edges */
+}
+
+.task-container::-webkit-scrollbar-thumb:hover {
+    background: var(--text-primary-dark); /* Darker color when hovered */
+}
+
+/* Custom scrollbar styles for Firefox */
+@-moz-document url-prefix() {
+    .task-container {
+        scrollbar-width: thin; /* Makes the scrollbar thinner */
+        scrollbar-color: var(--text-secondary-dark) var(--background-dark); /* Thumb and track colors */
+    }
+}
+
+/* Scrollbar styles for Internet Explorer and Edge */
+.task-container {
+    -ms-overflow-style: -ms-autohiding-scrollbar; /* Auto-hiding scrollbar */
+}
+
+table {
+    width: 100%;
+    table-layout: fixed; /* Ensure the table has a fixed layout */
+    border-collapse: collapse;
+    margin-bottom: 10px; /* Reduce bottom margin */
+    display: block; /* Enable block display to handle overflow */
+}
+
+table thead, table tbody {
+    display: table; /* Ensure thead and tbody are table elements */
+    width: 100%; /* Ensure they take full width */
+}
+
+table thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--background-dark); /* Background color for table header */
+}
+
+table thead tr th {
+    font-weight: bold;
+    padding: 5px;
+    border-bottom: 1px solid var(--card-border-dark); /* Border color for table header */
+    text-align: center; /* Center align text */
+    width: 20%; /* Set explicit width for each column */
+    word-wrap: break-word; /* Ensure long text wraps within the cell */
+    white-space: nowrap; /* Prevent text from breaking within the cell */
+    color: var(--text-primary-dark); /* Text color for table header */
+}
+
+table tbody tr td {
+    padding: 5px;
+    text-align: center; /* Center align text */
+    width: 20%; /* Set explicit width for each column */
+    word-wrap: break-word; /* Ensure long text wraps within the cell */
+    white-space: nowrap; /* Prevent text from breaking within the cell */
+    color: var(--text-primary-dark); /* Text color for table body */
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--card-background-dark); /* Background color for footer */
+    position: sticky; /* Ensure the footer stays at the bottom */
+    bottom: 0; /* Stick to the bottom of the container */
+    color: var(--text-primary-dark); /* Text color for footer */
+}
+
+.card-footer button {
+    background-color: var(--green);
+    color: var(--button-text-dark);
+    padding: 5px 10px;
+    font-size: 12px; /* Reduce font size */
+    border: none;
+}
+.task-container, .data-recevied, .data-container, .weather-container, .container-od, .container-control {
+    background-color: var(--card-background-dark);
+
+    border: 1px solid var(--card-border-dark);
+    color: var(--text-primary-dark);
+}
+.card-header h2 {
+    color: var(--blue);
+}
+
+.details .recentorders table tr {
+    color: var(--text-primary-dark);
+}
+
+.details .recentorders table tr:hover {
+    background-color: var(--sidebar-active);
+}
+
+.card-footer {
+    background-color: var(--card-background-dark);
+    color: var(--text-primary-dark);
+}
+
+.card-footer button {
+    background-color: var(--green);
+    color: var(--button-text-dark);
+    padding: 5px 10px;
+    font-size: 12px;
+    border: none;
+}
+
+.card-box .card .numbers {
+    color: var(--white);
+}
+
+.card-box .card .card-name, .card-box .card .icon-box {
+    color: var(--text-secondary-dark);
+}
+
+.card-box .card:hover .numbers, .card-box .card:hover .card-name, .card-box .card:hover .icon-box {
+    color: var(--white);
+}
+
+.details table thead tr th, .details table tbody tr td {
+    color: var(--text-primary-dark);
+    border-bottom: 1px solid var(--card-border-dark);
+}
+
+.btn-formgreen {
+    color : var(--button-text-dark);
+    background: var(--green);
+    min-width: 90px;
+    height: 30px;
+    border: none;
+    border-radius: 6px;
+}
+.btn-formgreen:hover{
+
+    background-color: var(--hover);
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-form2:hover {
+    background-color: var(--blue);
+}
+
+input:checked + .button {
+    background-color: var(--blue);
+
+}
+
+.small-img {
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .card-box {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .card-box {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+}
+
+.weather-container, .container-od, .container-control {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .weather-container, .container-od, .container-control {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .weather-container, .container-od, .container-control {
+        padding: 5px;
+    }
+}
+
+/* Responsive adjustments for other elements */
 @media (max-width: 991px) {
     .graphBox {
         grid-template-columns: 1fr;
         height: auto;
-        width: 300px;
+        width: 100%;
     }
 
     .menu-bar {
@@ -646,4 +1045,121 @@ input:checked + .button::before {
         left: initial;
     }
 }
+
+/* For tablets and smaller screens */
+@media (max-width: 768px) {
+    .card-header {
+        font-size: 1.1em; /* Slightly smaller font size for better readability */
+        padding: 8px 10px; /* Adjust padding to maintain a balanced look */
+    }
+
+    .small-img {
+        width: 100%; /* Make the image responsive */
+        height: auto; /* Maintain aspect ratio */
+        max-height: 120px; /* Adjust max height for better display on tablets */
+    }
+}
+
+/* For mobile phones */
+@media (max-width: 480px) {
+    .card-header {
+        font-size: 1em; /* Smaller font size for mobile screens */
+        padding: 6px 8px; /* Further adjust padding for smaller screens */
+    }
+
+    .small-img {
+        width: 100%; /* Make the image responsive */
+        height: auto; /* Maintain aspect ratio */
+        max-height: 100px; /* Adjust max height for mobile devices */
+    }
+}
+
+
+/* Adjust for tablets and smaller screens */
+@media (max-width: 768px) {
+    .colum12 {
+        grid-template-columns: 1fr; /* Change to single column layout */
+        grid-gap: 20px; /* Adjust gap for smaller screens */
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+
+    #don-hang .colum12 {
+        grid-template-columns: 1fr; /* Ensure consistent single column layout */
+    }
+
+    .colum12 .cot1, .colum12 .cot2 {
+        min-height: auto; /* Remove fixed height to allow auto-adjustment */
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+
+    .cot1 table, .cot2 table {
+        margin-top: 15px; /* Adjust margin for smaller screens */
+    }
+
+    .input-box, .title-input, select {
+        padding: 10px 5px; /* Adjust padding for smaller screens */
+    }
+
+    .input-box input, select {
+        font-size: 12px; /* Adjust font size for smaller screens */
+        padding: 8px; /* Adjust padding for smaller screens */
+    }
+
+    .title-input h4 {
+        font-size: 16px; /* Adjust font size for smaller screens */
+    }
+}
+
+/* Adjust for mobile phones */
+@media (max-width: 480px) {
+    .colum12 {
+        grid-template-columns: 1fr; /* Single column layout */
+        grid-gap: 15px; /* Adjust gap for mobile screens */
+        padding: 10px; /* Adjust padding for mobile screens */
+    }
+
+    #don-hang .colum12 {
+        grid-template-columns: 1fr; /* Ensure consistent single column layout */
+    }
+
+    .colum12 .cot1, .colum12 .cot2 {
+        min-height: auto; /* Remove fixed height to allow auto-adjustment */
+        padding: 10px; /* Adjust padding for mobile screens */
+    }
+
+    .cot1 table, .cot2 table {
+        margin-top: 10px; /* Adjust margin for mobile screens */
+    }
+
+    .input-box, .title-input, select {
+        padding: 8px 5px; /* Adjust padding for mobile screens */
+    }
+
+    .input-box input, select {
+        font-size: 12px; /* Adjust font size for mobile screens */
+        padding: 6px; /* Adjust padding for mobile screens */
+    }
+
+    .title-input h4 {
+        font-size: 14px; /* Adjust font size for mobile screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .colum12 {
+        grid-template-columns: 1fr; /* Change to single column layout */
+        grid-gap: 20px; /* Adjust gap for smaller screens */
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+
+    #don-hang .colum12 {
+        grid-template-columns: 1fr; /* Ensure consistent single column layout */
+    }
+
+    .colum12 .cot1 {
+        min-height: auto; /* Remove fixed height to allow auto-adjustment */
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+}
+
 
