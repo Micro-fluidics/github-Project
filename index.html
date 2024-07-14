@@ -35,19 +35,27 @@
             firebase.app(); // if already initialized, use that one
         }
 
-        // Function to load the list of devices
-        function LoadListDevice() {
-            let list = JSON.parse(localStorage.getItem('Devices')) || [];
-            if (list.length === 0) {
-                // Initialize default device if the list is empty
-                list.push({
-                    id: Date.now(),
-                    type: 'Pump1',
-                    name: 'Forward',
-                    folder: '1000',
-                    location: '100'
-                });
-                localStorage.setItem('Devices', JSON.stringify(list));
+function LoadListDevice() {
+    let list = JSON.parse(localStorage.getItem('Devices')) || [];
+    if (list.length === 0) {
+        // Initialize default devices if the list is empty
+        list.push({
+            id: Date.now(),
+            type: 'Pump1',
+            name: 'Forward',
+            folder: '1000',
+            location: '100'
+        });
+        // Adding another Pump2 device
+        list.push({
+            id: Date.now() + 1, // Ensure unique ID by adding 1
+            type: 'Pump2',
+            name: 'Backward',
+            folder: '2000',
+            location: '200'
+        });
+        localStorage.setItem('Devices', JSON.stringify(list));
+
             }
             let str = "";
             for (let i = 0; i < list.length; i++) {
