@@ -597,8 +597,288 @@ function toggleSwitch(id, event) {
         </div>
     </div>
             <div class="tab-content">
-            
-            
+            <div class="content-item" id="information">
+    <div style="background: var(--card-background-dark); box-shadow: 0 7px 25px var(--shadow); border-radius: 20px; padding: 30px; box-sizing: border-box; margin-top: 20px; width: 95%; margin-left: auto; margin-right: auto;">
+        <div class="card-header">
+
+            <h2 style="color: var(--white); font-weight: 600; letter-spacing: 1px; margin-bottom: 28px;">Project Overview</h2>
+        </div>
+        <p style="color: var(--white); font-size: 18px; line-height: 1.6;">
+            <span style="color: #1E90FF; font-size: 24px;">Microfluidic Bacterial Analysis System</span>
+            <br><br>
+              <span style="color: #B0B0B0;">Project Description:</span>
+            <br>
+            This project is a comprehensive system designed to detect bacterial growth, provide real-time monitoring, and automate the process of transferring samples to a mating chamber.<br> The system integrates an STM32F446RE microcontroller with FreeRTOS for multitasking and an ESP32 module for hosting a monitoring website.<br> The collaboration involves a doctoral student in biology at the Faculty of Agriculture in Rehovot, focusing on the growth and mating rates of bacteria.
+            <br><br>
+            Before accessing the system, it is necessary to understand how the current doctoral research operates and the advancements we have made.
+            <br><br>
+            <span style="color: #B0B0B0;">Current Research Process:</span>
+            <br>
+            The primary task involves measuring the turbidity of bacterial cultures, higher turbidity indicates significant bacterial growth.<br> Once the desired turbidity level is reached in two separate cultures, the bacteria are combined for mating.
+
+            <br><br>
+            <span style="color:#B0B0B0;">Our Development:</span>
+            <br>
+            We have developed a system that consolidates the functionality of multiple laboratory devices into a single, efficient, and automated kit.<br>This system operates at a lower cost compared to the expensive equipment currently used in biological laboratories.
+        </p>
+<br> <br><br>
+<span style="color: #1E90FF; font-size: 24px; display: block; margin-top: 20px;">Kit Diagram Overview:</span>
+
+<div style="display: flex; align-items: flex-start; justify-content: center; margin-top: 20px;">
+    <!-- Left side with the description -->
+    <div style="flex: 1; color: var(--text-primary-dark); padding-right: 20px;">
+
+          <p style="color: var(--text-primary-dark); font-size: 16px; line-height: 1.6;color:#B0B0B0;margin-top: 10px;">
+                This diagram provides a clear representation of the key components and processes in the microfluidic bacterial analysis kit.
+                It highlights the core functions of the system, ensuring a comprehensive understanding of its operation:
+            </p><br>
+        <ul style="list-style-type: none; padding-left: 10px; line-height: 2.8;">
+                <li><span style="color: #FFC107;">Bacterial Tubes:</span> Two tubes labeled Bacterial 1 Tube and Bacterial 2 Tube house bacterial cultures.<br> ADC1 and ADC2 measure the optical density (OD600) of these cultures to monitor growth. LEDs indicate the measurement status.</li>
+                <li><span style="color: #FFC107;">Sample Transfer:</span> When the bacterial cultures reach the desired growth, Pump1 and Pump2 transfer the cultures from the Bacterial Tubes to the Mating Tube for mating processes.</li>
+<li><span style="color: #FFC107;">Aeration System:</span> Pump3 and Pump4 mix filtered air to maintain aerobic conditions, ensuring optimal growth in the Bacterial Tubes.</li>
+
+<li><span style="color: #FFC107;">Temperature Control:</span> Monitors and regulates the environment using a fan or hot plate to maintain optimal conditions for bacterial growth.</li>
+
+
+
+
+        </ul>
+    </div>
+    <!-- Right side with the image -->
+    <div style="flex: 0.6; text-align: center;">
+        <img src="icon/system_diagram.png" alt="System Overview Diagram" class="small-img" onclick="showImage(this)" style="height: auto; max-height: 340px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+    </div>
+</div>
+
+<br><br><br>
+   <span style="color: #1E90FF; font-size: 24px; display: block; margin-top: 20px;">Product Capabilities and System Components:</span>
+<ul style="list-style-type: none; padding-left: 10px; line-height: 2.8;color: var(--text-primary-dark); margin-top: 10px;">
+<li>- <span style="color: #FFC107;">OD600 Circuit for Monitoring:</span> Uses a 595nm LED and BPW34 photodiode to measure optical density. Light through bacterial cultures is detected, converted to a photocurrent,<br> and amplified by the UA741 operational amplifier with a capacitor and resistor, providing accurate turbidity readings essential for monitoring bacterial growth.</li>
+
+
+    <li>- <span style="color: #FFC107;">Temperature Control:</span> Ensures optimal growth conditions with sensors, heating plates, and fans. Provides feedback to maintain the ideal environment.</li>
+    <li>- <span style="color: #FFC107;">Pump Control:</span> Supports both aerobic and anaerobic bacterial growth. Aerobic growth involves air mixing via pumps connected to an air filter, while other pumps transfer the turbid liquid to the mating chamber.</li>
+    <li>- <span style="color: #FFC107;">IR Sensor:</span> Prevents OD readings if the kit is opened to avoid light interference, ensuring accurate turbidity measurements.</li>
+    <li>- <span style="color: #FFC107;">Web-Based Dashboard:</span> Offers a user-friendly interface hosted on an ESP32 for real-time data monitoring. The ESP32 sets up an access point and provides an IP address for web application access.</li>
+    <li>- <span style="color: #FFC107;">Microcontroller (STM32F446RE):</span> Manages sensors and actuators using FreeRTOS for multitasking, performing data analysis, and sensor control tasks efficiently.</li>
+</ul>
+<span style="color: #1E90FF; font-size: 24px; display: block; margin-top: 20px;">System Schematic Components:</span>
+<div style="display: flex; align-items: flex-start; justify-content: center; margin-top: 20px;">
+    <!-- Left side with the description -->
+    <div style="flex: 1; color: var(--text-primary-dark); padding-right: 20px;">
+          <ol style="padding-left: 20px; line-height: 2.8;">
+    <li><span style="color: #FFC107;">Heating Surface 12V:</span> Connected to L298N Motor Driver.</li>
+    <li><span style="color: #FFC107;">Fan 12V:</span> Connected to L298N Motor Driver.</li>
+    <li><span style="color: #FFC107;">L298N Motor Driver Module:</span> Connected to STM32 and 12V power supply.</li>
+    <li><span style="color: #FFC107;">REEES52 IR Sensor Module:</span> Connected to STM32 GPIO.</li>
+    <li><span style="color: #FFC107;">Pump 5V:</span> Connected to L298N Motor Driver.</li>
+    <li><span style="color: #FFC107;">DHT11 Humidity & Temp Sensor:</span> Connected to STM32 GPIO.</li>
+    <li><span style="color: #FFC107;">SSD1306 OLED LCD:</span> Connected to STM32 I2C.</li>
+    <li><span style="color: #FFC107;">ESP32 DOIT DEVKIT V1:</span> Connected to STM32 via UART.</li>
+    <li><span style="color: #FFC107;">STM32 Nucleo-F446RE:</span> Central controller, connected to all sensors and modules.</li>
+    <li><span style="color: #FFC107;">OD600 Circuit:</span> Connected to STM32 ADC (595nm LED, BPW34 , UA741, Resistor, Capacitor).</li>
+        <li><span style="color: #FFC107;">Power Supplies:</span> 230V to 5V/12V Adapters.</li>
+</ol>
+
+    </div>
+    <!-- Right side with the image -->
+    <div style="flex: 1.2; text-align: center;" >
+        <img src="icon/electrical_scheme.png" alt="System Schematic"class="small-img" onclick="showImage(this)" style="height: auto; max-width: 80%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+    </div>
+</div>
+<br>
+<div style="text-align: left; margin-top: 20px;">
+    <span style="color: #1E90FF; font-size: 24px; display: block;margin-bottom:20px;">System Operation, Communication, and Peripheral Control Flowcharts</span>
+    <p style="color: var(--text-primary-dark); font-size: 16px; line-height: 1.6;">These flowcharts illustrate the system operation, detailing the communication process between components and how the peripherals are managed within the microfluidic bacterial analysis system.</p>
+
+</div>
+<div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+    <div style="text-align: center;">
+        <img src="icon/flow111.png" alt="System Start Flow" class="small-img" onclick="showImage(this)" style=" max-height:600px;height: auto; width: auto; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        <p style="color: #FFC107; margin-top: 5px;">System Start Flow</p>
+        <p style="color: var(--text-primary-dark); margin-top: 5px;">Step-by-step outline of actions from turning on the system to configuring tasks.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; justify-content: center; gap: 10px;">
+        <div style="text-align: center;">
+            <img src="icon/flow22.png" alt="Communication Block Scheme" class="small-img" onclick="showImage(this)" style="max-width:700px; height: auto; width: auto; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+            <p style="color: #FFC107; margin-top: 5px;">Communication Block Flowchart</p>
+
+            <p style="color: var(--text-primary-dark);font-size: 14px;">
+                    <span >UART (STM32 to ESP32):</span> Facilitates serial communication between the microcontroller and ESP32.<br>
+                    <span>TCP HTTP (ESP32 to PC):</span> Transfers data between ESP32 and PC for web interface.<br>
+                    <span>SPI (Flash WebApp Files):</span> Transfers web application files to the ESP32.<br>
+                    <span>I2C (STM32 to LCD):</span> Connects STM32 to the LCD for display.<br>
+            </p>
+        </div>
+        <div style="text-align: center;">
+            <img src="icon/flow33.png" alt="Peripherals Control Using STM32" class="small-img" onclick="showImage(this)" style="max-width:700px;height: auto; width: auto; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+            <p style="color: #FFC107; margin-top: 5px;">Peripherals Control Flowchart Using STM32</p>
+
+            <p style="color: var(--text-primary-dark); font-size: 14px;">
+                    <span>GPIO:</span> Controls various sensors and actuators.<br>
+                    <span>ADC:</span> Converts OD600 readings to digital signals.<br>
+                    <span>Timer:</span> Generates PWM signals and controls pump duration.
+
+            </p>
+        </div>
+    </div>
+</div>
+            <br><br>
+   <span style="color: #1E90FF; font-size: 24px; display: block; margin-top: 20px;">Website Features:</span>
+<br><br>
+        <ul style="list-style-type: none; padding-left: 0px; margin-left: 0; line-height: 1.5;color: var(--text-primary-dark);">
+             <li><span style="color: #FFC107;">DashBoard Simulation:</span>
+                <ul style="list-style-type: none; margin-left: 10px;">
+                    <li>- <span style="color: var(--text-primary-dark);">Data Monitoring:</span> Real-time graphs for OD600 and temperature values.</li>
+                    <li>- <span style="color: var(--text-primary-dark);">Received Data:</span> Displays OD1, OD2, Temperature, and Humidity readings.</li>
+                    <li>- <span style="color:var(--text-primary-dark);">Control Sensor:</span> Provides controls for Heating, Fan, Vibrate, LED, and Pump operations.</li>
+                    <li>- <span style="color: var(--text-primary-dark);">System Task Integration:</span> Allows scheduling and running tasks for sensors and actuators.</li>
+                </ul>
+            </li>
+            <li><span style="color: #FFC107;">Task Editor Simulation:</span>
+                <ul style="list-style-type: none; margin-left: 10px;">
+                    <li>- <span style="color: var(--text-primary-dark);">Choose Sensor:</span> Select a sensor to set tasks and schedules.</li>
+                    <li>- <span style="color: var(--text-primary-dark);">Manage Tasks:</span> Add, edit, and delete tasks for various sensors and actuators.</li>
+                    <li>- <span style="color: var(--text-primary-dark);">Send All Tasks:</span> Submit all configured tasks to the system for execution.</li>
+                </ul>
+            </li>
+            <li> <li><span style="color: #FFC107;">Settings Simulation:</span>
+                <ul style="list-style-type: none; margin-left: 10px;">
+                    <li>- <span style="color:var(--text-primary-dark);">Adjust Values:</span> Set the speeds for Pump 1 and Pump 2, and the vibrations for the tubes.<br> Configure V01 and V02 for the OD600 formula, which measures light absorption to find optical density.<br>Use -1 to display ADC values for calibration.</li>
+                    <li>- <span style="color:var(--text-primary-dark);">Start Automatic Wash:</span> During the wash, Pump 1 and Pump 2 use detergent from Pump 3 for 60 seconds and then stop.</li>
+                </ul>
+            </li>
+        </ul>
+                    <br><br>
+   <span style="color: #1E90FF; font-size: 24px; display: block; margin-top: 20px;">Software and Firmware:</span>
+            <br><br>
+        <ul style="list-style-type: none; padding-left: 0px; line-height: 1.5; color:var(--text-primary-dark);">
+            <li>- <span style="color: #FFC107;">Firmware:</span> The STM32F446RE, programmed in C using STM32CubeIDE, runs FreeRTOS for real-time tasks.</li>
+            <li>- <span style="color: #FFC107;">Real-Time Website:</span> Hosted on the ESP32, running Arduino code. HTML, CSS, and JavaScript are stored in flash memory using SPIFFS and the ESP32 Sketch Data Upload tool.</li>
+
+        </ul>
+                    <br><br>
+   <span style="color: #1E90FF; font-size: 24px; display: block; margin-top: 20px;">OD600 Circuit Explanation:</span>
+                <p style="color: var(--white); line-height: 2;">
+    <br>
+    The OD600 circuit is designed to measure the optical density of bacterial cultures accurately.<br> It uses a 595nm LED and a BPW34 photodiode to detect light transmission through the bacterial sample. The photodiode converts the light into a photocurrent, which is then amplified by a UA741 operational amplifier.<br> To ensure stable and accurate readings, the circuit includes a 10k ohm resistor and a 100uF capacitor.<br> The capacitor helps to smooth out fluctuations and noise, leading to more precise measurements but also introducing a slight delay in reporting the OD values as it stabilizes the signal.
+</p>
+<br><br>
+            <span style="color: #1E90FF; font-size: 24px;">Project Demonstration and Experiment Overview</span>
+            <br><br>
+            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+    <!-- Left side with the text -->
+    <div style="flex: 1; color: #fff; padding-right: 20px;">
+                <p style="color: var(--white); line-height: 2;">
+                                    
+            <span style="color: #B0B0B0;">In the Demonstration Video:</span>
+            <br>
+            We present a comprehensive demonstration of an experiment conducted using our microfluidic bacterial analysis system. <br>The experiment was carried out on colors that we measured in the laboratory for their OD values.<br> Additionally, we show how we perform an automatic mating process based on the OD values.
+            <br><br>
+            The demonstration begins by showcasing both the kit and the dashboard, where we simulate a complete experiment. <br>We start by connecting to the web application and calibrating the system to a baseline value of 0.
+            <br><br>
+            Following calibration, we test several samples with known OD600 values, previously measured in the laboratory.
+            <br><br>
+            During the video, we demonstrated how to define a task whose inputs are the OD1 and OD2 values.<br> This task, called the "Wait for ADC1 & ADC2" task, automatically turns on the LEDs and activates the ventilation pumps to perform an aerobic increase.<br> The task checks every few minutes if the values ​​of OD1 and OD2 have reached or exceeded the desired values.<br> When this happens, it activates the pumps to transfer the contents to the mating chamber.
+
+
+
+
+
+                    </p> 
+                    <br>
+                            <p style="color: #FFC107; line-height: 2;">
+            For this experiment, we used a linear model from 20 color tubes: MSE: 0.000401, R²: 0.998767, R: 0.999383.
+        </p>
+
+                </div>
+    <div style="flex: 0.8; text-align: center;">
+
+                <div style="text-align: center; margin-top: 5px;">
+        <span style="color: #FFC107; font-size: 20px;">Demonstration Video (Without Audio)</span>
+
+                <div style="text-align: center; margin-top: 20px;">
+
+                        <iframe src="https://drive.google.com/file/d/1IwfR0fk7b0M-xCKpOp08EfFH-bV6WKvY/preview" width="600" height="480" allow="autoplay"></iframe>
+                            </div>
+                            </div>
+                                                        </div>
+                                                                                    </div>
+                                                                                         <br><br>       <span style="color: #B0B0B0;">Demonstration Results:</span>
+<p style="color: var(--white); line-height: 2;">
+    Measured OD: [0.21, 0.29, 1.36, 1.4]<br>
+    Actual OD: [0.22, 0.301, 1.372, 1.40]<br>
+    <br>
+    Using the model to calculate differences and accuracy, the results were as follows:<br>
+    Differences: [0.01, 0.011, 0.012, 0]<br>
+    Accuracy (%): [95.45, 96.34, 99.12, 100.0]<br>
+    The model demonstrated an average accuracy of 97.73%, showcasing its reliability and precision in monitoring bacterial growth through OD600 measurements.
+</p>
+<br><br>
+
+<div style="margin-top: 20px;">
+    <h2 style="color: #1E90FF; font-size: 24px; text-align: left;">Summary of Findings</h2>
+    <br><br>
+    <p style="color: var(--white); line-height: 1.8; margin: 0 20px;">
+        We expanded our testing to include larger scale measurements of bacterial cultures, up to several liters. <br>This experiment validated our OD600 sensors' accuracy with larger bacterial mediums.
+    </p>
+    <div style="margin: 20px 20px;">
+        <h3 style="color: #B0B0B0; font-size: 20px; margin-bottom: 10px;">Key Results:</h3>
+        <ul style="color: var(--white); line-height: 1.8; padding-left: 20px;">
+            <li>Accurate and consistent readings for larger bacterial cultures with minimal error after calibration.</li>
+            <li>Strong correlation between sensor readings and actual OD values, refining our conversion model for improved precision.</li>
+        </ul>
+    </div>
+    <div style="margin: 20px 20px;">
+        <h3 style="color: #B0B0B0; font-size: 20px; margin-bottom: 10px;">Differences Between Bacterial and Color Measurements:</h3>
+        <p style="color: var(--white); line-height: 1.8;">
+            Bacterial OD600 readings are influenced by biological factors, whereas color solutions behave differently due to their chemical properties.<br>Our sensors measure both but with varying accuracy.
+        </p>
+    </div>
+    <div style="margin: 20px 20px;">
+        <h3 style="color: #B0B0B0; font-size: 20px; margin-bottom: 10px;">Model Accuracy and Validation:</h3>
+        <p style="color: var(--white); line-height: 1.8;">
+            Our models are based on 20 dye concentrations and multiple bacterial growth experiments.
+        </p>
+    </div>
+    <div style="margin: 20px 20px;">
+        <h3 style="color: #B0B0B0; font-size: 20px; margin-bottom: 10px;">Model Comparison and Results:</h3>
+        <p style="color: var(--white); line-height: 1.8;">
+            <strong>Color Model (Linear):</strong> MSE = 0.004021, R² = 0.987634, r = 0.993798
+            <br>
+            <strong>Bacterial Model (Linear):</strong> MSE = 0.003, R² = 0.984, r = 0.992
+            <br>
+            We use linear models for both colors and bacterial growth measurements, ensuring reliable and precise OD value conversions.
+        </p>
+    </div>
+</div>
+
+            <br><br>
+   
+
+        <p style="margin-top: 20px; color:var(--text-primary-dark); font-size: 18px; line-height: 1.6; text-align: center;">
+           <span style="color: #1E90FF; font-size: 24px; display: block; margin-top: 20px;">Pictures & Videos:</span>
+
+        </p>
+        <div style="margin-top: 20px; text-align: center;">
+            <div style="display: flex; justify-content: center;">
+                <img src="icon/picture1.png" alt="Microfluidic Bacterial Analysis System - Image 1" class="small-img" onclick="showImage(this)" style="height: 200px; width: 200px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
+                <img src="icon/picture2.png" alt="Microfluidic Bacterial Analysis System - Image 2" class="small-img" onclick="showImage(this)" style="height: 200px; width: 200px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
+                        <img src="icon/pic1.png" alt="Microfluidic Bacterial Analysis System - Image 1" class="small-img" onclick="showImage(this)" style="height: 200px; width: 200px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
+        <img src="icon/pic2.png" alt="Microfluidic Bacterial Analysis System - Image 2" class="small-img" onclick="showImage(this)" style="height: 200px; width: 200px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
+        <img src="icon/pic3.png" alt="Microfluidic Bacterial Analysis System - Image 3" class="small-img" onclick="showImage(this)" style="height: 200px; width: 200px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
+        <img src="icon/pic4.png" alt="Microfluidic Bacterial Analysis System - Image 4" class="small-img" onclick="showImage(this)" style="height: 200px; width: 200px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
+
+    </div>
+
+      <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImg">
+        <span class="prev" onclick="changeImage(-1)">&#10094;</span>
+        <span class="next" onclick="changeImage(1)">&#10095;</span>
+    </div>
+               </div> 
+    </div>    </div>
                 <div class="content-item" id="tong-quan">
                 <div class="dashboard-container">
     <div class="graphs-container">
@@ -1000,141 +1280,64 @@ function toggleSwitch(id, event) {
 </form>
     </div>
     </div>
-<div class="content-item" id="information">
 
-<div style="background: #2C2C2C; box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); border-radius: 20px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; width: 70%; margin-left: auto; margin-right: auto;">
-    <div class="card-header">
-        <h2 style="color: #fff; font-weight: 600; letter-spacing: 1px; margin-bottom: 20px; font-size: 26px;">Project Overview</h2>
-    </div>
-    <p style="margin-top: 20px; color: #fff; font-size: 18px; line-height: 1.6; text-align: center;">
-        <strong style="color:#47A025;font-size: 22px;">Microfluidic Bacterial Analysis System</strong>
-        <br><br>
-        The system detects bacterial growth using OD600 sensors, provides real-time monitoring, and transfers samples to a mating chamber.<br> It integrates an STM32F446RE microcontroller with FreeRTOS for multitasking and an ESP32 module for hosting the monitoring website.
-    </p>
-    <div style="text-align: left; width: 100%; max-width: 800px; margin-top: 20px;">
-        <strong style="color: #47A025;font-size: 18px;">Product Capabilities and System Components:</strong>
-        <ul style="list-style-type: none; padding-left: 10px; line-height: 1.5;">
-            <li>1. <strong>OD600 Sensor Monitoring:</strong> Tracks bacterial growth using OD600 sensors in tubes and chambers.</li>
-            <li>2. <strong>Temp Control:</strong> Maintains optimal conditions with temperature sensors, heating surfaces, heating plates, and fans.</li>
-            <li>3. <strong>Pump Control:</strong> Automates culture transfer, air insertion, mixing, and cleaning.</li>
-             <li>4. <strong>IR Sensor:</strong> Stops OD readings if the box is opened to prevent light interference.</li>
-            <li>5. <strong>Web-Based Dashboard:</strong> User-friendly interface hosted on an ESP32 for real-time data monitoring.</li>
-            <li>6. <strong>Microcontroller (STM32F446RE):</strong> Controls sensors and actuators, running FreeRTOS for multitasking.</li>
-        </ul>
-        <br>
-        <strong style="color: #47A025;font-size: 18px; ">System Scheme:</strong>
-        <ul style="list-style-type: none; padding-left: 10px; line-height: 1.5;">
-        <div style="margin-top: 5px; text-align: center;">
-              <img 
-    src="" 
-    alt="System Diagram (In Progress)" 
-    class="small-img" 
-    onclick="showImage(this)" 
-    style="height: 300px; width: 600px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;" 
-    title="Image is currently being built in Figma">
-
-            </div>
-            <li>- <strong>Microcontroller:</strong> STM32F446RE for control.</li>
-            <li>- <strong>Power Supply:</strong> USB for STM32/ESP32, 230V to 5V/12V adapters.</li>
-            <li>- <strong>Sensors and Actuators:</strong> Synchronized with the microcontroller.</li>
-        </ul>
-        <br>
-        <div style="text-align: left; width: 100%; max-width: 800px; margin-top: 20px;">
-            <strong style="color: #47A025;font-size: 18px;">System Diagram:</strong>
-            <div style="margin-top: 5px; text-align: center;">
-                <img src="icon/system_diagram.png" alt="System Diagram" class="small-img" onclick="showImage(this)" style="height: 300px; width: 600px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
-            </div>
-            <ul style="list-style-type: none; padding-left: 10px; line-height: 1.5;">
-                <li>- <strong style="color: #B0B0B0;">Bacterial 1 Tube and Bacterial 2 Tube:</strong> ADC1 and ADC2 read the OD600 measurements from the bacterial cultures.</li>
-                <li>- <strong style="color: #B0B0B0;">Mating Tube:</strong> Transfers samples from the bacterial tubes for mating processes.</li>
-                <li>- <strong style="color: #B0B0B0;">Temperature Control:</strong> Monitors temperature and uses heating and fan for regulation.</li>
-                <li>- <strong style="color: #B0B0B0;">Air Filters:</strong> Pump3 and Pump4 mix filtered air into the system for aerobic conditions.</li>
-                <li>- <strong style="color: #B0B0B0;">Pumps:</strong> Pump1 and Pump2 transfer cultures from Bacterial Tubes to the Mating Tube.</li>
-            </ul>
-        </div>
-        <br>
-        <strong style="color: #47A025;font-size: 18px;">Website Features:</strong>
-        <ul style="list-style-type: none; padding-left: 10px; margin-left: 0;">
-            <li style="margin-bottom: 10px; list-style-type: none; margin-left: 0;"><strong style="color: #fff;">DashBoard Simulation:</strong>
-                <ul style="list-style-type: none; margin-left: 10px; line-height: 1.5;">
-                    <li>- <strong style="color: #B0B0B0;">Data Monitoring:</strong> Real-time graphs for OD600 and temperature values.</li>
-                    <li>- <strong style="color: #B0B0B0;">Received Data:</strong> Displays OD1, OD2, Temperature, and Humidity readings.</li>
-                    <li>- <strong style="color: #B0B0B0;">Control Sensor:</strong> Provides controls for Heating, Fan, Vibrate, LED, and Pump operations.</li>
-                    <li>- <strong style="color: #B0B0B0;">System Task Integrate:</strong> Allows scheduling and running tasks for sensors and actuators.</li>
-                </ul>
-            </li>
-            <li style="margin-bottom: 10px; list-style-type: none; margin-left: 0;"><strong style="color: #fff;">Task Editor Simulation:</strong>
-                <ul style="list-style-type: none; margin-left: 10px; line-height: 1.5;">
-                    <li>- <strong style="color: #B0B0B0;">Choose Sensor:</strong> Select a sensor to set tasks and schedules.</li>
-                    <li>- <strong style="color: #B0B0B0;">Manage Tasks:</strong> Add, edit, and delete tasks for various sensors and actuators.</li>
-                    <li>- <strong style="color: #B0B0B0;">Send All Tasks:</strong> Submit all configured tasks to the system for execution.</li>
-                </ul>
-            </li>
-            <li style="margin-bottom: 10px; list-style-type: none; margin-left: 0;"><strong style="color: #fff;">Settings Simulation:</strong>
-                <ul style="list-style-type: none; margin-left: 10px; line-height: 1.5;">
-                    <li>- <strong style="color: #B0B0B0;">Adjust Values:</strong> Set the speeds for Pump 1 and Pump 2, and the vibrations for the tubes. Configure V01 and V02 for the OD600 formula, which measures light absorption to find optical density. Use -1 to display ADC values for calibration.</li>
-                    <li>- <strong style="color: #B0B0B0;">Start Automatic Wash:</strong> During the wash, Pump 1 and Pump 2 detergent from Pump 3 for 60 seconds and then stop.</li>
-                </ul>
-            </li>
-        </ul>
-
-<div style="text-align: left; width: 100%; max-width: 800px; margin-top: 20px;">
-    <strong style="color: #47A025;font-size: 18px;">Software and Firmware:</strong>
-    <ul style="list-style-type: none; padding-left: 20px; line-height: 1.5;">
-
-        <li>- <strong>Firmware:</strong> The STM32F446RE, programmed in C using STM32CubeIDE, runs FreeRTOS for real-time tasks.</li>
-        <li>- <strong>Real-Time Website:</strong> Hosted on the ESP32, running Arduino code. HTML, CSS, and JavaScript are burned to flash memory using SPIFFS and the ESP32 Sketch Data Upload tool.</li>
-
-        <li>- <strong>Data Communication:</strong> Reliable UART communication between STM32F446RE and ESP32 ensures accurate data transfer.</li>
-    </ul>
 </div>
-<br>
-
-        <p style="margin-top: 20px; color: #fff; font-size: 18px; line-height: 1.6; text-align: center;">
-            <strong style="color:#47A025;font-size: 22px;">Pictures & Videos</strong>
-        </p>
-        <div style="margin-top: 20px; text-align: center;">
-            <div style="display: flex; justify-content: center;">
-                <img src="icon/picture1.png" alt="Microfluidic Bacterial Analysis System - Image 1" class="small-img" onclick="showImage(this)" style="height: 200px; width: 200px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
-                <img src="icon/picture2.png" alt="Microfluidic Bacterial Analysis System - Image 2" class="small-img" onclick="showImage(this)" style="height: 200px; width: 200px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin: 10px;">
-            </div>
-
-            <!-- Modal to display the enlarged image -->
-            <div id="imageModal" class="modal">
-                <span class="close" onclick="closeModal()">&times;</span>
-                <img class="modal-content" id="modalImg">
-            </div>
-        </div>
-    </div>
+</div>
 </div>
 
 <script>
+    var currentIndex = 0;
+    var images = document.getElementsByClassName('small-img');
+
     function showImage(img) {
         var modal = document.getElementById("imageModal");
         var modalImg = document.getElementById("modalImg");
         modal.style.display = "block";
         modalImg.src = img.src;
+        currentIndex = Array.from(images).indexOf(img);
     }
 
     function closeModal() {
         var modal = document.getElementById("imageModal");
         modal.style.display = "none";
     }
-</script>
 
+    function changeImage(direction) {
+        currentIndex += direction;
+        if (currentIndex < 0) {
+            currentIndex = images.length - 1;
+        } else if (currentIndex >= images.length) {
+            currentIndex = 0;
+        }
+        var modalImg = document.getElementById("modalImg");
+        modalImg.src = images[currentIndex].src;
+    }
 
-    <script>
-function showImage(img) {
-    var modal = document.getElementById("imageModal");
+    function resetZoom() {
+        zoomLevel = 1;
+        var modalImg = document.getElementById("modalImg");
+        modalImg.style.transform = `scale(${zoomLevel})`;
+    }
+
+    function saveImage() {
+        var modalImg = document.getElementById("modalImg");
+        var link = document.createElement('a');
+        link.href = modalImg.src;
+        link.download = 'image.png';
+        link.click();
+    }
+
+    var zoomLevel = 1;
     var modalImg = document.getElementById("modalImg");
-    modal.style.display = "block";
-    modalImg.src = img.src;
-}
-
-function closeModal() {
-    var modal = document.getElementById("imageModal");
-    modal.style.display = "none";
-}
+    modalImg.addEventListener('wheel', function(event) {
+        if (event.deltaY < 0) {
+            zoomLevel += 0.1;
+        } else {
+            zoomLevel -= 0.1;
+            if (zoomLevel < 1) zoomLevel = 1;
+        }
+        modalImg.style.transform = `scale(${zoomLevel})`;
+    });
 </script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
